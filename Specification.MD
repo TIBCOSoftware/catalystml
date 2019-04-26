@@ -76,7 +76,7 @@ Below are a list of operations (and their expected results) supported by this sp
 
 
 #### Supported Operations:
-Math:
+_Math_:
 * __norm__: determine the geometric length of a vector - output is a float.  If matrix determines magnitude of vectors based upon axis selected - output array of floats.
     * Input
         * Data - [array or array of arrays]
@@ -132,7 +132,7 @@ Math:
         * None
     * Output - [array of arrays] (same size as inputs)
 
-Cleaning:
+_Cleaning_:
 * __replaceValue__: Given a map replaces data (key) with map value 
     * Input
         * Data - [array or dataframe]
@@ -199,16 +199,16 @@ Cleaning:
 * __flatten__: reduce multidimensional lists to single dimension
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
 
-Retyping:
+_Retyping_:
 * __map2Table__: convert a map/dataframe to a matrix
 * __table2Map__: convert a matrix to a map/dataframe by adding a name to each column
 
-Categorical:
+_Categorical_:
 * __binning__: take a numerical list and convert it into bins
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
 * __targetEncoding__: replace categorical value with its average of another numerical column
 
-String Processing:
+_String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
     * Input
         * data - [string]
@@ -224,20 +224,20 @@ String Processing:
 * __concat__: join strings together
 
 
-NLP:
+_NLP_:
 * __Tokenization__: separate text into tokens / words / punctuation
 * __Word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __Embedding2word__: convert list of embedding to closest words
 * __removeStop__: given text and list of (stop) words - removes those words from text.
 
-Image Processing:
+_Image Processing_:
 * __resize__: change dimensions of image
 * __removeAlpha__:  Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases
 * __Grayscale__: Convert color image to grayscale
 * __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
 
-Custom Operations:
+_Custom Operations_:
 * Language specific method for defining a custom operation (i.e. in go using go get)
 
 ### Outputs:
