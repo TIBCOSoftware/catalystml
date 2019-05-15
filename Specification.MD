@@ -180,6 +180,11 @@ _Cleaning_:
             * Default=’index’
     * Output - [array or map] (same type as inputs)
 * __groupBy__:  group by a given column in an axis and aggregate the value of another column (like SQL)
+    * Input
+        * Data - [array or dataframe] matrix or dataframe to group
+            * Optional=False
+        * col - Column by which to group
+    * Params
 * __pivot__:  reshape a matrix or dataframe by re-indexing like the pivot function in pandas
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
