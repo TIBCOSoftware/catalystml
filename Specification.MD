@@ -35,6 +35,10 @@ Since strings and data references are both surrounded by quotes to distinguish b
 
 When an object is defined either within input or as the output of an operation the object is given the name corresponding to the value associated with the “label” key.  This name can then be used to refer to this object in either another operation’s input or as a component of the pipeline output.  Collisions of labels should raise a warning during pipeline build time, but still allow for data overwrite. For maps, dataframes, and lists the columns/keys can be reference by appending the column/key to the end of the object name surrounded by square brackets.  For example a dataframe object named df with columns “col0”, “col1”, etc could have its first column called with “df[col0]”.  Similarly, list objects can have their components referred by their index number by appending the index to the end of the object name surrounded by square brackets.  For multi-dimensional list each index would be within their own brackets.  For example a list of lists (2D) named “matrix” could refer to a component as “matrix[0][3]” .  Indexes for lists begin at 0.
 
+## Comments
+
+JSON formats do not allow comments, i.e. all inclusions must be data.  However, for this specification comments can effectively be included as a key/value pair in any map level by using a key of "//comment".  With such a key the value would be ignored by the parser, which effectively creates an avenue for a comment.  
+
 ## Structure Specification:
 
 ### General Information:
@@ -160,6 +164,14 @@ _Cleaning_:
 			* Accepted Values - “Negatives”,
     * Output - [array or map] (same type as inputs)
 * __arrange/sort__:  sort a matrix/dataframe based on given columns
+    * Input
+        * Data - [array of arrays or dataframe]
+			* Optional=False
+        * Col - map key or column number
+    * Params
+        * Ascending - [boolean]
+        * KeepRow - [boolean] (keeps row/column)
+        * Axis - [int]
 * __filter__:  keep/remove rows with certain values
     * Input
         * Data - [array or dataframe]
@@ -180,6 +192,13 @@ _Cleaning_:
             * Default=’index’
     * Output - [array or map] (same type as inputs)
 * __groupBy__:  group by a given column in an axis and aggregate the value of another column (like SQL)
+    * Input
+        * Data - [array or dataframe] matrix or dataframe to group
+            * Optional=False
+        * groupKeys [array] - Column by which to group
+    * Params
+        * asIndex - [boolean]
+        * axis - [int]
 * __pivot__:  reshape a matrix or dataframe by re-indexing like the pivot function in pandas
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
@@ -201,8 +220,23 @@ _Cleaning_:
 
 _Retyping_:
 * __map2Table__: convert a map/dataframe to a matrix
+    * Input
+        * map - [map]  contains map to be converted to table
+            * Optional=False
+        * colOrder - [array of strings] list of the columns to be merged into table (ORDER MATTERS)
+            * Optional=False
+    * Params
+        * axis - the orientation of the table
+            * default=0
+    * Output - [array of arrays]
 * __table2Map__: convert a matrix to a map/dataframe by adding a name to each column
-
+    * Input
+        * table - [array or arrays] 2D table to be converted to map
+        * colKeys - [array of strings] list of keys for map/dataframe that correspond to 0 to n columns in table
+    * Params
+        * axis - the orientation of the table
+            * default=0
+    * Output - [map or dataframe]
 _Categorical_:
 * __binning__: take a numerical list and convert it into bins
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
@@ -222,6 +256,10 @@ _String Processing_:
 * __geoEncoding__:Convert string to Geo coords 
 * __address__: (number, street,city, state, etc.) extract data information from string
 * __concat__: join strings together
+    * Input
+        * s0 [string] - first string
+        * s1 [string] - second string
+    * Output - [string]
 
 
 _NLP_:
