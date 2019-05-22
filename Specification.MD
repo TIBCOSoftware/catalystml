@@ -160,6 +160,14 @@ _Cleaning_:
 			* Accepted Values - “Negatives”,
     * Output - [array or map] (same type as inputs)
 * __arrange/sort__:  sort a matrix/dataframe based on given columns
+    * Input
+        * Data - [array of arrays or dataframe]
+			* Optional=False
+        * Col - map key or column number
+    * Params
+        * Ascending - [boolean]
+        * KeepRow - [boolean] (keeps row/column)
+        * Axis - [int]
 * __filter__:  keep/remove rows with certain values
     * Input
         * Data - [array or dataframe]
@@ -183,8 +191,10 @@ _Cleaning_:
     * Input
         * Data - [array or dataframe] matrix or dataframe to group
             * Optional=False
-        * col - Column by which to group
+        * groupKeys [array] - Column by which to group
     * Params
+        * asIndex - [boolean]
+        * axis - [int]
 * __pivot__:  reshape a matrix or dataframe by re-indexing like the pivot function in pandas
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
@@ -206,8 +216,23 @@ _Cleaning_:
 
 _Retyping_:
 * __map2Table__: convert a map/dataframe to a matrix
+    * Input
+        * map - [map]  contains map to be converted to table
+            * Optional=False
+        * colOrder - [array of strings] list of the columns to be merged into table (ORDER MATTERS)
+            * Optional=False
+    * Params
+        * axis - the orientation of the table
+            * default=0
+    * Output - [array of arrays]
 * __table2Map__: convert a matrix to a map/dataframe by adding a name to each column
-
+    * Input
+        * table - [array or arrays] 2D table to be converted to map
+        * colKeys - [array of strings] list of keys for map/dataframe that correspond to 0 to n columns in table
+    * Params
+        * axis - the orientation of the table
+            * default=0
+    * Output - [map or dataframe]
 _Categorical_:
 * __binning__: take a numerical list and convert it into bins
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
@@ -227,6 +252,10 @@ _String Processing_:
 * __geoEncoding__:Convert string to Geo coords 
 * __address__: (number, street,city, state, etc.) extract data information from string
 * __concat__: join strings together
+    * Input
+        * s0 [string] - first string
+        * s1 [string] - second string
+    * Output - [string]
 
 
 _NLP_:
