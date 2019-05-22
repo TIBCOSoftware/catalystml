@@ -35,6 +35,10 @@ Since strings and data references are both surrounded by quotes to distinguish b
 
 When an object is defined either within input or as the output of an operation the object is given the name corresponding to the value associated with the “label” key.  This name can then be used to refer to this object in either another operation’s input or as a component of the pipeline output.  Collisions of labels should raise a warning during pipeline build time, but still allow for data overwrite. For maps, dataframes, and lists the columns/keys can be reference by appending the column/key to the end of the object name surrounded by square brackets.  For example a dataframe object named df with columns “col0”, “col1”, etc could have its first column called with “df[col0]”.  Similarly, list objects can have their components referred by their index number by appending the index to the end of the object name surrounded by square brackets.  For multi-dimensional list each index would be within their own brackets.  For example a list of lists (2D) named “matrix” could refer to a component as “matrix[0][3]” .  Indexes for lists begin at 0.
 
+## Comments
+
+JSON formats do not allow comments, i.e. all inclusions must be data.  However, for this specification comments can effectively be included as a key/value pair in any map level by using a key of "//comment".  With such a key the value would be ignored by the parser, which effectively creates an avenue for a comment.  
+
 ## Structure Specification:
 
 ### General Information:
