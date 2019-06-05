@@ -260,7 +260,68 @@ _String Processing_:
         * s0 [string] - first string
         * s1 [string] - second string
     * Output - [string]
-
+* __contains__:  whether substring exists in string
+    * Input
+        * s0 [string] - string
+        * s1 [string] - substring
+    * Output - [boolean]
+* __count__:returns the number of non-overlapping instances of substring in string
+    * Input
+        * s0 [string] - string
+        * s1 [string] - substring
+    * Output - [int]
+* __decodestring__: returns a string from a base64 encoded input string 
+    * Input
+        * s [string] - string
+    * Output - [string]
+* __encodestring__: returns a base64 encoded string from an input string 
+    * Input
+        * s [string] - string
+    * Output - [string]
+* __index__: Index returns the index of the first instance of substr in s, or -1 if substr is not present in s
+    * Input
+        * s0 [string] - string
+        * s1 [string] - substring
+    * Output - [int]
+* __indexany__: IndexAny returns the index of the first instance of any Unicode code point from chars in s, or -1 if no Unicode code point from chars is present in s
+    * Input
+        * s0 [string] - string
+        * s1 [string] - substring
+    * Output - [int]
+* __lastindex__: LastIndex returns the index of the last instance of substr in s, or -1 if substr is not present in s
+    * Input
+        * s0 [string] - string
+        * s1 [string] - substring
+    * Output - [int]
+* __matchregex__: Match input against regular expression
+    * Input
+        * s0 [string] - regex
+        * s1 [string] - string
+    * Output - [boolean]
+* __repeat__: Repeat returns a new string consisting of count copies of the string s
+    * Input
+        * s [string] - string
+        * i [integer] - the number of repeats
+    * Output - [string]
+* __replace__: Replace returns a copy of the string s with the first n non-overlapping instances of old replaced by new. If n < 0, there is no limit on the number of replacements
+    * Input
+        * s0 [string] - string
+        * s1 [string] - string to be replaced
+        * s2 [string] - string to replace with
+        * i [integer] - number of possible replacements
+    * Output - [string]
+* __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
+* __replaceregex__: Replace data in a string based on a regular expression match	
+* __split__: Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators
+* __tolower__: ToLower returns a copy of the string s with all Unicode letters mapped to their lower case
+* __toupper__: ToUpper returns a copy of the string s with all Unicode letters mapped to their upper case
+* __trim__: Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed
+* __trimleft__:TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed
+* __trimright__: TrimRight returns a slice of the string s with all trailing Unicode code points contained in cutset removed
+* __trimprefix__: TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged
+* __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
+* __uuid__: UUID generates a random UUID according to RFC 4122
+    * Output - [string]
 
 _NLP_:
 * __Tokenization__: separate text into tokens / words / punctuation
