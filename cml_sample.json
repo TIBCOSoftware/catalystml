@@ -14,10 +14,6 @@
         "dimensions": 2,
         "shape":[3,2],
         "label":"input"
-    },
-    {
-		    "type": "list",
-        "label":"blah"
     }
 	],
 	"pipeline": [
@@ -25,13 +21,13 @@
                     "id":"mag",
                     "operation":"norm",
                     "input":{"data":"$input"},
-                    "params":{"axis":"rows"}
+                    "params":{"axis":0}
                     
                   },
                   {
                     "id":"accel",
                     "operation":"Join",
-                    "input":{"data":["$input","$mag"]},
+                    "input":{"data0":"$input","data1":"$mag"},
                     "params":{                    
                       "on":["index","index"],
                       "how":"left"
@@ -46,8 +42,8 @@
                   {
                     "id":"finalout",
                     "input":{
-                      "data":"$flat",
-                      "listOfKeys":["0_0","1_0","2_0","amag_0","0_1","1_1","2_1","amag_1"]
+                      "table":"$flat",
+                      "colKeys":["0_0","1_0","2_0","amag_0","0_1","1_1","2_1","amag_1"]
                     },
                     "operation":"table2Map"
 
