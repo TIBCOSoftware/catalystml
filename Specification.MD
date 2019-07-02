@@ -65,7 +65,7 @@ The root level key value “input” is used to define the data that is passed i
 * label
 
 ### Structure of Operations:
-The structure key in the JSON specification defines the interactions and order of execution between operations and includes the list of perations used.  The structure (and the basic structure for operations) is defined as:
+The structure key in the JSON specification defines the interactions and order of execution between operations and includes the list of operations used.  Order of operation is left to individual implementations, but it can be assumed that for a given operation all the dependancies above it have been run.  The structure (and the basic structure for operations) is defined as:
 
 structure: [array of objects] defines a list containing all operations - the operations objects are of the form:
 * Operation- [string] name of operation (i.e. norm, scale, etc.)
@@ -91,7 +91,12 @@ _Math_:
             * Optional=True
             * Default=0
     * Output - [array of floats] (array of length 1 if needed)
-
+* __normalize__: divide all values of array by value
+    * Input
+        * Data - [array or array of arrays]
+            * Optional=False
+        * value - [int, float] 
+    * Output - [array of floats]
 * __scale__: multiply every value of a matrix by a scalar
     *Input
         * Data - < array of arrays> 
@@ -137,15 +142,50 @@ _Math_:
     * Params
         * None
     * Output - [array of arrays] (same size as inputs)
+* __castToArray__: casts single value to array or array of arrays of given shape
+    * Input
+        * value - [int,string,float,etc] 
+            * Optional=False
+        * shape - [array of ints] - array determines shape of output ([2,3] means a 2x3 matrix)
+            * Optional=False
+    * Params
+        * None
+    * Output - [array of arrays] (same size as inputs)
+* __add__: add two numbers
+    * Input
+        * a0 - [int,string,float,etc] 
+            * Optional=False
+        * a1 - [int,float] 
+            * Optional=False
+    * Output - [int,float]
+* __multi__: multiply two numbers
+    * Input
+        * a0 - [int,string,float,etc] 
+            * Optional=False
+        * a1 - [int,float] 
+            * Optional=False
+    * Output - [int,float]
+* __divide__: divide two numbers
+    * Input
+        * num - [int,string,float,etc] 
+            * Optional=False
+        * denom - [int,float] 
+            * Optional=False
+    * Output - [int,float]
 
 _Cleaning_:
 * __replaceValue__: Given a map replaces data (key) with map value 
     * Input
         * Data - [array or map]
             * Optional=False
-        * Value - [int, float, string, NaN]
+        * replaceMap - [map] - map gives key to replace with value
 	        * Optional=True
-	        * Default=NaN
+        * replaceKey - [NaN,int,string,float,etc] - what is to be replaced
+	        * Optional=True
+	        * Default=NaN (if neither replaceMap or replaceKey given)
+        * replaceValue - [NaN,int,string,float,etc] - what is to be replaced with 
+	        * Optional=True
+	        * Default=NaN (if neither replaceMap or replaceKey given)
     * Params
         * Axis - [int] 
             * Optional=True
@@ -202,6 +242,7 @@ _Cleaning_:
         * asIndex - [boolean]
         * axis - [int]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
+* __transpose__:  transpose a matrix
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
         * Data0 - [array of data variables]  contains matrices or data frames of inputs
@@ -243,6 +284,14 @@ _Categorical_:
 * __binning__: take a numerical list and convert it into bins
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
 * __targetEncoding__: replace categorical value with its average of another numerical column
+* __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
+    * Input
+        * table - [map or array of array]  data
+        * lagnum - int of number of places to lag data
+    * Params
+        * axis - the orientation of the table
+            * default=0
+    * Output - [map]
 
 _String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
