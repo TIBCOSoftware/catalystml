@@ -65,7 +65,7 @@ The root level key value “input” is used to define the data that is passed i
 * label
 
 ### Structure of Operations:
-The structure key in the JSON specification defines the interactions and order of execution between operations and includes the list of operations used.  Order of operation is left to individual implementations, but it can be assumed that for a given operation all the dependancies above it have been run.  The structure (and the basic structure for operations) is defined as:
+The structure key in the JSON specification defines the interactions and order of execution between operations and includes the list of operations used.  The order in which operations are executed is specified to be in the order in which the operations are  listed.  However, optimization can be left to the implementation.  For example, any operations that may not have dependencies on prior operation output that have not been run can be run in parallel, etc.  The structure (and the basic structure for operations) is defined as:
 
 structure: [array of objects] defines a list containing all operations - the operations objects are of the form:
 * Operation- [string] name of operation (i.e. norm, scale, etc.)
