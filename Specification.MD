@@ -20,6 +20,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
 * data structures:
     * "list" - is an array of objects
     * "map" - a hash table of key value pairs - values are data types or lists
+    * "image" - a type that holds all image data, should support at least png,gif,jpeg types
 * data types:
     * "string"
     * "int32"
@@ -48,6 +49,7 @@ General information describes several key:value pairs within the first level of 
 * _Name_ - [string] - General name for the structure i.e. AccelerometerProcessing
 * _Description_ -  [string] - A note that describes the purpose/use case of the structure
 * _Version_- [string] - Version of structure i.e. 0.8.3
+* _CMLVersion_ - [string] - Version of CatalystML spec structure is written for
 * _createdDate_: [string] - the date the structure was created
 * _Model_- [json object] The metadata for a model (tag/etc.) containing the following parameters
 	* _Framework_ - [string] - target model framework (Tensorflow, PyTorch, etc.)
@@ -280,6 +282,8 @@ _Retyping_:
         * axis - the orientation of the table
             * default=0
     * Output - [map]
+* __cast__: convert from one base type to another
+
 _Categorical_:
 * __binning__: take a numerical list and convert it into bins
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
@@ -379,6 +383,7 @@ _NLP_:
 * __Word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __Embedding2word__: convert list of embedding to closest words
 * __removeStop__: given text and list of (stop) words - removes those words from text.
+* __stem__: produces the stem of a word (i.e. running -> run)
 
 _Image Processing_:
 * __resize__: change dimensions of image
@@ -386,6 +391,11 @@ _Image Processing_:
 * __Grayscale__: Convert color image to grayscale
 * __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
+* __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions)
+    * Input
+        * image - [image]
+    * Output - [array of array or arrays (3D matrix)]
+
 
 _Custom Operations_:
 * Language specific method for defining a custom operation (i.e. in go using go get)
