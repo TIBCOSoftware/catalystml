@@ -13,14 +13,15 @@ The specification will be represented within a JSON format.  The first level of 
 3. __Structure__ - a list of the functions to operate on the data
 4. __Outputs__ - describing how the processed data is to be output
 
-## Types and Structures
+## Types and Data Structures
 
-Throughout the specification (especially in Inputs and Outputs) data types and structures are used to represent data.  Here we define and discuss the supported data types.  The types fall into two categories structures and types.  Structures are object types (lists, maps, data frames) that can be constructed with values that are either data types or other data structures.
+Throughout the specification (especially in Inputs and Outputs) data types and structures are used to represent data.  Here we define and discuss the supported data types.  The types fall into two categories structures and types.  Structures are object types (lists, maps, data frames) that can be constructed with values that are either data types or other data structures.  "Any" is added for ease in constructing output data.
 
 * data structures:
     * "list" - is an array of objects
     * "map" - a hash table of key value pairs - values are data types or lists
     * "image" - a type that holds all image data, should support at least png,gif,jpeg types
+    * "any" - any of the other types or structure - only available for final output
 * data types:
     * "string"
     * "int32"
@@ -259,9 +260,18 @@ _Cleaning_:
             * Options: left, right, inner, outer
             * Optional=False
     * Output - [matrix or map]
-* __apply__: apply a function to every value in a vector
+* __apply__: apply a function to every value in a vector or key in a map
+    * Input
+        * data - [map or array] data to be operated on
+        * function - [json object] - the operator to be usedas the function 
+    * Params
+        * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
 * __flatten__: reduce multidimensional lists to single dimension
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
+* __set__: [array] takes an array and removes duplicates
+    * Input
+        * array - [array]
+    * Output - [array]
 
 _Retyping_:
 * __map2Table__: convert a map to a matrix
@@ -379,9 +389,9 @@ _String Processing_:
     * Output - [string]
 
 _NLP_:
-* __Tokenization__: separate text into tokens / words / punctuation
-* __Word2embedding__: convert words from list to array of wordlist x numerical embedding
-* __Embedding2word__: convert list of embedding to closest words
+* __tokenization__: separate text into tokens / words / punctuation
+* __word2embedding__: convert words from list to array of wordlist x numerical embedding
+* __embedding2word__: convert list of embedding to closest words
 * __removeStop__: given text and list of (stop) words - removes those words from text.
 * __stem__: produces the stem of a word (i.e. running -> run)
 
@@ -406,7 +416,8 @@ _Custom Operations_:
 The structure of the “output” object of a feature preparation specification structure is intended to allow for the construction of complicated output object ranging from a string to a full JSON type mix of maps and lists.  The “output” object should allow for values to include both objects defined in “operations”, “inputs”, hand values, AND further “output” objects (i.e. output objects can be nested/recursive).  The “output” object has two fields “type”, and “data” where the type defined in “type” determines how “data” is constructed.  If a hash table object (map or data frame) is used for type then data is built as a JSON object. If type is a list object ”data” is built as an array of data values.  If "type" does not match "data" and error should be raised.
 
 * __output__: [map object] a JSON object defining the output
-    * "Type": [string]
+    * "Type": [string] - data designation 
+        * (i.e. "map[string]any", "array[int]", etc.)
     * "Data": data of defined type constructed from inputs and operation ids.
 
 Constructed as an object from hand defined keys and data references. 
