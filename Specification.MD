@@ -20,7 +20,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
 * data structures:
     * "list" - is an array of objects
     * "map" - a hash table of key value pairs - values are data types or lists
-    * "image" - a type that holds all image data, should support at least png,gif,jpeg types
+    * "image" - a type that holds all image data, should support at least png, gif, jpeg types
     * "datetime" - structure to contain date and time
     * "any" - any of the other types or structure - only available for final output
 * data types:
@@ -68,7 +68,9 @@ The root level key value “input” is used to define the data that is passed i
 * shape - if relevant
 * label
 
-### Structure of Operations:
+### Operations:
+
+#### Structure of Operations
 The structure key in the JSON specification defines the interactions and order of execution between operations and includes the list of operations used.  The order in which operations are executed is specified to be in the order in which the operations are  listed.  However, optimization can be left to the implementation.  For example, any operations that may not have dependencies on prior operation output that have not been run can be run in parallel, etc.  The structure (and the basic structure for operations) is defined as:
 
 structure: [array of objects] defines a list containing all operations - the operations objects are of the form:
@@ -368,12 +370,12 @@ _String Processing_:
         * s [string] - string
         * i [integer] - the number of repeats
     * Output - [string]
-* __replace__: Replace returns a copy of the string s with the first n non-overlapping instances of old replaced by new. If n < 0, there is no limit on the number of replacements
+* __replace__: Replace returns a copy of the string s with the first n non-overlapping instances of old replaced by new. If n < 0, there is no limit on the number of replacements.
     * Input
         * s0 [string] - string
         * s1 [string] - string to be replaced
         * s2 [string] - string to replace with
-        * i [integer] - number of possible replacements
+        * i [integer] - number of possible replacements, default all
     * Output - [string]
 * __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
 * __replaceregex__: Replace data in a string based on a regular expression match	
@@ -409,6 +411,35 @@ _Image Processing_:
 
 _Custom Operations_:
 * Language specific method for defining a custom operation (i.e. in go using go get)
+
+#### Operations in implementaitons:
+
+To aid in integrating implementations of this specification into GUI interfaces, and IDEs every operation should be defined by a JSON.  All of the above operations are given in the operations directory.  The JSON to define an operation is define as follows, with mulitple objects allowed in the lists for "input" and "params":
+```
+{
+    “title”:”title”,
+    “desc”:”description”,
+    "input":[
+	        {
+                "name":"name", 
+                "type":"type", 
+                "description":"description", 
+                "optional":"boolean",
+                "allowed":"list of allowed"
+            }
+	    ],
+    "params":[
+	        {
+                "name":"name", 
+                "type":"type", 
+                "description":"description", 
+                "optional":"boolean",
+                "allowed":"list of allowed"
+            }
+    	],
+    "output":"type"
+}
+```
 
 ### Outputs:
 
