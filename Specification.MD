@@ -21,6 +21,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "list" - is an array of objects
     * "map" - a hash table of key value pairs - values are data types or lists
     * "image" - a type that holds all image data, should support at least png,gif,jpeg types
+    * "datetime" - structure to contain date and time
     * "any" - any of the other types or structure - only available for final output
 * data types:
     * "string"
@@ -77,8 +78,7 @@ structure: [array of objects] defines a list containing all operations - the ope
         * Data: value of a labeled variable or a list of values
         * Other keys specific to operation possible
     * Params - object containing operation specific parameters (optional)
-    * Output: - name of the output of the operation
-        * If map give keys of map
+    * Output: - type of output
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 

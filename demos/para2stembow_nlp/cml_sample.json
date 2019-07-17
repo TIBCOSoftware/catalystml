@@ -1,0 +1,48 @@
+{
+    "name":"Para2BOW",
+    "description":"Converts a paragraph to a bag of words for NLP",
+    "version":"0.0.1",
+    "createdDate":"20190703",
+    "model":{
+        "framework":"Tensorflow",
+        "tags":"serve",
+        "signatureDefs":"def_signature"
+    },
+	"input": [
+    {
+		    "type": "string",
+        "label":"paragraph"
+    }
+	],
+	"structure": [
+                  {
+                    "id":"words",
+                    "operation":"tokenization",
+                    "input":{"data":"$paragraph"},
+                    "params":{"language":"english"}
+                  },
+                  {
+                    "id":"nostop",
+                    "operation":"removeStop"
+                  },
+                  {
+                    "id":"stemwords",
+                    "operation":"apply",
+                    "function":"stem",
+                    "//comment":"Depends on how the function stem works"
+                  },
+                  {
+                    "id":"set",
+                    "operation":"set"
+                  },
+                  {
+                    "id":"BOWmap",
+                    "operation":"apply",
+                    "function":"count"
+                  }
+             ],
+	"output": {
+    "type": "map",
+    "data":{"BOW":"$BOWmap"}
+	}
+}
