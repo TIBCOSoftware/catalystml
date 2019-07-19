@@ -35,7 +35,7 @@ Since strings and data references are both surrounded by quotes to distinguish b
 
 ## Object Names:
 
-When an object is defined either within input or as the output of an operation the object is given the name corresponding to the value associated with the “label” key.  This name can then be used to refer to this object in either another operation’s input or as a component of the structure output.  Collisions of labels should raise a warning during structure build time, but still allow for data overwrite. For maps and lists the columns/keys can be reference by appending the column/key (in single quotes for maps) to the end of the object name surrounded by square brackets.  For example a map object named df with columns/keys “col0”, “col1”, etc could have its first column called with “df['col0']”.  Similarly, list objects can have their components referred by their index number by appending the index to the end of the object name surrounded by square brackets.  For multi-dimensional list each index would be within their own brackets.  For example a list of lists (2D) named “matrix” could refer to a component as “matrix[0][3]” .  Indexes for lists begin at 0.
+When an object is defined either within input or as the output of an operation the object is given the name corresponding to the value associated with the “label” key.  This name can then be used to refer to this object in either another operation’s input or as a component of the structure output.  Collisions of labels should raise a warning during structure build time, but still allow for data overwrite.  Indeed, an operation output can be labeled with a pre-existing object component (map or array compnent as described next) to overwrite that compnent. For maps and lists the columns/keys can be reference by appending the column/key (in single quotes for maps) to the end of the object name surrounded by square brackets.  For example a map object named df with columns/keys “col0”, “col1”, etc could have its first column called with “df['col0']”.  Similarly, list objects can have their components referred by their index number by appending the index to the end of the object name surrounded by square brackets.  For multi-dimensional list each index would be within their own brackets.  For example a list of lists (2D) named “matrix” could refer to a component as “matrix[0][3]” .  Indexes for lists begin at 0.
 
 ## Comments
 
@@ -101,6 +101,9 @@ _Math_:
         * Data - [array or array of arrays]
             * Optional=False
         * value - [int, float] 
+            * Optional=False
+        * minvalue - [int,float]
+            * Optional=True
     * Output - [array of floats]
 * __scale__: multiply every value of a matrix by a scalar
     *Input
@@ -181,7 +184,7 @@ _Math_:
 _Cleaning_:
 * __replaceValue__: Given a map replaces data (key) with map value 
     * Input
-        * Data - [array or map]
+        * data - [array or map]
             * Optional=False
         * replaceMap - [map] - map gives key to replace with value
 	        * Optional=True
@@ -203,7 +206,7 @@ _Cleaning_:
     * Input
         * Data - [array of arrays or map]
 			* Optional=False
-        * Col - map key or column number
+        * Col - [string/int or array ]map key or column number
     * Params
         * outlierType [string]
 			* Optional=True
@@ -238,6 +241,12 @@ _Cleaning_:
             * Optional=True
             * Default=’index’
     * Output - [array or map] (same type as inputs)
+* __dropCol__:  remove cols from matrix or map
+    * Input
+        * data - [matrix or map]
+            * optional = False
+        * cols - [strings, ints, array] indices or key for column in map or matrix to be removed
+    * Output - [matrix or map]
 * __groupBy__:  group by a given column in an axis and aggregate the value of another column (like SQL)
     * Input
         * Data - [array or map] data to group
@@ -246,13 +255,14 @@ _Cleaning_:
     * Params
         * asIndex - [boolean]
         * axis - [int]
+    * Output - [array or map]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
 * __transpose__:  transpose a matrix
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
-        * Data0 - [array of data variables]  contains matrices or data frames of inputs
+        * Data0 - [array of data variables]  contains matrices or maps of inputs
             * Optional=False
-        * Data1 - [array of data variables]  contains matrices or data frames of inputs
+        * Data1 - [array of data variables]  contains matrices or maps of inputs
             *Optional=False
     * Params
         * on - [array of strings]  - either index or the col name/number
@@ -299,6 +309,14 @@ _Retyping_:
 _Categorical_:
 * __binning__: take a numerical list and convert it into bins
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
+    * Input
+        * data - [array of arrays or map] 2D table to be converted to map
+        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
+    * Params
+        * col - [int] the orientation of the table
+            * optional=false
+        * separateOut - [bool] If the result is separate from the input data or not
+    * Output - [map]
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
     * Input
