@@ -16,29 +16,29 @@
 	],
 	"structure": [
                   {
-                    "id":"words",
                     "operation":"tokenization",
                     "input":{"data":"$paragraph"},
-                    "params":{"language":"english"}
+                    "params":{"language":"english"},
+                    "output":"words"
                   },
                   {
-                    "id":"nostop",
-                    "operation":"removeStop"
+                    "operation":"removeStop",
+                    "output":"nostop"
                   },
                   {
-                    "id":"stemwords",
                     "operation":"apply",
                     "function":"stem",
-                    "//comment":"Depends on how the function stem works"
+                    "//comment":"Depends on how the function stem works",
+                    "output":"stemwords"
                   },
                   {
-                    "id":"set",
-                    "operation":"set"
+                    "operation":"set",
+                    "output":"set"
                   },
                   {
-                    "id":"BOWmap",
                     "operation":"apply",
-                    "function":"count"
+                    "function":"count",
+                    "output":"BOWmap"
                   }
              ],
 	"output": {

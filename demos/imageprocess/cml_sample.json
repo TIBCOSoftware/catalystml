@@ -16,29 +16,30 @@
 	],
 	"structure": [
                   {
-                    "id":"rs",
-                    "operation":"resize",
-                    "input":{"data":"$img"}                    
-                  },
-                  {
-                    "id":"alphaLess",
-                    "operation":"removeAlpha",
-                    "input":{"data":"$rs"}
-                  },
-                  {
-                    "id":"tensor",
-                    "operation":"img2tensor",
-                    "input":{"data":"$alphaLess"}
 
+                    "operation":"resize",
+                    "input":{"data":"$img"},                 
+                    "output":"rs"
                   },
                   {
-                    "id":"normalized",
+                    "operation":"removeAlpha",
+                    "input":{"data":"$rs"},
+                    "output":"alphaLess"
+                  },
+                  {
+                    "operation":"img2tensor",
+                    "input":{"data":"$alphaLess"},
+                    "output":"tensor"
+                  },
+                  {
+
                     "operation":"normalize",
                     "input":
                     {
                       "data":"tensor",
                       "value":256
-                    }
+                    },
+                    "output":"normalized"
                   }
              ],
 	"output": {

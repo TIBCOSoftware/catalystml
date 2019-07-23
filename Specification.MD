@@ -53,7 +53,7 @@ General information describes several key:value pairs within the first level of 
 * _Version_- [string] - Version of structure i.e. 0.8.3
 * _CMLVersion_ - [string] - Version of CatalystML spec structure is written for
 * _createdDate_: [string] - the date the structure was created
-* _Model_- [json object] The metadata for a model (tag/etc.) containing the following parameters
+* _Model_- [json object] The metadata for a model (tag/etc.) containing the following parameters - NOT FULLY IMPLEMENTED - SUBJECT TO CHANGE
 	* _Framework_ - [string] - target model framework (Tensorflow, PyTorch, etc.)
 	* _inputTensorName_ - [string] - the names of the input tensors
     * _Tags_ - [string] - TF model descriptor
@@ -75,12 +75,12 @@ The structure key in the JSON specification defines the interactions and order o
 
 structure: [array of objects] defines a list containing all operations - the operations objects are of the form:
 * Operation- [string] name of operation (i.e. norm, scale, etc.)
-    * Id - label for this instance of the operation by the user (will be used to refer to operatin instance output)
     * Input -  [map object] describes the inputs:
         * Data: value of a labeled variable or a list of values
         * Other keys specific to operation possible
     * Params - object containing operation specific parameters (optional)
-    * Output: - type of output
+    * OutputType: - type of output
+    * Output - label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
@@ -95,7 +95,7 @@ _Math_:
         * Axis - [int]
             * Optional=True
             * Default=0
-    * Output - [array of floats] (array of length 1 if needed)
+    * OutputType - [array of floats] (array of length 1 if needed)
 * __normalize__: divide all values of array by value
     * Input
         * Data - [array or array of arrays]
@@ -104,7 +104,7 @@ _Math_:
             * Optional=False
         * minvalue - [int,float]
             * Optional=True
-    * Output - [array of floats]
+    * OutputType - [array of floats]
 * __scale__: multiply every value of a matrix by a scalar
     *Input
         * Data - < array of arrays> 
@@ -113,7 +113,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as input)
+    * OutputType - [array of arrays] (same size as input)
 * __mean__: average of an array - axis of matrix can be selected
     * Input
         * Data - [array or array of arrays]
@@ -298,7 +298,7 @@ _Retyping_:
     * Output - [array of arrays]
 * __table2Map__: convert a matrix to a map by adding a name to each column
     * Input
-        * table - [array or arrays] 2D table to be converted to map
+        * table - [array of arrays] 2D table to be converted to map
         * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
     * Params
         * axis - the orientation of the table

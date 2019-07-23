@@ -16,7 +16,7 @@
 	],
 	"structure": [
                   {
-                    "id":"datatemp",
+                    
                     "operation":"replaceValue",
                     "input":
                     {
@@ -31,83 +31,82 @@
                         "diabetes",
                         "highbloodpressure",
                         "smoker"
-                        ]}
+                        ]},
+                    "output":"datatemp"
                   },
                   {
-                    "id":"datatemp",
                     "operation":"replaceValue",
                     "input":
                     {
                       "data":"$dataIn",
                       "replaceMap":{"Working":1,"NotWorking":0}
                     },
-                    "params":{"col":"currentlyworking"}
-                    
+                    "params":{"col":"currentlyworking"},
+                    "output":"datatemp"
                   },
                   {
-                    "id":"datatemp['age']",
                     "operation":"normalize",
                     "input":{
                       "data":"$datatemp['age']",
                       "value":100,
                       "minvalue":18
-                    }
+                    },
+                    "output":"datatemp['age']"
                   },
                   {
-                    "id":"datatemp['bmi']",
+                    
                     "operation":"normalize",
                     "input":{
                       "data":"$datatemp['bmi']",
                       "value":60,
                       "minvalue":15
-                    }
+                    },
+                    "output":"datatemp['bmi']"
                   },
                   {
-                    "id":"datatemp",
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
                       "col": "maritalstatus",
                       "separateOut":false
-                    }
+                    },
+                    "output":"datatemp"
                   },
                   {
-                    "id":"datatemp",
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
                       "col": "state",
                       "separateOut":false
-                    }
+                    },
+                    "output":"datatemp"
                   },
                   {
-                    "id":"datatemp",
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
                       "col": "product",
                       "separateOut":false
-                    }
+                    },
+                    "output":"datatemp"
                   },
                   {
-                    "id":"datatemp",
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
                       "col": "occupation",
                       "separateOut":false
-                    }
+                    },
+                    "output":"datatemp"
                   },
                   {
-                    "id":"datatemp",
                     "operation":"dropCol",
                     "params":{
                       "col": ["city","lattitude","longitude","zipcode","year"],
                       "separateOut":false
-                    }
+                    },
+                    "output":"datatemp"
                   }
-
-
              ],
 	"output": {
     "type": "map",
