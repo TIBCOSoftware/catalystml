@@ -79,7 +79,7 @@ structure: [array of objects] defines a list containing all operations - the ope
         * Data: value of a labeled variable or a list of values
         * Other keys specific to operation possible
     * Params - object containing operation specific parameters (optional)
-    * OutputType: - type of output
+    * OutputType - type of output
     * Output - label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
@@ -122,7 +122,7 @@ _Math_:
         * Axis - [int] 
             * Optional=True
             * Default=0
-    * Output - [array of floats]
+    * OutputType - [array of floats]
 * __multPairWise__:for matrices of the same shape multiply corresponding values
    * Input
         * matrix0 - [array of arrays]
@@ -131,7 +131,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __addPairWise__:for matrices of the same shape add corresponding values
     * Input
         * matrix0 - [array of arrays]
@@ -140,7 +140,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __divPairWise__: for matrices of the same shape divide corresponding values
     * Input
         * matrix0 - [array of arrays] 
@@ -149,7 +149,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __castToArray__: casts single value to array or array of arrays of given shape
     * Input
         * value - [int,string,float,etc] 
@@ -158,28 +158,28 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __add__: add two numbers
     * Input
         * a0 - [int,string,float,etc] 
             * Optional=False
         * a1 - [int,float] 
             * Optional=False
-    * Output - [int,float]
+    * OutputType - [int,float]
 * __multi__: multiply two numbers
     * Input
         * a0 - [int,string,float,etc] 
             * Optional=False
         * a1 - [int,float] 
             * Optional=False
-    * Output - [int,float]
+    * OutputType - [int,float]
 * __divide__: divide two numbers
     * Input
         * num - [int,string,float,etc] 
             * Optional=False
         * denom - [int,float] 
             * Optional=False
-    * Output - [int,float]
+    * OutputType - [int,float]
 
 _Cleaning_:
 * __replaceValue__: Given a map replaces data (key) with map value 
@@ -201,7 +201,7 @@ _Cleaning_:
         * Col - [string] 
             * Optional=True
             * Default=’index’
-    * Output - [array or map] (same type as inputs)
+    * OutputType - [array or map] (same type as inputs)
 * __removeOutliers__: negatives or values vastly outside range of data
     * Input
         * Data - [array of arrays or map]
@@ -212,7 +212,7 @@ _Cleaning_:
 			* Optional=True
 			* Default = “Negatives”
 			* Accepted Values - “Negatives”,
-    * Output - [array or map] (same type as inputs)
+    * OutputType - [array or map] (same type as inputs)
 * __arrange/sort__:  sort a matrix/map based on given columns
     * Input
         * Data - [array of arrays or map]
@@ -222,6 +222,7 @@ _Cleaning_:
         * Ascending - [boolean]
         * KeepRow - [boolean] (keeps row/column)
         * Axis - [int]
+    * OutputType - [array of arrays or map]
 * __filter__:  keep/remove rows with certain values
     * Input
         * Data - [array or map]
@@ -240,13 +241,13 @@ _Cleaning_:
         * Col - [string]
             * Optional=True
             * Default=’index’
-    * Output - [array or map] (same type as inputs)
+    * OutputType - [array or map] (same type as inputs)
 * __dropCol__:  remove cols from matrix or map
     * Input
         * data - [matrix or map]
             * optional = False
         * cols - [strings, ints, array] indices or key for column in map or matrix to be removed
-    * Output - [matrix or map]
+    * OutputType - [matrix or map]
 * __groupBy__:  group by a given column in an axis and aggregate the value of another column (like SQL)
     * Input
         * Data - [array or map] data to group
@@ -255,7 +256,7 @@ _Cleaning_:
     * Params
         * asIndex - [boolean]
         * axis - [int]
-    * Output - [array or map]
+    * OutputType - [array or map]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
 * __transpose__:  transpose a matrix
 * __join__:  join two data objects like the Left Join command in SQL
@@ -271,19 +272,30 @@ _Cleaning_:
         * how - [string]
             * Options: left, right, inner, outer
             * Optional=False
-    * Output - [matrix or map]
+    * OutputType - [matrix or map]
 * __apply__: apply a function to every value in a vector or key in a map
     * Input
         * data - [map or array] data to be operated on
         * function - [json object] - the operator to be usedas the function 
     * Params
         * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
+    * OutputType - [array]
 * __flatten__: reduce multidimensional lists to single dimension
+    * Input
+        * matrix - [matrix] matrix to be flattened
+    * OutputType - [array]
+* __addCol2Table__: add a new column to a matrix from a given array
+    * Input
+        * matrix - [map or array] matrix to be expanded
+        * col - [array]  array of same length as matrix's second dimention
+    * Params
+        * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
+    * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
 * __set__: [array] takes an array and removes duplicates
     * Input
         * array - [array]
-    * Output - [array]
+    * OutputType - [array]
 
 _Retyping_:
 * __map2Table__: convert a map to a matrix
@@ -295,7 +307,7 @@ _Retyping_:
     * Params
         * axis - the orientation of the table
             * default=0
-    * Output - [array of arrays]
+    * OutputType - [array of arrays]
 * __table2Map__: convert a matrix to a map by adding a name to each column
     * Input
         * table - [array of arrays] 2D table to be converted to map
@@ -303,7 +315,7 @@ _Retyping_:
     * Params
         * axis - the orientation of the table
             * default=0
-    * Output - [map]
+    * OutputType - [map]
 * __cast__: convert from one base type to another
 
 _Categorical_:
@@ -316,7 +328,7 @@ _Categorical_:
         * col - [int] the orientation of the table
             * optional=false
         * separateOut - [bool] If the result is separate from the input data or not
-    * Output - [map]
+    * OutputType - [map]
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
     * Input
@@ -325,7 +337,7 @@ _Categorical_:
     * Params
         * axis - the orientation of the table
             * default=0
-    * Output - [map]
+    * OutputType - [map]
 
 _String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
@@ -336,7 +348,7 @@ _String Processing_:
         * format - [string]
             * Optional=True
             * Default=””  We will get the proper format
-    * Output - [datetime object]  (datatime object includes properties, month etc.)
+    * OutputType - [datetime object]  (datatime object includes properties, month etc.)
 * __phoneNumber__: Extract phone number from string
 * __geoEncoding__:Convert string to Geo coords 
 * __address__: (number, street,city, state, etc.) extract data information from string
@@ -344,57 +356,57 @@ _String Processing_:
     * Input
         * s0 [string] - first string
         * s1 [string] - second string
-    * Output - [string]
+    * OutputType - [string]
 * __contains__:  whether substring exists in string
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [boolean]
+    * OutputType - [boolean]
 * __count__:returns the number of non-overlapping instances of substring in string
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __decodestring__: returns a string from a base64 encoded input string 
     * Input
         * s [string] - string
-    * Output - [string]
+    * OutputType - [string]
 * __encodestring__: returns a base64 encoded string from an input string 
     * Input
         * s [string] - string
-    * Output - [string]
+    * OutputType - [string]
 * __index__: Index returns the index of the first instance of substr in s, or -1 if substr is not present in s
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __indexany__: IndexAny returns the index of the first instance of any Unicode code point from chars in s, or -1 if no Unicode code point from chars is present in s
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __lastindex__: LastIndex returns the index of the last instance of substr in s, or -1 if substr is not present in s
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __matchregex__: Match input against regular expression
     * Input
         * s0 [string] - regex
         * s1 [string] - string
-    * Output - [boolean]
+    * OutputType - [boolean]
 * __repeat__: Repeat returns a new string consisting of count copies of the string s
     * Input
         * s [string] - string
         * i [integer] - the number of repeats
-    * Output - [string]
+    * OutputType - [string]
 * __replace__: Replace returns a copy of the string s with the first n non-overlapping instances of old replaced by new. If n < 0, there is no limit on the number of replacements.
     * Input
         * s0 [string] - string
         * s1 [string] - string to be replaced
         * s2 [string] - string to replace with
         * i [integer] - number of possible replacements, default all
-    * Output - [string]
+    * OutputType - [string]
 * __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
 * __replaceregex__: Replace data in a string based on a regular expression match	
 * __split__: Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators
@@ -406,7 +418,7 @@ _String Processing_:
 * __trimprefix__: TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged
 * __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
 * __uuid__: UUID generates a random UUID according to RFC 4122
-    * Output - [string]
+    * OutputType - [string]
 
 _NLP_:
 * __tokenization__: separate text into tokens / words / punctuation
@@ -424,7 +436,7 @@ _Image Processing_:
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions)
     * Input
         * image - [image]
-    * Output - [array of array or arrays (3D matrix)]
+    * OutputType - [array of array or arrays (3D matrix)]
 
 
 _Custom Operations_:
