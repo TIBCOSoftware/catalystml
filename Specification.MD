@@ -288,8 +288,6 @@ _Cleaning_:
     * Input
         * matrix - [map or array] matrix to be expanded
         * col - [array]  array of same length as matrix's second dimention
-    * Params
-        * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
 * __set__: [array] takes an array and removes duplicates

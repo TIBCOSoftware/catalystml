@@ -26,12 +26,8 @@
                   },
                   {
                     "id":"accel",
-                    "operation":"Join",
-                    "input":{"data0":"$input","data1":"$mag"},
-                    "params":{                    
-                      "on":["index","index"],
-                      "how":"left"
-                    }
+                    "operation":"addCol2Table",
+                    "input":{"matrix":"$input","col":"$mag"}
                   },
                   {
                     "id":"flat",
