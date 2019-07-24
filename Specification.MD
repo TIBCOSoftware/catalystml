@@ -20,7 +20,8 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
 * data structures:
     * "list" - is an array of objects
     * "map" - a hash table of key value pairs - values are data types or lists
-    * "image" - a type that holds all image data, should support at least png,gif,jpeg types
+    * "image" - a type that holds all image data, should support at least png, gif, jpeg types
+    * "datetime" - structure to contain date and time
     * "any" - any of the other types or structure - only available for final output
 * data types:
     * "string"
@@ -34,7 +35,7 @@ Since strings and data references are both surrounded by quotes to distinguish b
 
 ## Object Names:
 
-When an object is defined either within input or as the output of an operation the object is given the name corresponding to the value associated with the “label” key.  This name can then be used to refer to this object in either another operation’s input or as a component of the structure output.  Collisions of labels should raise a warning during structure build time, but still allow for data overwrite. For maps and lists the columns/keys can be reference by appending the column/key (in single quotes for maps) to the end of the object name surrounded by square brackets.  For example a map object named df with columns/keys “col0”, “col1”, etc could have its first column called with “df['col0']”.  Similarly, list objects can have their components referred by their index number by appending the index to the end of the object name surrounded by square brackets.  For multi-dimensional list each index would be within their own brackets.  For example a list of lists (2D) named “matrix” could refer to a component as “matrix[0][3]” .  Indexes for lists begin at 0.
+When an object is defined either within input or as the output of an operation the object is given the name corresponding to the value associated with the “label” key.  This name can then be used to refer to this object in either another operation’s input or as a component of the structure output.  Collisions of labels should raise a warning during structure build time, but still allow for data overwrite.  Indeed, an operation output can be labeled with a pre-existing object component (map or array compnent as described next) to overwrite that compnent. For maps and lists the columns/keys can be reference by appending the column/key (in single quotes for maps) to the end of the object name surrounded by square brackets.  For example a map object named df with columns/keys “col0”, “col1”, etc could have its first column called with “df['col0']”.  Similarly, list objects can have their components referred by their index number by appending the index to the end of the object name surrounded by square brackets.  For multi-dimensional list each index would be within their own brackets.  For example a list of lists (2D) named “matrix” could refer to a component as “matrix[0][3]” .  Indexes for lists begin at 0.
 
 ## Comments
 
@@ -52,7 +53,7 @@ General information describes several key:value pairs within the first level of 
 * _Version_- [string] - Version of structure i.e. 0.8.3
 * _CMLVersion_ - [string] - Version of CatalystML spec structure is written for
 * _createdDate_: [string] - the date the structure was created
-* _Model_- [json object] The metadata for a model (tag/etc.) containing the following parameters
+* _Model_- [json object] The metadata for a model (tag/etc.) containing the following parameters - NOT FULLY IMPLEMENTED - SUBJECT TO CHANGE
 	* _Framework_ - [string] - target model framework (Tensorflow, PyTorch, etc.)
 	* _inputTensorName_ - [string] - the names of the input tensors
     * _Tags_ - [string] - TF model descriptor
@@ -67,18 +68,19 @@ The root level key value “input” is used to define the data that is passed i
 * shape - if relevant
 * label
 
-### Structure of Operations:
+### Operations:
+
+#### Structure of Operations
 The structure key in the JSON specification defines the interactions and order of execution between operations and includes the list of operations used.  The order in which operations are executed is specified to be in the order in which the operations are  listed.  However, optimization can be left to the implementation.  For example, any operations that may not have dependencies on prior operation output that have not been run can be run in parallel, etc.  The structure (and the basic structure for operations) is defined as:
 
 structure: [array of objects] defines a list containing all operations - the operations objects are of the form:
 * Operation- [string] name of operation (i.e. norm, scale, etc.)
-    * Id - label for this instance of the operation by the user (will be used to refer to operatin instance output)
     * Input -  [map object] describes the inputs:
         * Data: value of a labeled variable or a list of values
         * Other keys specific to operation possible
     * Params - object containing operation specific parameters (optional)
-    * Output: - name of the output of the operation
-        * If map give keys of map
+    * OutputType - type of output
+    * Output - label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
@@ -93,13 +95,16 @@ _Math_:
         * Axis - [int]
             * Optional=True
             * Default=0
-    * Output - [array of floats] (array of length 1 if needed)
+    * OutputType - [array of floats] (array of length 1 if needed)
 * __normalize__: divide all values of array by value
     * Input
         * Data - [array or array of arrays]
             * Optional=False
         * value - [int, float] 
-    * Output - [array of floats]
+            * Optional=False
+        * minvalue - [int,float]
+            * Optional=True
+    * OutputType - [array of floats]
 * __scale__: multiply every value of a matrix by a scalar
     *Input
         * Data - < array of arrays> 
@@ -108,7 +113,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as input)
+    * OutputType - [array of arrays] (same size as input)
 * __mean__: average of an array - axis of matrix can be selected
     * Input
         * Data - [array or array of arrays]
@@ -117,7 +122,7 @@ _Math_:
         * Axis - [int] 
             * Optional=True
             * Default=0
-    * Output - [array of floats]
+    * OutputType - [array of floats]
 * __multPairWise__:for matrices of the same shape multiply corresponding values
    * Input
         * matrix0 - [array of arrays]
@@ -126,7 +131,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __addPairWise__:for matrices of the same shape add corresponding values
     * Input
         * matrix0 - [array of arrays]
@@ -135,7 +140,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __divPairWise__: for matrices of the same shape divide corresponding values
     * Input
         * matrix0 - [array of arrays] 
@@ -144,7 +149,7 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __castToArray__: casts single value to array or array of arrays of given shape
     * Input
         * value - [int,string,float,etc] 
@@ -153,33 +158,33 @@ _Math_:
             * Optional=False
     * Params
         * None
-    * Output - [array of arrays] (same size as inputs)
+    * OutputType - [array of arrays] (same size as inputs)
 * __add__: add two numbers
     * Input
         * a0 - [int,string,float,etc] 
             * Optional=False
         * a1 - [int,float] 
             * Optional=False
-    * Output - [int,float]
+    * OutputType - [int,float]
 * __multi__: multiply two numbers
     * Input
         * a0 - [int,string,float,etc] 
             * Optional=False
         * a1 - [int,float] 
             * Optional=False
-    * Output - [int,float]
+    * OutputType - [int,float]
 * __divide__: divide two numbers
     * Input
         * num - [int,string,float,etc] 
             * Optional=False
         * denom - [int,float] 
             * Optional=False
-    * Output - [int,float]
+    * OutputType - [int,float]
 
 _Cleaning_:
 * __replaceValue__: Given a map replaces data (key) with map value 
     * Input
-        * Data - [array or map]
+        * data - [array or map]
             * Optional=False
         * replaceMap - [map] - map gives key to replace with value
 	        * Optional=True
@@ -196,18 +201,18 @@ _Cleaning_:
         * Col - [string] 
             * Optional=True
             * Default=’index’
-    * Output - [array or map] (same type as inputs)
+    * OutputType - [array or map] (same type as inputs)
 * __removeOutliers__: negatives or values vastly outside range of data
     * Input
         * Data - [array of arrays or map]
 			* Optional=False
-        * Col - map key or column number
+        * Col - [string/int or array ]map key or column number
     * Params
         * outlierType [string]
 			* Optional=True
 			* Default = “Negatives”
 			* Accepted Values - “Negatives”,
-    * Output - [array or map] (same type as inputs)
+    * OutputType - [array or map] (same type as inputs)
 * __arrange/sort__:  sort a matrix/map based on given columns
     * Input
         * Data - [array of arrays or map]
@@ -217,6 +222,7 @@ _Cleaning_:
         * Ascending - [boolean]
         * KeepRow - [boolean] (keeps row/column)
         * Axis - [int]
+    * OutputType - [array of arrays or map]
 * __filter__:  keep/remove rows with certain values
     * Input
         * Data - [array or map]
@@ -235,7 +241,13 @@ _Cleaning_:
         * Col - [string]
             * Optional=True
             * Default=’index’
-    * Output - [array or map] (same type as inputs)
+    * OutputType - [array or map] (same type as inputs)
+* __dropCol__:  remove cols from matrix or map
+    * Input
+        * data - [matrix or map]
+            * optional = False
+        * cols - [strings, ints, array] indices or key for column in map or matrix to be removed
+    * OutputType - [matrix or map]
 * __groupBy__:  group by a given column in an axis and aggregate the value of another column (like SQL)
     * Input
         * Data - [array or map] data to group
@@ -244,13 +256,14 @@ _Cleaning_:
     * Params
         * asIndex - [boolean]
         * axis - [int]
+    * OutputType - [array or map]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
 * __transpose__:  transpose a matrix
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
-        * Data0 - [array of data variables]  contains matrices or data frames of inputs
+        * Data0 - [array of data variables]  contains matrices or maps of inputs
             * Optional=False
-        * Data1 - [array of data variables]  contains matrices or data frames of inputs
+        * Data1 - [array of data variables]  contains matrices or maps of inputs
             *Optional=False
     * Params
         * on - [array of strings]  - either index or the col name/number
@@ -259,19 +272,28 @@ _Cleaning_:
         * how - [string]
             * Options: left, right, inner, outer
             * Optional=False
-    * Output - [matrix or map]
+    * OutputType - [matrix or map]
 * __apply__: apply a function to every value in a vector or key in a map
     * Input
         * data - [map or array] data to be operated on
         * function - [json object] - the operator to be usedas the function 
     * Params
         * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
+    * OutputType - [array]
 * __flatten__: reduce multidimensional lists to single dimension
+    * Input
+        * matrix - [matrix] matrix to be flattened
+    * OutputType - [array]
+* __addCol2Table__: add a new column to a matrix from a given array
+    * Input
+        * matrix - [map or array] matrix to be expanded
+        * col - [array]  array of same length as matrix's second dimention
+    * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
 * __set__: [array] takes an array and removes duplicates
     * Input
         * array - [array]
-    * Output - [array]
+    * OutputType - [array]
 
 _Retyping_:
 * __map2Table__: convert a map to a matrix
@@ -283,20 +305,28 @@ _Retyping_:
     * Params
         * axis - the orientation of the table
             * default=0
-    * Output - [array of arrays]
+    * OutputType - [array of arrays]
 * __table2Map__: convert a matrix to a map by adding a name to each column
     * Input
-        * table - [array or arrays] 2D table to be converted to map
+        * table - [array of arrays] 2D table to be converted to map
         * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
     * Params
         * axis - the orientation of the table
             * default=0
-    * Output - [map]
+    * OutputType - [map]
 * __cast__: convert from one base type to another
 
 _Categorical_:
 * __binning__: take a numerical list and convert it into bins
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
+    * Input
+        * data - [array of arrays or map] 2D table to be converted to map
+        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
+    * Params
+        * col - [int] the orientation of the table
+            * optional=false
+        * separateOut - [bool] If the result is separate from the input data or not
+    * OutputType - [map]
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
     * Input
@@ -305,7 +335,7 @@ _Categorical_:
     * Params
         * axis - the orientation of the table
             * default=0
-    * Output - [map]
+    * OutputType - [map]
 
 _String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
@@ -316,7 +346,7 @@ _String Processing_:
         * format - [string]
             * Optional=True
             * Default=””  We will get the proper format
-    * Output - [datetime object]  (datatime object includes properties, month etc.)
+    * OutputType - [datetime object]  (datatime object includes properties, month etc.)
 * __phoneNumber__: Extract phone number from string
 * __geoEncoding__:Convert string to Geo coords 
 * __address__: (number, street,city, state, etc.) extract data information from string
@@ -324,57 +354,57 @@ _String Processing_:
     * Input
         * s0 [string] - first string
         * s1 [string] - second string
-    * Output - [string]
+    * OutputType - [string]
 * __contains__:  whether substring exists in string
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [boolean]
+    * OutputType - [boolean]
 * __count__:returns the number of non-overlapping instances of substring in string
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __decodestring__: returns a string from a base64 encoded input string 
     * Input
         * s [string] - string
-    * Output - [string]
+    * OutputType - [string]
 * __encodestring__: returns a base64 encoded string from an input string 
     * Input
         * s [string] - string
-    * Output - [string]
+    * OutputType - [string]
 * __index__: Index returns the index of the first instance of substr in s, or -1 if substr is not present in s
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __indexany__: IndexAny returns the index of the first instance of any Unicode code point from chars in s, or -1 if no Unicode code point from chars is present in s
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __lastindex__: LastIndex returns the index of the last instance of substr in s, or -1 if substr is not present in s
     * Input
         * s0 [string] - string
         * s1 [string] - substring
-    * Output - [int]
+    * OutputType - [int]
 * __matchregex__: Match input against regular expression
     * Input
         * s0 [string] - regex
         * s1 [string] - string
-    * Output - [boolean]
+    * OutputType - [boolean]
 * __repeat__: Repeat returns a new string consisting of count copies of the string s
     * Input
         * s [string] - string
         * i [integer] - the number of repeats
-    * Output - [string]
-* __replace__: Replace returns a copy of the string s with the first n non-overlapping instances of old replaced by new. If n < 0, there is no limit on the number of replacements
+    * OutputType - [string]
+* __replace__: Replace returns a copy of the string s with the first n non-overlapping instances of old replaced by new. If n < 0, there is no limit on the number of replacements.
     * Input
         * s0 [string] - string
         * s1 [string] - string to be replaced
         * s2 [string] - string to replace with
-        * i [integer] - number of possible replacements
-    * Output - [string]
+        * i [integer] - number of possible replacements, default all
+    * OutputType - [string]
 * __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
 * __replaceregex__: Replace data in a string based on a regular expression match	
 * __split__: Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators
@@ -386,7 +416,7 @@ _String Processing_:
 * __trimprefix__: TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged
 * __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
 * __uuid__: UUID generates a random UUID according to RFC 4122
-    * Output - [string]
+    * OutputType - [string]
 
 _NLP_:
 * __tokenization__: separate text into tokens / words / punctuation
@@ -404,11 +434,40 @@ _Image Processing_:
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions)
     * Input
         * image - [image]
-    * Output - [array of array or arrays (3D matrix)]
+    * OutputType - [array of array or arrays (3D matrix)]
 
 
 _Custom Operations_:
 * Language specific method for defining a custom operation (i.e. in go using go get)
+
+#### Operations in implementaitons:
+
+To aid in integrating implementations of this specification into GUI interfaces, and IDEs every operation should be defined by a JSON.  All of the above operations are given in the operations directory.  The JSON to define an operation is define as follows, with mulitple objects allowed in the lists for "input" and "params":
+```
+{
+    “title”:”title”,
+    “desc”:”description”,
+    "input":[
+	        {
+                "name":"name", 
+                "type":"type", 
+                "description":"description", 
+                "optional":"boolean",
+                "allowed":"list of allowed"
+            }
+	    ],
+    "params":[
+	        {
+                "name":"name", 
+                "type":"type", 
+                "description":"description", 
+                "optional":"boolean",
+                "allowed":"list of allowed"
+            }
+    	],
+    "output":"type"
+}
+```
 
 ### Outputs:
 

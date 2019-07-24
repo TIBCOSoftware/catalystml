@@ -1,0 +1,52 @@
+{
+    "name":"ImageProccessing",
+    "description":"Converts image to data",
+    "version":"0.0.1",
+    "createdDate":"20190709",
+    "model":{
+        "framework":"Tensorflow",
+        "tags":"serve",
+        "signatureDefs":"def_signature"
+    },
+	"input": [
+    {
+		    "type": "array",
+        "label":"img"
+    }
+	],
+	"structure": [
+                  {
+
+                    "operation":"resize",
+                    "input":{"data":"$img"},                 
+                    "output":"rs"
+                  },
+                  {
+                    "operation":"removeAlpha",
+                    "input":{"data":"$rs"},
+                    "output":"alphaLess"
+                  },
+                  {
+                    "operation":"img2tensor",
+                    "input":{"data":"$alphaLess"},
+                    "output":"tensor"
+                  },
+                  {
+
+                    "operation":"normalize",
+                    "input":
+                    {
+                      "data":"tensor",
+                      "value":256
+                    },
+                    "output":"normalized"
+                  }
+             ],
+	"output": {
+    "type": "array",
+    "data":{
+      "name":"inputs",
+      "data":"$normalized"
+    }
+	}
+}

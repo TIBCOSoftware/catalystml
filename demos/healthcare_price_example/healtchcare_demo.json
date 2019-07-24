@@ -1,0 +1,115 @@
+{
+    "name":"Healthcare",
+    "description":"Transforms healthcare mostly catagorical data to useable format",
+    "version":"0.0.1",
+    "createdDate":"20190719",
+    "model":{
+        "framework":"Tensorflow",
+        "tags":"serve",
+        "signatureDefs":"def_signature"
+    },
+	"input": [
+    {
+		    "type": "map",
+        "label":"dataIn"
+    }
+	],
+	"structure": [
+                  {
+                    
+                    "operation":"replaceValue",
+                    "input":
+                    {
+                      "data":"$dataIn",
+                      "replaceMap":{"Yes":1,"No":0}
+                    },
+                    "params":{"col":
+                      [
+                        "cancer",
+                        "heartdisease",
+                        "cholesterol",
+                        "diabetes",
+                        "highbloodpressure",
+                        "smoker"
+                        ]},
+                    "output":"datatemp"
+                  },
+                  {
+                    "operation":"replaceValue",
+                    "input":
+                    {
+                      "data":"$dataIn",
+                      "replaceMap":{"Working":1,"NotWorking":0}
+                    },
+                    "params":{"col":"currentlyworking"},
+                    "output":"datatemp"
+                  },
+                  {
+                    "operation":"normalize",
+                    "input":{
+                      "data":"$datatemp['age']",
+                      "value":100,
+                      "minvalue":18
+                    },
+                    "output":"datatemp['age']"
+                  },
+                  {
+                    
+                    "operation":"normalize",
+                    "input":{
+                      "data":"$datatemp['bmi']",
+                      "value":60,
+                      "minvalue":15
+                    },
+                    "output":"datatemp['bmi']"
+                  },
+                  {
+                    "operation":"oneHotEncoding",
+                    "input":{"data":"$datatemp"},
+                    "params":{
+                      "col": "maritalstatus",
+                      "separateOut":false
+                    },
+                    "output":"datatemp"
+                  },
+                  {
+                    "operation":"oneHotEncoding",
+                    "input":{"data":"$datatemp"},
+                    "params":{
+                      "col": "state",
+                      "separateOut":false
+                    },
+                    "output":"datatemp"
+                  },
+                  {
+                    "operation":"oneHotEncoding",
+                    "input":{"data":"$datatemp"},
+                    "params":{
+                      "col": "product",
+                      "separateOut":false
+                    },
+                    "output":"datatemp"
+                  },
+                  {
+                    "operation":"oneHotEncoding",
+                    "input":{"data":"$datatemp"},
+                    "params":{
+                      "col": "occupation",
+                      "separateOut":false
+                    },
+                    "output":"datatemp"
+                  },
+                  {
+                    "operation":"dropCol",
+                    "params":{
+                      "col": ["city","lattitude","longitude","zipcode","year"],
+                      "separateOut":false
+                    },
+                    "output":"datatemp"
+                  }
+             ],
+	"output": {
+    "type": "map",
+    "data":{"output":"$datatemp"}
+	}
+}
