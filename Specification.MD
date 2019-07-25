@@ -96,7 +96,7 @@ _Math_:
             * Optional=True
             * Default=0
     * OutputType - [array of floats] (array of length 1 if needed)
-* __normalize__: divide all values of array by value
+* __normalize__: divide all values of array by value (i.e. x/value), if minvalue is given applies (x-minval)/(value-minvalue) where x is the data 
     * Input
         * Data - [array or array of arrays]
             * Optional=False
@@ -326,6 +326,7 @@ _Categorical_:
         * col - [int] the orientation of the table
             * optional=false
         * separateOut - [bool] If the result is separate from the input data or not
+            * default=false
     * OutputType - [map]
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
@@ -417,6 +418,7 @@ _String Processing_:
 * __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
 * __uuid__: UUID generates a random UUID according to RFC 4122
     * OutputType - [string]
+* __levenshteinDistance__: Calculates the Levenshtein Distance between two strings (number of changes needed to conver one string to the other)
 
 _NLP_:
 * __tokenization__: separate text into tokens / words / punctuation
@@ -424,6 +426,8 @@ _NLP_:
 * __embedding2word__: convert list of embedding to closest words
 * __removeStop__: given text and list of (stop) words - removes those words from text.
 * __stem__: produces the stem of a word (i.e. running -> run)
+* __segment__: Seperates a paragraph into sentences
+* __posTag__: Part of speach tag
 
 _Image Processing_:
 * __resize__: change dimensions of image
