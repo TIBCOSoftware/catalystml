@@ -16,9 +16,8 @@
 	],
 	"structure": [
                   {
-                    "operation":"tokenization",
-                    "input":{"data":"$paragraph"},
-                    "params":{"language":"english"},
+                    "operation":"tokenize",
+                    "input":{"str":"$paragraph"},
                     "output":"words"
                   },
                   {

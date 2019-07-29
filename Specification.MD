@@ -290,7 +290,7 @@ _Cleaning_:
         * col - [array]  array of same length as matrix's second dimention
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
-* __set__: [array] takes an array and removes duplicates
+* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD)
     * Input
         * array - [array]
     * OutputType - [array]
@@ -421,11 +421,29 @@ _String Processing_:
 * __levenshteinDistance__: Calculates the Levenshtein Distance between two strings (number of changes needed to conver one string to the other)
 
 _NLP_:
-* __tokenization__: separate text into tokens / words / punctuation
+* __tokenize__: separate text into tokens / words / punctuation
+    * Input:
+        * str - [string]
+    * OutputType: [array of strings]
 * __word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __embedding2word__: convert list of embedding to closest words
 * __removeStop__: given text and list of (stop) words - removes those words from text.
+    * Input:
+        * str - [string] The string to have stop words removed from.
+    * Params:
+        * lang - [string] The language to be used, based on ISO 639-1 codes https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes .
+            * Optional = True
+            * default = "en"
+    * OutputType - [string]
 * __stem__: produces the stem of a word (i.e. running -> run)
+    * Input:
+        * str - [string]
+    * Params:
+        * algo - [string]
+            * Optional = True
+            * default = "Porter"
+            * allowed: ["Snowball","Porter"]
+    * OutputType - [string or array]
 * __segment__: Seperates a paragraph into sentences
 * __posTag__: Part of speach tag
 
