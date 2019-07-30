@@ -96,7 +96,7 @@ _Math_:
             * Optional=True
             * Default=0
     * OutputType - [array of floats] (array of length 1 if needed)
-* __normalize__: divide all values of array by value
+* __normalize__: divide all values of array by value (i.e. x/value), if minvalue is given applies (x-minval)/(value-minvalue) where x is the data 
     * Input
         * Data - [array or array of arrays]
             * Optional=False
@@ -290,7 +290,7 @@ _Cleaning_:
         * col - [array]  array of same length as matrix's second dimention
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
-* __set__: [array] takes an array and removes duplicates
+* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD)
     * Input
         * array - [array]
     * OutputType - [array]
@@ -326,6 +326,7 @@ _Categorical_:
         * col - [int] the orientation of the table
             * optional=false
         * separateOut - [bool] If the result is separate from the input data or not
+            * default=false
     * OutputType - [map]
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
@@ -408,6 +409,10 @@ _String Processing_:
 * __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
 * __replaceregex__: Replace data in a string based on a regular expression match	
 * __split__: Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators
+    * Input:
+        * str - [string] string to be seperated
+        * sep - [string] strings to be seperated at .i.e. "," , "\t", etc.
+    * OutputType: [array of strings]
 * __tolower__: ToLower returns a copy of the string s with all Unicode letters mapped to their lower case
 * __toupper__: ToUpper returns a copy of the string s with all Unicode letters mapped to their upper case
 * __trim__: Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed
@@ -417,13 +422,34 @@ _String Processing_:
 * __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
 * __uuid__: UUID generates a random UUID according to RFC 4122
     * OutputType - [string]
+* __levenshteinDistance__: Calculates the Levenshtein Distance between two strings (number of changes needed to conver one string to the other)
 
 _NLP_:
-* __tokenization__: separate text into tokens / words / punctuation
+* __tokenize__: separate text into tokens / words / punctuation
+    * Input:
+        * str - [string]
+    * OutputType: [array of strings]
 * __word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __embedding2word__: convert list of embedding to closest words
 * __removeStop__: given text and list of (stop) words - removes those words from text.
+    * Input:
+        * str - [string] The string to have stop words removed from.
+    * Params:
+        * lang - [string] The language to be used, based on ISO 639-1 codes https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes .
+            * Optional = True
+            * default = "en"
+    * OutputType - [string]
 * __stem__: produces the stem of a word (i.e. running -> run)
+    * Input:
+        * str - [string]
+    * Params:
+        * algo - [string]
+            * Optional = True
+            * default = "Porter"
+            * allowed: ["Snowball","Porter"]
+    * OutputType - [string or array]
+* __segment__: Seperates a paragraph into sentences
+* __posTag__: Part of speach tag
 
 _Image Processing_:
 * __resize__: change dimensions of image
