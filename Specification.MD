@@ -409,6 +409,10 @@ _String Processing_:
 * __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
 * __replaceregex__: Replace data in a string based on a regular expression match	
 * __split__: Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators
+    * Input:
+        * str - [string] string to be seperated
+        * sep - [string] strings to be seperated at .i.e. "," , "\t", etc.
+    * OutputType: [array of strings]
 * __tolower__: ToLower returns a copy of the string s with all Unicode letters mapped to their lower case
 * __toupper__: ToUpper returns a copy of the string s with all Unicode letters mapped to their upper case
 * __trim__: Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed
