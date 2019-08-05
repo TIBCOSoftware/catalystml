@@ -16,27 +16,51 @@
 	],
 	"structure": [
                   {
-                    "operation":"tokenize",
-                    "input":{"str":"$paragraph"},
-                    "output":"words"
-                  },
-                  {
                     "operation":"removeStop",
+                    "input":{"str":"$paragraph"},
+                    "params":{"lang":"en"},
                     "output":"nostop"
                   },
                   {
+                    "operation":"tokenize",
+                    "input":{"str":"$nostop"},
+                    "output":"words"
+                  },
+                  {
                     "operation":"apply",
-                    "function":"stem",
-                    "//comment":"Depends on how the function stem works",
+                    "input":{
+                      "data":"$words",
+                      "function":{
+                        "operation":"stem",
+                        "input":{"str":"$item"},
+                        "params":{"algo":"Porter"}
+                      }
+                    },
+                    "params":{
+                      "mapOrArray":"array"
+                    },
                     "output":"stemwords"
                   },
                   {
                     "operation":"set",
+                    "input":{"array":"$stemwords"},
                     "output":"set"
                   },
                   {
                     "operation":"apply",
-                    "function":"count",
+                    "input":{
+                      "data":"$set",
+                      "function":{
+                              "operation":"count",
+                              "input":{
+                                "s0":"$nostop",
+                                "s1":"$item"
+                              }
+                      }
+                    },
+                    "params":{
+                      "mapOrArray":"map"
+                    },
                     "output":"BOWmap"
                   }
              ],
