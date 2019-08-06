@@ -31,7 +31,9 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "float64"
     * "boolean"
 
-Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.
+Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").
+
+Dataframes are a common data structure when dealing with data processing.  While dataframes are not addressed outside this section, the idea of dataframes is incorporated in how to manipulate data.  In this context a datframe is considered to be a map with values that correspond to arrays.
 
 ## Object Names:
 
@@ -293,7 +295,7 @@ _Cleaning_:
         * col - [array]  array of same length as matrix's second dimention
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
-* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD)
+* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
         * array - [array]
     * OutputType - [array]

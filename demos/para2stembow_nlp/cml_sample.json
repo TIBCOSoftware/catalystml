@@ -32,7 +32,7 @@
                       "data":"$words",
                       "function":{
                         "operation":"stem",
-                        "input":{"str":"$item"},
+                        "input":{"str":"&item"},
                         "params":{"algo":"Porter"}
                       }
                     },
@@ -54,7 +54,7 @@
                               "operation":"count",
                               "input":{
                                 "s0":"$nostop",
-                                "s1":"$item"
+                                "s1":"&item"
                               }
                       }
                     },
