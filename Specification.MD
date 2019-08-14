@@ -22,6 +22,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "map" - a hash table of key value pairs - values are data types or lists
     * "image" - a type that holds all image data, should support at least png, gif, jpeg types
     * "datetime" - structure to contain date and time
+    * "graph" - a type that contains a list of node names linked to the key word "nodes" and an additional list that contains edges (connections between nodes) linked to the key word "edges"
     * "any" - any of the other types or structure - only available for final output
 * data types:
     * "string"
@@ -31,7 +32,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "float64"
     * "boolean"
 
-Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").
+Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").  If a "$" or "&" should be included in a string the escape character "/" should preceed the "$" or "&".
 
 Dataframes are a common data structure when dealing with data processing.  While dataframes are not addressed outside this section, the idea of dataframes is incorporated in how to manipulate data.  In this context a datframe is considered to be a map with values that correspond to arrays.
 
@@ -428,6 +429,29 @@ _String Processing_:
 * __uuid__: UUID generates a random UUID according to RFC 4122
     * OutputType - [string]
 * __levenshteinDistance__: Calculates the Levenshtein Distance between two strings (number of changes needed to conver one string to the other)
+    * Inputs:
+        s0 [string] - first string for comparison
+        s1 [string] - second string for comparison
+    * OutputType: [int]
+* __levenshteinSimilarity__: Calculates the Levenshtein Similarity (the normalized Distance) between two strings (number of changes needed to conver one string to the other)
+    * Inputs:
+        s0 [string] - first string for comparison
+        s1 [string] - second string for comparison
+    * OutputType: [float32]
+
+_Graphs_:
+* __node2vec__: applies Node2Vec algorithm to get embeddings of a graph
+* __addNode__: adds node or list of nodes to graph
+* __removeNode__: removes nodes or list of nodes from graph
+* __addEdge__: adds edge or list of egdes to graph
+* __removeEdge__: removes edge or list of edges from graph
+* __countNodes__: counts number of Nodes in Graph
+* __countEdges__: counts number of Edges or sums edge weights in Graph
+* __getSubGraphFromNodes__: returns a subgraph containing the nodes input as list
+* __getSubGraphFromEdges__: returns a subgraph containing the edges input as list
+* __hasParallelEdges__: checks a graph for parallel edges
+* __hasSelfLoops__: checks a graph forself loops
+* __isOrdered__: Checks to see if Graph is ordered
 
 _NLP_:
 * __tokenize__: separate text into tokens / words / punctuation
