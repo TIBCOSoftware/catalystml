@@ -1,71 +1,71 @@
-{
-    "name":"Para2BOW",
-    "description":"Converts a paragraph to a bag of words for NLP",
-    "version":"0.0.1",
-    "createdDate":"20190703",
-    "model":{
-        "framework":"Tensorflow",
-        "tags":"serve",
-        "signatureDefs":"def_signature"
-    },
-	"input": [
+ {    
+  "name":"Para2BOW",
+  "description":"Converts a paragraph to a bag of words for NLP",
+  "version":"0.0.1",
+  "createdDate":"20190703",
+  "model":{
+      "framework":"Tensorflow",
+      "tags":"serve",
+      "signatureDefs":"def_signature"
+  },
+  "input": [
     {
-		    "type": "string",
-        "label":"paragraph"
+      "type": "string",
+                "label":"paragraph"
     }
-	],
-	"structure": [
-                  {
-                    "operation":"removeStop",
-                    "input":{"str":"$paragraph"},
-                    "params":{"lang":"en"},
-                    "output":"nostop"
-                  },
-                  {
-                    "operation":"tokenize",
-                    "input":{"str":"$nostop"},
-                    "output":"words"
-                  },
-                  {
-                    "operation":"apply",
-                    "input":{
-                      "data":"$words",
-                      "function":{
-                        "operation":"stem",
-                        "input":{"str":"&item"},
-                        "params":{"algo":"Porter"}
-                      }
-                    },
-                    "params":{
-                      "mapOrArray":"array"
-                    },
-                    "output":"stemwords"
-                  },
-                  {
-                    "operation":"set",
-                    "input":{"array":"$stemwords"},
-                    "output":"set"
-                  },
-                  {
-                    "operation":"apply",
-                    "input":{
-                      "data":"$set",
-                      "function":{
-                              "operation":"count",
-                              "input":{
-                                "s0":"$nostop",
-                                "s1":"&item"
-                              }
-                      }
-                    },
-                    "params":{
-                      "mapOrArray":"map"
-                    },
-                    "output":"BOWmap"
-                  }
-             ],
-	"output": {
+  ],
+  "structure": [
+    {
+      "operation":"removeStop",
+      "input":{"str":"$paragraph"},
+      "params":{"lang":"en"},
+      "output":"nostop"
+    },
+    {
+      "operation":"tokenize",
+      "input":{"str":"$nostop"},
+      "output":"words"
+    },
+    {
+      "operation":"apply",
+      "input":{
+        "data":"$words",
+        "function":{
+            "operation":"stem",
+            "input":{"str":"&item"},
+            "params":{"algo":"Porter"}
+          }
+        },
+      "params":{
+        "mapOrArray":"array"
+      },
+      "output":"stemwords"
+    },
+    {
+      "operation":"set",
+      "input":{"arr":"$stemwords"},
+      "output":"set"
+    },
+    {
+      "operation":"apply",
+      "input":{
+          "data":"$set",
+        "function":{
+          "operation":"count",
+          "input":{
+            "s0":"$nostop",
+            "s1":"&item"
+          }
+        }
+      },
+      "params":{
+        "mapOrArray":"map"
+      },
+      "output":"BOWmap"
+    }
+  ],
+  "output": {
     "type": "map",
     "data":{"BOW":"$BOWmap"}
-	}
+  }
 }

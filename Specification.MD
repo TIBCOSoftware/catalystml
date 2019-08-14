@@ -443,6 +443,9 @@ _NLP_:
         * lang - [string] The language to be used, based on ISO 639-1 codes https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes .
             * Optional = True
             * default = "en"
+        * stopwords - [array of strings] - Allows for customization of stopwords
+            * Optional = True
+            * default = "en"
     * OutputType - [string]
 * __stem__: produces the stem of a word (i.e. running -> run)
     * Input:
