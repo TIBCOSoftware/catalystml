@@ -18,7 +18,7 @@ The specification will be represented within a JSON format.  The first level of 
 Throughout the specification (especially in Inputs and Outputs) data types and structures are used to represent data.  Here we define and discuss the supported data types.  The types fall into two categories structures and types.  Structures are object types (lists, maps, data frames) that can be constructed with values that are either data types or other data structures.  "Any" is added for ease in constructing output data.
 
 * data structures:
-    * "list" - is an array of objects
+    * "list" - is an array of objects (we also use matrix and array of array interchangably below)
     * "map" - a hash table of key value pairs - values are data types or lists
     * "image" - a type that holds all image data, should support at least png, gif, jpeg types
     * "datetime" - structure to contain date and time
@@ -31,7 +31,9 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "float64"
     * "boolean"
 
-Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.
+Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").
+
+Dataframes are a common data structure when dealing with data processing.  While dataframes are not addressed outside this section, the idea of dataframes is incorporated in how to manipulate data.  In this context a datframe is considered to be a map with values that correspond to arrays.
 
 ## Object Names:
 
@@ -92,7 +94,7 @@ _Math_:
         * Data - [array or array of arrays]
             * Optional=False
     * Params
-        * Axis - [int]
+        * Axis - [int] (0=vertical/column, 1=horizontal/row)
             * Optional=True
             * Default=0
     * OutputType - [array of floats] (array of length 1 if needed)
@@ -119,7 +121,7 @@ _Math_:
         * Data - [array or array of arrays]
             * Optional=False
     * Params
-        * Axis - [int] 
+        * Axis - [int] (0=vertical/column, 1=horizontal/row)
             * Optional=True
             * Default=0
     * OutputType - [array of floats]
@@ -195,7 +197,7 @@ _Cleaning_:
 	        * Optional=True
 	        * Default=NaN (if neither replaceMap or replaceKey given)
     * Params
-        * Axis - [int] 
+        * Axis - [int] (0=vertical/column, 1=horizontal/row)
             * Optional=True
             * Default=0
         * Col - [string] 
@@ -221,7 +223,7 @@ _Cleaning_:
     * Params
         * Ascending - [boolean]
         * KeepRow - [boolean] (keeps row/column)
-        * Axis - [int]
+        * Axis - [int] (0=vertical/column, 1=horizontal/row)
     * OutputType - [array of arrays or map]
 * __filter__:  keep/remove rows with certain values
     * Input
@@ -235,7 +237,7 @@ _Cleaning_:
 	        * Default=Remove
 	        * Acceptable values = “Remove”,”Keep”
     * Params
-        * Axis - [int]
+        * Axis - [int] (0=vertical/column, 1=horizontal/row)
             * Optional=True
             * Default=0
         * Col - [string]
@@ -255,7 +257,7 @@ _Cleaning_:
         * groupKeys [array] - Column by which to group
     * Params
         * asIndex - [boolean]
-        * axis - [int]
+        * axis - [int] (0=vertical/column, 1=horizontal/row)
     * OutputType - [array or map]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
 * __transpose__:  transpose a matrix
@@ -276,9 +278,12 @@ _Cleaning_:
 * __apply__: apply a function to every value in a vector or key in a map
     * Input
         * data - [map or array] data to be operated on
-        * function - [json object] - the operator to be usedas the function 
+        * function - [json object] - the operator to be used as the function, "$item" to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
     * Params
         * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
+            * Options: "map", "array"
+            * Optional=true
+            * default=array
     * OutputType - [array]
 * __flatten__: reduce multidimensional lists to single dimension
     * Input
@@ -290,7 +295,7 @@ _Cleaning_:
         * col - [array]  array of same length as matrix's second dimention
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
-* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD)
+* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
         * array - [array]
     * OutputType - [array]
@@ -311,7 +316,7 @@ _Retyping_:
         * table - [array of arrays] 2D table to be converted to map
         * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
     * Params
-        * axis - the orientation of the table
+        * axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
             * default=0
     * OutputType - [map]
 * __cast__: convert from one base type to another
@@ -334,7 +339,7 @@ _Categorical_:
         * table - [map or array of array]  data
         * lagnum - int of number of places to lag data
     * Params
-        * axis - the orientation of the table
+        * axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
             * default=0
     * OutputType - [map]
 
@@ -436,6 +441,9 @@ _NLP_:
         * str - [string] The string to have stop words removed from.
     * Params:
         * lang - [string] The language to be used, based on ISO 639-1 codes https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes .
+            * Optional = True
+            * default = "en"
+        * stopwords - [array of strings] - Allows for customization of stopwords
             * Optional = True
             * default = "en"
     * OutputType - [string]
