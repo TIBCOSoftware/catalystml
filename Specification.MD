@@ -430,13 +430,13 @@ _String Processing_:
     * OutputType - [string]
 * __levenshteinDistance__: Calculates the Levenshtein Distance between two strings (number of changes needed to conver one string to the other)
     * Inputs:
-        s0 [string] - first string for comparison
-        s1 [string] - second string for comparison
+        * s0 [string] - first string for comparison
+        * s1 [string] - second string for comparison
     * OutputType: [int]
 * __levenshteinSimilarity__: Calculates the Levenshtein Similarity (the normalized Distance) between two strings (number of changes needed to conver one string to the other)
     * Inputs:
-        s0 [string] - first string for comparison
-        s1 [string] - second string for comparison
+        * s0 [string] - first string for comparison
+        * s1 [string] - second string for comparison
     * OutputType: [float32]
 
 _Graphs_:
