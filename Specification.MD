@@ -290,7 +290,7 @@ _Cleaning_:
     * Input
         * matrix - [matrix] matrix to be flattened
     * OutputType - [array]
-* __addCol2Table__: add a new column to a matrix from a given array
+* __addCol2Table__: add a new column to a matrix from a given array (matrix is assumed to be 2-D list)
     * Input
         * matrix - [map or array] matrix to be expanded
         * col - [array]  array of same length as matrix's second dimention
@@ -485,14 +485,33 @@ _NLP_:
 
 _Image Processing_:
 * __resize__: change dimensions of image
+    * Input:
+        * img - [image]
+    * Params: at least oneof xsize/ysize must be included
+        * xsize - [int] if only xsize included, xsize/ysize ratio is preserved
+            * Optional - True
+        * ysize - [int] if only ysize included, xsize/ysize ratio is preserved
+            * Optional - True
+        * algo - [string]
+            * Optional - true
+            * default - "Lanczos"
+            * allowed: ["Lanczos","NearestNeighbor","Linear", "CatmullRom"]
+    * OutputType - [image]
 * __removeAlpha__:  Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases
 * __Grayscale__: Convert color image to grayscale
 * __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
-* __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions)
+* __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions) with value of integers ranging from 0 to 255
     * Input
-        * image - [image]
-    * OutputType - [array of array or arrays (3D matrix)]
+        * img - [image]
+    * Params
+        * removeAlpha: [bool] Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases.  True means remove alpha while converting
+            * default - False
+            * Optional - True
+        * includeBatch: [bool] Often ML requires a dimension for batch (multiple images), if true dimensions = 4 with first dimension the batch, otherwise this produces a 3-D tensor (width, height, color).
+            * default - False
+            * Optional - True
+    * OutputType - [array of array or arrays (3D or 4D matrix)]
 
 
 _Custom Operations_:
