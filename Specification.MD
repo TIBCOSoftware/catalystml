@@ -32,7 +32,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "float64"
     * "boolean"
 
-Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").  If a "$" or "&" should be included in a string the escape character "/" should preceed the "$" or "&".
+Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").  If a "$" or "&" should be included in a string the escape character "\" should preceed the "$" or "&".
 
 Dataframes are a common data structure when dealing with data processing.  While dataframes are not addressed outside this section, the idea of dataframes is incorporated in how to manipulate data.  In this context a datframe is considered to be a map with values that correspond to arrays.
 
@@ -216,7 +216,7 @@ _Cleaning_:
 			* Default = “Negatives”
 			* Accepted Values - “Negatives”,
     * OutputType - [array or map] (same type as inputs)
-* __arrange/sort__:  sort a matrix/map based on given columns
+* __sort__:  sort a matrix/map based on given columns
     * Input
         * Data - [array of arrays or map]
 			* Optional=False
@@ -296,9 +296,27 @@ _Cleaning_:
         * col - [array]  array of same length as matrix's second dimention
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
+   * Input
+        * data - [array] data to be reshaped
+        * shape - [array]  array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is 0 that dimension is sized to fit the data. i.e. [0,2,3] for a 24 value array means a 4x2x3 matrix
+    * OutputType - [matrix]
 * __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
         * array - [array]
+    * OutputType - [array]
+* __ifIn__: Given 2 arrays returns the new array with the elements of the first array only if they appear in the second array as well.
+    * Input
+        * arr0 - [array]  first array, the one to compare to the "in" list
+            * Optional=False
+        * arrIn - [array of data variables]  the array for the "in" of if in.
+            * Optional=False
+    * OutputType - [array]
+* __ifNotIn__:Given 2 arrays returns the new array with the elements of the first array only if they DO NOT appear in the second array as well.
+    * Input
+        * arr0 - [array]  first array, the one to compare to the "not in" list
+            * Optional=False
+        * arrIn - [array of data variables]  the array for the "not in" of if not in.
+            * Optional=False
     * OutputType - [array]
 
 _Retyping_:
@@ -460,16 +478,20 @@ _NLP_:
     * OutputType: [array of strings]
 * __word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __embedding2word__: convert list of embedding to closest words
-* __removeStop__: given text and list of (stop) words - removes those words from text.
-    * Input:
-        * str - [string] The string to have stop words removed from.
+* __getStopWord__: given text and list of ([stop](https://en.wikipedia.org/wiki/Stop_words)) words - removes those words from text.
     * Params:
-        * lang - [string] The language to be used, based on ISO 639-1 codes https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes .
+        * lang - [string] The language to be used, based on [ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes). For example: English='en'.
             * Optional = True
             * default = "en"
-        * stopwords - [array of strings] - Allows for customization of stopwords
+        * lib - [string] - which library stopword list to load
             * Optional = True
-            * default = "en"
+            * allowed: ["nltk"]
+            * default = "nltk"
+        * fileloc - [sting]- path to file that contains list of stop words (1 word per line)
+            * Optional = True
+        * merge -  [bool] Whether to merge list from file with file from library
+            * Optional = True
+            * default = False
     * OutputType - [string]
 * __stem__: produces the stem of a word (i.e. running -> run)
     * Input:
@@ -498,7 +520,7 @@ _Image Processing_:
             * allowed: ["Lanczos","NearestNeighbor","Linear", "CatmullRom"]
     * OutputType - [image]
 * __removeAlpha__:  Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases
-* __Grayscale__: Convert color image to grayscale
+* __grayscale__: Convert color image to grayscale
 * __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions) with value of integers ranging from 0 to 255
