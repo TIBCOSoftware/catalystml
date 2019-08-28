@@ -18,25 +18,24 @@
                   {
 
                     "operation":"resize",
-                    "input":{"data":"$img"},                 
+                    "input":{"img":"$img"},  
+                    "params":{"xsize":256,"ysize":256},               
                     "output":"rs"
                   },
                   {
-                    "operation":"removeAlpha",
-                    "input":{"data":"$rs"},
-                    "output":"alphaLess"
-                  },
-                  {
                     "operation":"img2tensor",
-                    "input":{"data":"$alphaLess"},
+                    "input":{"img":"$rs"},
+                    "params":{
+                      "removeAlpha":true,
+                      "includeBatch":true
+                    },
                     "output":"tensor"
                   },
                   {
-
                     "operation":"normalize",
                     "input":
                     {
-                      "data":"tensor",
+                      "data":"$tensor",
                       "value":256
                     },
                     "output":"normalized"
