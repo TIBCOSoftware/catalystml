@@ -87,6 +87,11 @@ structure: [array of objects] defines a list containing all operations - the ope
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
+#### Tests of Operations
+A directory exists within the github repository titled 'tests' that includes unit tests for various operations.  This directory is further subdivided by the same categories as the below operations. Then each operation will consist of its own direcctory (directory name sharing the name of the operation).  Each test in an operations directory will consist of three files: the operation inputs and parameters as they would be entered into a structure, an input file, and an output file where each operation can have multiple tests.  Each test will be numbered starting from 0.  The format of the names for the tests of operation _OperationName_, test number _X_, and with input as a _jpeg_ and output as a _csv_ is as follows:
+*   _OperationNameX.json_ - for the operation structure ($input designates in the input variable)
+*   _OperationNameX.in.jpeg_ - for the operation input
+*   _OperationNameX.in.csv_ - for the operation input
 
 #### Supported Operations:
 _Math_:
