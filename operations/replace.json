@@ -28,5 +28,5 @@
             }
 	    ],
     "params":[],
-    "outputType":"type"
+    "output":"string"
 }

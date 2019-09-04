@@ -87,6 +87,11 @@ structure: [array of objects] defines a list containing all operations - the ope
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
+#### Tests of Operations
+A directory exists within the github repository titled 'tests' that includes unit tests for various operations.  This directory is further subdivided by the same categories as the below operations. Then each operation will consist of its own direcctory (directory name sharing the name of the operation).  Each test in an operations directory will consist of three files: the operation inputs and parameters as they would be entered into a structure, an input file, and an output file where each operation can have multiple tests.  Each test will be numbered starting from 0.  The format of the names for the tests of operation _OperationName_, test number _X_, and with input as a _jpeg_ and output as a _csv_ is as follows:
+*   _OperationNameX.json_ - for the operation structure ($input designates in the input variable)
+*   _OperationNameX.in.jpeg_ - for the operation input
+*   _OperationNameX.in.csv_ - for the operation input
 
 #### Supported Operations:
 _Math_:
@@ -308,14 +313,14 @@ _Cleaning_:
     * Input
         * arr0 - [array]  first array, the one to compare to the "in" list
             * Optional=False
-        * arrIn - [array of data variables]  the array for the "in" of if in.
+        * arr1 - [array of data variables]  the array for the "in" of if in.
             * Optional=False
     * OutputType - [array]
 * __ifNotIn__:Given 2 arrays returns the new array with the elements of the first array only if they DO NOT appear in the second array as well.
     * Input
         * arr0 - [array]  first array, the one to compare to the "not in" list
             * Optional=False
-        * arrIn - [array of data variables]  the array for the "not in" of if not in.
+        * arr1 - [array of data variables]  the array for the "not in" of if not in.
             * Optional=False
     * OutputType - [array]
 
@@ -438,7 +443,11 @@ _String Processing_:
         * sep - [string] strings to be seperated at .i.e. "," , "\t", etc.
     * OutputType: [array of strings]
 * __tolower__: ToLower returns a copy of the string s with all Unicode letters mapped to their lower case
+    * Input:
+        * str- [string] string to be made all lower case
 * __toupper__: ToUpper returns a copy of the string s with all Unicode letters mapped to their upper case
+    * Input:
+        * str- [string] string to be made all upper case
 * __trim__: Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed
 * __trimleft__:TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed
 * __trimright__: TrimRight returns a slice of the string s with all trailing Unicode code points contained in cutset removed
@@ -478,16 +487,16 @@ _NLP_:
     * OutputType: [array of strings]
 * __word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __embedding2word__: convert list of embedding to closest words
-* __getStopWord__: given text and list of ([stop](https://en.wikipedia.org/wiki/Stop_words)) words - removes those words from text.
+* __getStopWords__: gets array of ([stop words](https://en.wikipedia.org/wiki/Stop_words)).
     * Params:
+        * lib - [string] - which library stopword list to load
+            * Optional = True
+            * allowed: ["nltk","none"]
+            * default = "nltk"
         * lang - [string] The language to be used, based on [ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes). For example: English='en'.
             * Optional = True
             * default = "en"
-        * lib - [string] - which library stopword list to load
-            * Optional = True
-            * allowed: ["nltk"]
-            * default = "nltk"
-        * fileloc - [sting]- path to file that contains list of stop words (1 word per line)
+        * fileLoc - [string]- path to file that contains list of stop words (1 word per line)
             * Optional = True
         * merge -  [bool] Whether to merge list from file with file from library
             * Optional = True

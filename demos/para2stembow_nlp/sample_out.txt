@@ -1,42 +1,39 @@
-'hands-on': 1,
- 'leverag': 2,
- 'process': 3,
- 'unstructur': 1,
- 'look': 1,
- 'scientist': 1,
- 'languag': 1,
- 'algorithm': 1,
- '.': 4,
- 'practition': 1,
- 'tutori': 1,
- 'text': 3,
- 'cover': 1,
- 'seri': 1,
- 'understand': 2,
- 'insight': 1,
- 'nlp': 2,
- 'interest': 1,
- 'tri': 1,
- 'natur': 2,
- 'we': 1,
- 'extract': 1,
- 'usual': 1,
- ')': 1,
- 'thi': 1,
- 'techniqu': 2,
- 'like': 1,
- 'strategi': 1,
- 'in': 1,
- 'data': 4,
- 'use-cas': 1,
- '(': 1,
- 'language-bas': 1,
- 'use': 2,
- 'also': 1,
- 'speech': 1,
- 'test': 1,
- 'tool': 1,
- 'exampl': 1,
- 'articl': 2,
- 'workflow': 1,
- ',': 5
+cover,1
+insight,1
+use-cas,1
+nlp,2
+articl,2
+scientist,1
+unstructur,1
+speech,1
+hands-on,1
+techniqu,2
+text,3
+tri,1
+natur,2
+tool,1
+practition,1
+usual,1
+look,1
+.,4
+seri,1
+strategi,1
+leverag,2
+",",5
+workflow,1
+languag,2
+process,3
+interest,1
+data,4
+tutori,1
+exampl,1
+(,1
+algorithm,1
+also,1
+understand,2
+language-bas,1
+like,1
+use,3
+),1
+test,1
+extract,1
