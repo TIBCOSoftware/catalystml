@@ -1,5 +1,5 @@
 {
-    "title":"removestop",
+    "title":"removeStop",
     "desc":"removes Stop words from a string",
     "input":[
 	        {
