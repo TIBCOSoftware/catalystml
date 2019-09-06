@@ -380,10 +380,11 @@ _String Processing_:
 * __phoneNumber__: Extract phone number from string
 * __geoEncoding__:Convert string to Geo coords 
 * __address__: (number, street,city, state, etc.) extract data information from string
-* __concat__: join strings together
+* __concat__: join two strings together or a list of strings.  It is possible to concat s0, s1, and slist together.
     * Input
         * s0 [string] - first string
         * s1 [string] - second string
+        * slist [array of strings] - list of strings
     * OutputType - [string]
 * __contains__:  whether substring exists in string
     * Input
