@@ -22,7 +22,6 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "map" - a hash table of key value pairs - values are data types or lists
     * "image" - a type that holds all image data, should support at least png, gif, jpeg types
     * "datetime" - structure to contain date and time
-    * "graph" - a type that contains a list of node names linked to the key word "nodes" and an additional list that contains edges (connections between nodes) linked to the key word "edges"
     * "any" - any of the other types or structure - only available for final output
 * data types:
     * "string"
@@ -303,7 +302,7 @@ _Cleaning_:
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
    * Input
         * data - [array] data to be reshaped
-        * shape - [array]  array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is 0 that dimension is sized to fit the data. i.e. [0,2,3] for a 24 value array means a 4x2x3 matrix
+        * shape - [array]  array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is -1 that dimension is sized to fit the data. i.e. [-1,2,3] for a 24 value array means a 4x2x3 matrix
     * OutputType - [matrix]
 * __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
@@ -380,10 +379,11 @@ _String Processing_:
 * __phoneNumber__: Extract phone number from string
 * __geoEncoding__:Convert string to Geo coords 
 * __address__: (number, street,city, state, etc.) extract data information from string
-* __concat__: join strings together
+* __concat__: join two strings together or a list of strings.  It is possible to concat s0, s1, and slist together.
     * Input
         * s0 [string] - first string
         * s1 [string] - second string
+        * slist [array of strings] - list of strings
     * OutputType - [string]
 * __contains__:  whether substring exists in string
     * Input
@@ -465,20 +465,6 @@ _String Processing_:
         * s0 [string] - first string for comparison
         * s1 [string] - second string for comparison
     * OutputType: [float32]
-
-_Graphs_:
-* __node2vec__: applies Node2Vec algorithm to get embeddings of a graph
-* __addNode__: adds node or list of nodes to graph
-* __removeNode__: removes nodes or list of nodes from graph
-* __addEdge__: adds edge or list of egdes to graph
-* __removeEdge__: removes edge or list of edges from graph
-* __countNodes__: counts number of Nodes in Graph
-* __countEdges__: counts number of Edges or sums edge weights in Graph
-* __getSubGraphFromNodes__: returns a subgraph containing the nodes input as list
-* __getSubGraphFromEdges__: returns a subgraph containing the edges input as list
-* __hasParallelEdges__: checks a graph for parallel edges
-* __hasSelfLoops__: checks a graph forself loops
-* __isOrdered__: Checks to see if Graph is ordered
 
 _NLP_:
 * __tokenize__: separate text into tokens / words / punctuation

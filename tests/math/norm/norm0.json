@@ -1,0 +1,5 @@
+{
+  "operation":"norm",
+  "input":{"data":"$input"},
+  "params":{"axis":0}
+},
