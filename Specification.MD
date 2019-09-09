@@ -303,7 +303,7 @@ _Cleaning_:
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
    * Input
         * data - [array] data to be reshaped
-        * shape - [array]  array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is 0 that dimension is sized to fit the data. i.e. [0,2,3] for a 24 value array means a 4x2x3 matrix
+        * shape - [array]  array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is -1 that dimension is sized to fit the data. i.e. [-1,2,3] for a 24 value array means a 4x2x3 matrix
     * OutputType - [matrix]
 * __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
