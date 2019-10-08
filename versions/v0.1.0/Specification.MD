@@ -157,7 +157,7 @@ _Math_:
     * Params
         * None
     * OutputType - [array of arrays] (same size as inputs)
-* __castToArray__: casts single value to array or array of arrays of given shape
+* __valToArray__: casts single value to array or array of arrays of given shape
     * Input
         * value - [int,string,float,etc] 
             * Optional=False
@@ -351,7 +351,7 @@ _Categorical_:
         * data - [array of arrays or map] 2D table to be converted to map
         * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
     * Params
-        * col - [int] the orientation of the table
+        * axis - [int] the orientation of the table
             * optional=false
         * separateOut - [bool] If the result is separate from the input data or not
             * default=false

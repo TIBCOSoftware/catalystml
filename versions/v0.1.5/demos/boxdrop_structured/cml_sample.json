@@ -1,0 +1,49 @@
+{
+    "name":"BoxDrop",
+    "description":"Converts a matrix of accelerometers to an input map with magnitudes included",
+    "version":"0.1.1",
+    "createdDate":"20190130",
+    "model":{
+        "framework":"Tensorflow",
+        "tags":"serve",
+        "signatureDefs":"def_signature"
+    },
+	"input": [
+    {
+		    "type": "array",
+        "dimensions": 2,
+        "shape":[3,3],
+        "label":"input"
+    }
+	],
+	"structure": [
+    {
+      "id":"mag",
+      "operation":"norm",
+      "input":{"data":"$input"},
+      "params":{"axis":0}
+    },
+    {
+      "id":"accel",
+      "operation":"addCol2Table",
+      "input":{"matrix":"$input","col":"$mag"}
+    },
+    {
+      "id":"flat",
+      "operation":"flatten",
+      "input":{"data":"$accel"}
+    },
+    {
+      "id":"finalout",
+      "operation":"table2Map",
+      "input":{
+        "table":"$flat",
+        "colKeys":["0_0","1_0","2_0","amag_0","0_1","1_1","2_1","amag_1","0_2","1_2","2_2","amag_2"]
+      }
+    }
+  ],
+	"output": {
+    "type": "map",
+    "data":{"feat1":"$finalout"}
+	}
+}
