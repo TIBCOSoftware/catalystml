@@ -6,6 +6,10 @@ The purpose of CatalystML is to facilitate the transformation of data from an in
 
 A catalyst in chemistry is chemical that allows a given chemical reaction occur more easily without fundamentally changing the reaction.  CatalystML seeks to make it easier to transform data especially wihtin a streaming real time production environment such that the transformed data can be input into Machine Learning models.
 
+## Demos
+
+The demos provided in the main directory of this repository with their inputs and outputs are always intended to work with the most recent version of the specification.
+
 ## Implementations
 
 This specification is intended to demonstrate a language agnostic format for describing data processing.  However, to be used it needs to be implemented.  Currently, The following languages have an implementation of the specification:
