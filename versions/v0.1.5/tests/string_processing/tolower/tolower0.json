@@ -1,0 +1,7 @@
+{
+    "operation": "tolower",
+    "input": {
+      "str": "$input"
+    },
+    "output": "output"
+  }
