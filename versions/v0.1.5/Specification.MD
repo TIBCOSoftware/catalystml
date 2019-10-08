@@ -249,6 +249,56 @@ _Cleaning_:
             * Optional=True
             * Default=’index’
     * OutputType - [array or map] (same type as inputs)
+* __binning__: take a numerical list and convert it into bins
+* __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
+    * Input
+        * data - [array of arrays or map] 2D table to be converted to map
+        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
+    * Params
+        * axis - [int] the orientation of the table
+            * optional=false
+        * separateOut - [bool] If the result is separate from the input data or not
+            * default=false
+    * OutputType - [map]
+* __targetEncoding__: replace categorical value with its average of another numerical column
+* __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
+    * Input
+        * table - [map or array of array]  data
+        * lagnum - int of number of places to lag data
+    * Params
+        * axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
+            * default=0
+    * OutputType - [map]
+* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
+    * Input
+        * array - [array]
+    * OutputType - [array]
+* __ifIn__: Given 2 arrays returns the new array with the elements of the first array only if they appear in the second array as well.
+    * Input
+        * arr0 - [array]  first array, the one to compare to the "in" list
+            * Optional=False
+        * arr1 - [array of data variables]  the array for the "in" of if in.
+            * Optional=False
+    * OutputType - [array]
+* __ifNotIn__:Given 2 arrays returns the new array with the elements of the first array only if they DO NOT appear in the second array as well.
+    * Input
+        * arr0 - [array]  first array, the one to compare to the "not in" list
+            * Optional=False
+        * arr1 - [array of data variables]  the array for the "not in" of if not in.
+            * Optional=False
+    * OutputType - [array]
+* __apply__: apply a function to every value in a vector or key in a map
+    * Input
+        * data - [map or array] data to be operated on
+        * function - [json object] - the operator to be used as the function, "$item" to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
+    * Params
+        * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
+            * Options: "map", "array"
+            * Optional=true
+            * default=array
+    * OutputType - [array]
+
+_Restructuring_:
 * __dropCol__:  remove cols from matrix or map
     * Input
         * data - [matrix or map]
@@ -280,16 +330,6 @@ _Cleaning_:
             * Options: left, right, inner, outer
             * Optional=False
     * OutputType - [matrix or map]
-* __apply__: apply a function to every value in a vector or key in a map
-    * Input
-        * data - [map or array] data to be operated on
-        * function - [json object] - the operator to be used as the function, "$item" to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
-    * Params
-        * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
-            * Options: "map", "array"
-            * Optional=true
-            * default=array
-    * OutputType - [array]
 * __flatten__: reduce multidimensional lists to single dimension
     * Input
         * matrix - [matrix] matrix to be flattened
@@ -304,26 +344,6 @@ _Cleaning_:
         * data - [array] data to be reshaped
         * shape - [array]  array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is -1 that dimension is sized to fit the data. i.e. [-1,2,3] for a 24 value array means a 4x2x3 matrix
     * OutputType - [matrix]
-* __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
-    * Input
-        * array - [array]
-    * OutputType - [array]
-* __ifIn__: Given 2 arrays returns the new array with the elements of the first array only if they appear in the second array as well.
-    * Input
-        * arr0 - [array]  first array, the one to compare to the "in" list
-            * Optional=False
-        * arr1 - [array of data variables]  the array for the "in" of if in.
-            * Optional=False
-    * OutputType - [array]
-* __ifNotIn__:Given 2 arrays returns the new array with the elements of the first array only if they DO NOT appear in the second array as well.
-    * Input
-        * arr0 - [array]  first array, the one to compare to the "not in" list
-            * Optional=False
-        * arr1 - [array of data variables]  the array for the "not in" of if not in.
-            * Optional=False
-    * OutputType - [array]
-
-_Retyping_:
 * __map2Table__: convert a map to a matrix
     * Input
         * map - [map]  contains map to be converted to table
@@ -343,28 +363,6 @@ _Retyping_:
             * default=0
     * OutputType - [map]
 * __cast__: convert from one base type to another
-
-_Categorical_:
-* __binning__: take a numerical list and convert it into bins
-* __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
-    * Input
-        * data - [array of arrays or map] 2D table to be converted to map
-        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
-    * Params
-        * axis - [int] the orientation of the table
-            * optional=false
-        * separateOut - [bool] If the result is separate from the input data or not
-            * default=false
-    * OutputType - [map]
-* __targetEncoding__: replace categorical value with its average of another numerical column
-* __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
-    * Input
-        * table - [map or array of array]  data
-        * lagnum - int of number of places to lag data
-    * Params
-        * axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
-            * default=0
-    * OutputType - [map]
 
 _String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
