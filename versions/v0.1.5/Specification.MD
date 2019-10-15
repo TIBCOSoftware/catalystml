@@ -547,7 +547,6 @@ _MetaOperations_
         * operation/function
         * inputs - [list of objects(defined in named operation)]
         * params - [list of objects(defined in named operation)]
-        * out
     * Params
         * None
     * OutputType - [any]
