@@ -82,7 +82,7 @@ structure: [array of objects] defines a list containing all operations - the ope
         * Other keys specific to operation possible
     * Params - object containing operation specific parameters (optional)
     * OutputType - type of output
-    * Output - label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp) 
+    * Output - a label or list of labels,  the label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
