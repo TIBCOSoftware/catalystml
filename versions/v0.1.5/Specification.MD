@@ -534,8 +534,13 @@ _Image Processing_:
             * Optional - True
     * OutputType - [array of array or arrays (3D or 4D matrix)]
 * __tensor2image__: Converts a mathematical tensor (i.e. an array of any number of dimentions) into an image
+    * Input
+        * tensor [array]
+    * Params
+        * extenstion [string] - image type to convert too: jpg, png, bmp
+    * OutputType
 
-_MetaOperations_
+_Utils_
 * __runCML__: Runs another CML data preperation structure within the current structure. Allows you to integrate other CML structures into your JSON and pass standardized processing between languages.
     * Input
         * data - [any/object] the input data for the CML structure
