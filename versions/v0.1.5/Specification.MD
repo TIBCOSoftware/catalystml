@@ -82,7 +82,7 @@ structure: [array of objects] defines a list containing all operations - the ope
         * Other keys specific to operation possible
     * Params - object containing operation specific parameters (optional)
     * OutputType - type of output
-    * Output - label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
+    * Output - a label or list of labels,  the label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
@@ -253,10 +253,12 @@ _Cleaning_:
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
     * Input
         * data - [array of arrays or map] 2D table to be converted to map
-        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
     * Params
         * axis - [int] the orientation of the table
             * optional=false
+        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
+            * Optional = true
+            * Default = those that exist in data
         * separateOut - [bool] If the result is separate from the input data or not
             * default=false
     * OutputType - [map]
@@ -362,7 +364,11 @@ _Restructuring_:
         * axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
             * default=0
     * OutputType - [map]
-* __cast__: convert from one base type to another
+* __cast__: convert the base datatype of a data structure or datatype from one base type to another (i.e. [int32,int32] to [flat64,float64]), it is useful to note that maps of arrays are allowed and handle by the specification.
+    * Input
+        * data - [any datatype or data structure] input data to be cast.
+        * toType - [string] string depicting which datatype to cast to.  Allowed: int64,float64,string,int32,float32,boolean
+    * OutputType - [any]
 
 _String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
@@ -527,7 +533,29 @@ _Image Processing_:
             * default - False
             * Optional - True
     * OutputType - [array of array or arrays (3D or 4D matrix)]
+* __tensor2image__: Converts a mathematical tensor (i.e. an array of any number of dimentions) into an image
+    * Input
+        * tensor [array]
+    * Params
+        * extenstion [string] - image type to convert too: jpg, png, bmp
+    * OutputType
 
+_Utils_
+* __runCML__: Runs another CML data preperation structure within the current structure. Allows you to integrate other CML structures into your JSON and pass standardized processing between languages.
+    * Input
+        * data - [any/object] the input data for the CML structure
+    * Params
+        * cmlFileName - path to where the json file that contains the CML structure.
+    * OutputYpe - [any]
+* __applyToInputs__: Applies the name operation to the list of inputs and params.  This way you do not have to list oneHotEncoding (for example) 10 times for each of your catagorical data columns.
+    * Input
+        * operation/function [string] - operation to apply
+        * inputs - [list of objects(defined in named operation)]
+        * params - [list of objects(defined in named operation)]
+    * Params
+        * None
+    * OutputType - [any]
+    * Output - single string adds output to that variable, list of strings applies output of each input object to the corresponding outputlist item
 
 _Custom Operations_:
 * Language specific method for defining a custom operation (i.e. in go using go get)
