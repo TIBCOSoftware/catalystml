@@ -536,15 +536,15 @@ _Image Processing_:
 * __tensor2image__: Converts a mathematical tensor (i.e. an array of any number of dimentions) into an image
 
 _MetaOperations_
-* __runCML__:
+* __runCML__: Runs another CML data preperation structure within the current structure. Allows you to integrate other CML structures into your JSON and pass standardized processing between languages.
     * Input
         * data - [any/object] the input data for the CML structure
     * Params
         * cmlFileName - path to where the json file that contains the CML structure.
     * OutputYpe - [any]
-* __applyToInputs__: 
+* __applyToInputs__: Applies the name operation to the list of inputs and params.  This way you do not have to list oneHotEncoding (for example) 10 times for each of your catagorical data columns.
     * Input
-        * operation/function
+        * operation/function [string] - operation to apply
         * inputs - [list of objects(defined in named operation)]
         * params - [list of objects(defined in named operation)]
     * Params
