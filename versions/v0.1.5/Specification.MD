@@ -250,17 +250,18 @@ _Cleaning_:
             * Default=’index’
     * OutputType - [array or map] (same type as inputs)
 * __binning__: take a numerical list and convert it into bins
-* __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
+* __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1.  The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true. Collisions of column names are resolved, but append an intger after an "_" starting at 1 for the new column, for example "col_1", "col_2", "col_3", ...
     * Input
         * data - [array of arrays or map] 2D table to be converted to map
     * Params
-        * axis - [int] the orientation of the table
-            * optional=false
-        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
+        * inputColumns - [array of strings] the columns to which one Hot Encodding should be applied
+            Optional = false
+        * outputColumns - [array of strings] list of keys that should be turned into new columns
             * Optional = true
             * Default = those that exist in data
-        * separateOut - [bool] If the result is separate from the input data or not
-            * default=false
+        * keepOrig - [bool] The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true.
+            * Optional = true
+            * default = false
     * OutputType - [map]
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
@@ -546,7 +547,7 @@ _Utils_
         * data - [any/object] the input data for the CML structure
     * Params
         * cmlFileName - path to where the json file that contains the CML structure.
-    * OutputYpe - [any]
+    * OutputType - [any]
 * __applyToInputs__: Applies the name operation to the list of inputs and params.  This way you do not have to list oneHotEncoding (for example) 10 times for each of your catagorical data columns.
     * Input
         * operation/function [string] - operation to apply
