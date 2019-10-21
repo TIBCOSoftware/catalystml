@@ -503,7 +503,13 @@ _NLP_:
             * allowed: ["Snowball","Porter"]
     * OutputType - [string or array]
 * __segment__: Seperates a paragraph into sentences
+    * Input:
+        * str - [string]
+    * OutputType: [array of strings]
 * __posTag__: Part of speach tag
+    * Input:
+        * str - [string]
+    * OutputType: [array of arrays of strings]
 
 _Image Processing_:
 * __resize__: change dimensions of image
@@ -534,7 +540,7 @@ _Image Processing_:
             * default - False
             * Optional - True
     * OutputType - [array of array or arrays (3D or 4D matrix)]
-* __tensor2image__: Converts a mathematical tensor (i.e. an array of any number of dimentions) into an image
+* __tensor2image__: Converts a mathematical tensor (i.e. an array of any number of dimentions, for an image usualy 3Ds used, x,y,color) into an image
     * Input
         * tensor [array]
     * Params
