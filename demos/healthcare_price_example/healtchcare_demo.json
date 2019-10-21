@@ -67,8 +67,8 @@
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
-                      "col": "maritalstatus",
-                      "separateOut":false
+                      "inputColumns": "maritalstatus",
+                      "keepOrig":false
                     },
                     "output":"datatemp"
                   },
@@ -76,8 +76,8 @@
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
-                      "col": "state",
-                      "separateOut":false
+                      "inputColumns": "state",
+                      "keepOrig":false
                     },
                     "output":"datatemp"
                   },
@@ -85,8 +85,8 @@
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
-                      "col": "product",
-                      "separateOut":false
+                      "inputColumns": "product",
+                      "keepOrig":false
                     },
                     "output":"datatemp"
                   },
@@ -94,8 +94,8 @@
                     "operation":"oneHotEncoding",
                     "input":{"data":"$datatemp"},
                     "params":{
-                      "col": "occupation",
-                      "separateOut":false
+                      "inputColumns": "occupation",
+                      "keepOrig":false
                     },
                     "output":"datatemp"
                   },
