@@ -527,6 +527,9 @@ _Image Processing_:
     * OutputType - [image]
 * __removeAlpha__:  Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases
 * __grayscale__: Convert color image to grayscale
+    * Input:
+        * img - [image]
+    * OutputType - [image]
 * __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions) with value of integers ranging from 0 to 255
