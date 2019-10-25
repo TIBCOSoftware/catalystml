@@ -250,17 +250,18 @@ _Cleaning_:
             * Default=’index’
     * OutputType - [array or map] (same type as inputs)
 * __binning__: take a numerical list and convert it into bins
-* __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1
+* __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1.  The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true. Collisions of column names are resolved, but append an intger after an "_" starting at 1 for the new column, for example "col_1", "col_2", "col_3", ...
     * Input
         * data - [array of arrays or map] 2D table to be converted to map
     * Params
-        * axis - [int] the orientation of the table
-            * optional=false
-        * colKeys - [array of strings] list of keys for map that correspond to 0 to n columns in table
+        * inputColumns - [array of strings] the columns to which one Hot Encodding should be applied
+            Optional = false
+        * outputColumns - [array of strings] list of keys that should be turned into new columns
             * Optional = true
             * Default = those that exist in data
-        * separateOut - [bool] If the result is separate from the input data or not
-            * default=false
+        * keepOrig - [bool] The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true.
+            * Optional = true
+            * default = false
     * OutputType - [map]
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
@@ -502,7 +503,13 @@ _NLP_:
             * allowed: ["Snowball","Porter"]
     * OutputType - [string or array]
 * __segment__: Seperates a paragraph into sentences
+    * Input:
+        * str - [string]
+    * OutputType: [array of strings]
 * __posTag__: Part of speach tag
+    * Input:
+        * str - [string]
+    * OutputType: [array of arrays of strings]
 
 _Image Processing_:
 * __resize__: change dimensions of image
@@ -520,6 +527,9 @@ _Image Processing_:
     * OutputType - [image]
 * __removeAlpha__:  Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases
 * __grayscale__: Convert color image to grayscale
+    * Input:
+        * img - [image]
+    * OutputType - [image]
 * __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions) with value of integers ranging from 0 to 255
@@ -533,7 +543,7 @@ _Image Processing_:
             * default - False
             * Optional - True
     * OutputType - [array of array or arrays (3D or 4D matrix)]
-* __tensor2image__: Converts a mathematical tensor (i.e. an array of any number of dimentions) into an image
+* __tensor2image__: Converts a mathematical tensor (i.e. an array of any number of dimentions, for an image usualy 3Ds used, x,y,color) into an image
     * Input
         * tensor [array]
     * Params
@@ -546,7 +556,7 @@ _Utils_
         * data - [any/object] the input data for the CML structure
     * Params
         * cmlFileName - path to where the json file that contains the CML structure.
-    * OutputYpe - [any]
+    * OutputType - [any]
 * __applyToInputs__: Applies the name operation to the list of inputs and params.  This way you do not have to list oneHotEncoding (for example) 10 times for each of your catagorical data columns.
     * Input
         * operation/function [string] - operation to apply
