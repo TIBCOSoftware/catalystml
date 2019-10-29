@@ -116,7 +116,7 @@ _Math_:
     *Input
         * Data - < array of arrays> 
             * Optional=False
-        * scaler - [float]
+        * scaler - [float] value to scale by
             * Optional=False
     * Params
         * None
@@ -227,7 +227,6 @@ _Cleaning_:
         * Col - map key or column number
     * Params
         * Ascending - [boolean]
-        * KeepRow - [boolean] (keeps row/column)
         * Axis - [int] (0=vertical/column, 1=horizontal/row)
     * OutputType - [array of arrays or map]
 * __filter__:  keep/remove rows with certain values
@@ -304,7 +303,7 @@ _Cleaning_:
 _Restructuring_:
 * __dropCol__:  remove cols from matrix or map
     * Input
-        * data - [matrix or map]
+        * data - [matrix or map] original data set
             * optional = False
         * cols - [strings, ints, array] indices or key for column in map or matrix to be removed
     * OutputType - [matrix or map]
@@ -316,6 +315,8 @@ _Restructuring_:
     * Params
         * asIndex - [boolean]
         * axis - [int] (0=vertical/column, 1=horizontal/row)
+            * optional = true
+            * default = 0
     * OutputType - [array or map]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
 * __transpose__:  transpose a matrix
@@ -340,7 +341,7 @@ _Restructuring_:
 * __addCol2Table__: add a new column to a matrix from a given array (matrix is assumed to be 2-D list)
     * Input
         * matrix - [map or array] matrix to be expanded
-        * col - [array]  array of same length as matrix's second dimention
+        * col - [array]  col to be added of same length as matrix's second dimention
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
    * Input
@@ -368,7 +369,7 @@ _Restructuring_:
 * __cast__: convert the base datatype of a data structure or datatype from one base type to another (i.e. [int32,int32] to [flat64,float64]), it is useful to note that maps of arrays are allowed and handle by the specification.
     * Input
         * data - [any datatype or data structure] input data to be cast.
-        * toType - [string] string depicting which datatype to cast to.  Allowed: int64,float64,string,int32,float32,boolean
+        * toType - [string] string depicting which datatype to cast to.  Allowed: int64,float64,string,int32,float32,boolean.
     * OutputType - [any]
 
 _String Processing_:
@@ -474,11 +475,11 @@ _String Processing_:
 _NLP_:
 * __tokenize__: separate text into tokens / words / punctuation
     * Input:
-        * str - [string]
+        * str - [string] string to tokenize
     * OutputType: [array of strings]
 * __word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __embedding2word__: convert list of embedding to closest words
-* __getStopWords__: gets array of ([stop words](https://en.wikipedia.org/wiki/Stop_words)).
+* __getStopWords__: gets array of ([stop words](https://en.wikipedia.org/wiki/Stop_words)), by either using a default, or reading from a file.
     * Params:
         * lib - [string] - which library stopword list to load
             * Optional = True
@@ -492,10 +493,10 @@ _NLP_:
         * merge -  [bool] Whether to merge list from file with file from library
             * Optional = True
             * default = False
-    * OutputType - [string]
+    * OutputType - [array]
 * __stem__: produces the stem of a word (i.e. running -> run)
     * Input:
-        * str - [string]
+        * str - [string] word to have endings removed
     * Params:
         * algo - [string]
             * Optional = True
@@ -506,7 +507,7 @@ _NLP_:
     * Input:
         * str - [string]
     * OutputType: [array of strings]
-* __posTag__: Part of speach tag
+* __posTag__: Part of speach tagger
     * Input:
         * str - [string]
     * OutputType: [array of arrays of strings]
@@ -530,7 +531,12 @@ _Image Processing_:
     * Input:
         * img - [image]
     * OutputType - [image]
-* __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
+* __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face).  If size from corner is larger than the image the subsection is returned up to the image edge.
+    * Input
+        * img - [image] image to be have subsection removed from
+    * Params
+        * size - [array of ints] the size of the subsection
+        * lowerLeftCorner - [array of ints] the x,y coordinates (the corner with the lowest x,y vaules)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions) with value of integers ranging from 0 to 255
     * Input
