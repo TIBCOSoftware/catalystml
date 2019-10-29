@@ -319,12 +319,26 @@ _Restructuring_:
             * default = 0
     * OutputType - [array or map]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
+    * Input
+        * data - [array or map] Column(s) to use for populating new frame’s values.
+    * Params
+        * index - [array of strings] Name of columns which value to be used to make new frame’s index.
+            *optional= false
+        * Columns - [array of strings] : Name of columns which value to be used to make new frame’s columns.
+            *optional = false
+        * Aggregate - [map[string]string] : Map key is groupKey, map value is aggregate function. Currently support Sum, Count, Mean, Min, Max
+            * allowed= Sum, Count, Mean, Min, Max
+            * optional= false
+    * OutputType - [DataFrame]
 * __transpose__:  transpose a matrix
+    * Input
+        * data [array]- Matrix to be transposed
+            * Optional=False
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
-        * Data0 - [array of data variables]  contains matrices or maps of inputs
+        * Data0 - [array,map]  contains matrices or maps of inputs
             * Optional=False
-        * Data1 - [array of data variables]  contains matrices or maps of inputs
+        * Data1 - [array,map]  contains matrices or maps of inputs
             *Optional=False
     * Params
         * on - [array of strings]  - either index or the col name/number
@@ -355,7 +369,7 @@ _Restructuring_:
         * colOrder - [array of strings] list of the columns to be merged into table (ORDER MATTERS)
             * Optional=False
     * Params
-        * axis - the orientation of the table
+        * axis - [int] the orientation of the table, (0=vertical/column, 1=horizontal/row)
             * default=0
     * OutputType - [array of arrays]
 * __table2Map__: convert a matrix to a map by adding a name to each column
