@@ -544,7 +544,6 @@ _Image Processing_:
             * default - "Lanczos"
             * allowed: ["Lanczos","NearestNeighbor","Linear", "CatmullRom"]
     * OutputType - [image]
-* __removeAlpha__:  Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases
 * __grayscale__: Convert color image to grayscale
     * Input:
         * img - [image]
