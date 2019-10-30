@@ -299,6 +299,10 @@ _Cleaning_:
             * Optional=true
             * default=array
     * OutputType - [array]
+* __concatMap__: takes an array of maps and combines them into one.
+    * Input
+        * data - [array] array of maps to be combines into one
+    * OutputType - [map]
 
 _Restructuring_:
 * __dropCol__:  remove cols from matrix or map
