@@ -19,10 +19,10 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
 
 * data structures:
     * "list" - is an array of objects (we also use matrix and array of array interchangably below)
-    * "map" - a hash table of key value pairs - values are data types or lists
+    * "map" - a hash table of key value pairs - values are data types or structures
     * "image" - a type that holds all image data, should support at least png, gif, jpeg types
     * "datetime" - structure to contain date and time
-    * "any" - any of the other types or structure - only available for final output
+    * "any" - any of the other types or structure 
 * data types:
     * "string"
     * "int32"
@@ -31,7 +31,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "float64"
     * "boolean"
 
-Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").  If a "$" or "&" should be included in a string the escape character "\" should preceed the "$" or "&".
+Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").  If a "$" or "&" should be included in a string the escape character "\\" should preceed the "$" or "&".
 
 Dataframes are a common data structure when dealing with data processing.  While dataframes are not addressed outside this section, the idea of dataframes is incorporated in how to manipulate data.  In this context a datframe is considered to be a map with values that correspond to arrays.
 
@@ -65,10 +65,10 @@ General information describes several key:value pairs within the first level of 
 * __Input__: [array of objects] defines a list containing all inputs 
 
 The root level key value “input” is used to define the data that is passed into the specification.  Since multiple data objects can be passed to the specification “input” is a JSON list of objects containing the following key words:
-* type
-* dimensions - if relevant
-* shape - if relevant
-* label
+* type - [string]
+* dimensions - array]- if relevant
+* shape - [array]-  if relevant
+* label - [string] if labeling full input, [array] if providing labels for each component, [map] is proviging labels for compenents of a map
 
 ### Operations:
 
@@ -87,10 +87,10 @@ structure: [array of objects] defines a list containing all operations - the ope
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
 #### Tests of Operations
-A directory exists within the github repository titled 'tests' that includes unit tests for various operations.  This directory is further subdivided by the same categories as the below operations. Then each operation will consist of its own direcctory (directory name sharing the name of the operation).  Each test in an operations directory will consist of three files: the operation inputs and parameters as they would be entered into a structure, an input file, and an output file where each operation can have multiple tests.  Each test will be numbered starting from 0.  The format of the names for the tests of operation _OperationName_, test number _X_, and with input as a _jpeg_ and output as a _csv_ is as follows:
+A directory exists within the github repository titled 'tests' that includes unit tests for various operations.  This directory is further subdivided by the same categories as the below operations. Then each operation will consist of its own directory (directory name sharing the name of the operation).  Each test in an operations directory will consist of three files: the operation inputs and parameters as they would be entered into a structure, an input file, and an output file where each operation can have multiple tests.  Each test will be numbered starting from 0.  The format of the names for the tests of operation _OperationName_, test number _X_, and with input as a _jpeg_ and output as a _csv_ is as follows:
 *   _OperationNameX.json_ - for the operation structure ($input designates in the input variable)
 *   _OperationNameX.in.jpeg_ - for the operation input
-*   _OperationNameX.in.csv_ - for the operation input
+*   _OperationNameX.out.csv_ - for the operation output
 
 #### Supported Operations:
 _Math_:
@@ -595,7 +595,7 @@ _Custom Operations_:
 
 #### Operations in implementaitons:
 
-To aid in integrating implementations of this specification into GUI interfaces, and IDEs every operation should be defined by a JSON.  All of the above operations are given in the operations directory.  The JSON to define an operation is define as follows, with mulitple objects allowed in the lists for "input" and "params":
+To aid in integrating implementations of this specification into GUI interfaces and IDEs every operation should be defined by a JSON.  All of the above operations are given in the operations directory.  The JSON to define an operation is define as follows, with mulitple objects allowed in the lists for "input" and "params":
 ```
 {
     “title”:”title”,
