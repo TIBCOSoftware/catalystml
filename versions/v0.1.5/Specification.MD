@@ -141,18 +141,18 @@ _Math_:
     * OutputType - [array of arrays] (same size as inputs)
 * __addPairWise__:for matrices of the same shape add corresponding values
     * Input
-        * matrix0 - [array of arrays]
+        * matrix0 - [array of arrays] first matrix 
             *Optional=False
-        * matrix1 - [array of arrays]
+        * matrix1 - [array of arrays] second matrix
             * Optional=False
     * Params
         * None
     * OutputType - [array of arrays] (same size as inputs)
 * __divPairWise__: for matrices of the same shape divide corresponding values
     * Input
-        * matrix0 - [array of arrays] 
+        * matrix0 - [array of arrays] first matrix (numerator)
             * Optional=False
-        * matrix1 - [array of arrays]
+        * matrix1 - [array of arrays] second matrix (denominator)
             * Optional=False
     * Params
         * None
