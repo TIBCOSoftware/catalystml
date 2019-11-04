@@ -19,10 +19,10 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
 
 * data structures:
     * "list" - is an array of objects (we also use matrix and array of array interchangably below)
-    * "map" - a hash table of key value pairs - values are data types or lists
+    * "map" - a hash table of key value pairs - values are data types or structures
     * "image" - a type that holds all image data, should support at least png, gif, jpeg types
     * "datetime" - structure to contain date and time
-    * "any" - any of the other types or structure - only available for final output
+    * "any" - any of the other types or structure 
 * data types:
     * "string"
     * "int32"
@@ -31,7 +31,7 @@ Throughout the specification (especially in Inputs and Outputs) data types and s
     * "float64"
     * "boolean"
 
-Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").  If a "$" or "&" should be included in a string the escape character "\" should preceed the "$" or "&".
+Since strings and data references are both surrounded by quotes to distinguish between them data references have a “$” at the beginning of the label.  Likewise, to reserve keywords to be referenced within a specific operation (i.e. item in Apply) use "&" in front of the keyword (.i.e. "&item").  If a "$" or "&" should be included in a string the escape character "\\" should preceed the "$" or "&".
 
 Dataframes are a common data structure when dealing with data processing.  While dataframes are not addressed outside this section, the idea of dataframes is incorporated in how to manipulate data.  In this context a datframe is considered to be a map with values that correspond to arrays.
 
@@ -65,10 +65,10 @@ General information describes several key:value pairs within the first level of 
 * __Input__: [array of objects] defines a list containing all inputs 
 
 The root level key value “input” is used to define the data that is passed into the specification.  Since multiple data objects can be passed to the specification “input” is a JSON list of objects containing the following key words:
-* type
-* dimensions - if relevant
-* shape - if relevant
-* label
+* type - [string]
+* dimensions - array]- if relevant
+* shape - [array]-  if relevant
+* label - [string] if labeling full input, [array] if providing labels for each component, [map] is proviging labels for compenents of a map
 
 ### Operations:
 
@@ -87,10 +87,10 @@ structure: [array of objects] defines a list containing all operations - the ope
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
 #### Tests of Operations
-A directory exists within the github repository titled 'tests' that includes unit tests for various operations.  This directory is further subdivided by the same categories as the below operations. Then each operation will consist of its own direcctory (directory name sharing the name of the operation).  Each test in an operations directory will consist of three files: the operation inputs and parameters as they would be entered into a structure, an input file, and an output file where each operation can have multiple tests.  Each test will be numbered starting from 0.  The format of the names for the tests of operation _OperationName_, test number _X_, and with input as a _jpeg_ and output as a _csv_ is as follows:
+A directory exists within the github repository titled 'tests' that includes unit tests for various operations.  This directory is further subdivided by the same categories as the below operations. Then each operation will consist of its own directory (directory name sharing the name of the operation).  Each test in an operations directory will consist of three files: the operation inputs and parameters as they would be entered into a structure, an input file, and an output file where each operation can have multiple tests.  Each test will be numbered starting from 0.  The format of the names for the tests of operation _OperationName_, test number _X_, and with input as a _jpeg_ and output as a _csv_ is as follows:
 *   _OperationNameX.json_ - for the operation structure ($input designates in the input variable)
 *   _OperationNameX.in.jpeg_ - for the operation input
-*   _OperationNameX.in.csv_ - for the operation input
+*   _OperationNameX.out.csv_ - for the operation output
 
 #### Supported Operations:
 _Math_:
@@ -116,7 +116,7 @@ _Math_:
     *Input
         * Data - < array of arrays> 
             * Optional=False
-        * scaler - [float]
+        * scaler - [float] value to scale by
             * Optional=False
     * Params
         * None
@@ -227,7 +227,6 @@ _Cleaning_:
         * Col - map key or column number
     * Params
         * Ascending - [boolean]
-        * KeepRow - [boolean] (keeps row/column)
         * Axis - [int] (0=vertical/column, 1=horizontal/row)
     * OutputType - [array of arrays or map]
 * __filter__:  keep/remove rows with certain values
@@ -300,11 +299,15 @@ _Cleaning_:
             * Optional=true
             * default=array
     * OutputType - [array]
+* __concatMap__: takes an array of maps and combines them into one.
+    * Input
+        * data - [array] array of maps to be combines into one
+    * OutputType - [map]
 
 _Restructuring_:
 * __dropCol__:  remove cols from matrix or map
     * Input
-        * data - [matrix or map]
+        * data - [matrix or map] original data set
             * optional = False
         * cols - [strings, ints, array] indices or key for column in map or matrix to be removed
     * OutputType - [matrix or map]
@@ -316,14 +319,30 @@ _Restructuring_:
     * Params
         * asIndex - [boolean]
         * axis - [int] (0=vertical/column, 1=horizontal/row)
+            * optional = true
+            * default = 0
     * OutputType - [array or map]
 * __pivot__:  reshape a matrix or map by re-indexing like the pivot function in pandas
+    * Input
+        * data - [array or map] Column(s) to use for populating new frame’s values.
+    * Params
+        * index - [array of strings] Name of columns which value to be used to make new frame’s index.
+            *optional= false
+        * Columns - [array of strings] : Name of columns which value to be used to make new frame’s columns.
+            *optional = false
+        * Aggregate - [map[string]string] : Map key is groupKey, map value is aggregate function. Currently support Sum, Count, Mean, Min, Max
+            * allowed= Sum, Count, Mean, Min, Max
+            * optional= false
+    * OutputType - [DataFrame]
 * __transpose__:  transpose a matrix
+    * Input
+        * data [array]- Matrix to be transposed
+            * Optional=False
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
-        * Data0 - [array of data variables]  contains matrices or maps of inputs
+        * Data0 - [array,map]  contains matrices or maps of inputs
             * Optional=False
-        * Data1 - [array of data variables]  contains matrices or maps of inputs
+        * Data1 - [array,map]  contains matrices or maps of inputs
             *Optional=False
     * Params
         * on - [array of strings]  - either index or the col name/number
@@ -340,7 +359,7 @@ _Restructuring_:
 * __addCol2Table__: add a new column to a matrix from a given array (matrix is assumed to be 2-D list)
     * Input
         * matrix - [map or array] matrix to be expanded
-        * col - [array]  array of same length as matrix's second dimention
+        * col - [array]  col to be added of same length as matrix's second dimention
     * OutputType - [matrix]
 * __reShape__: change the dimensionality of a matrix without changing the underlying data
    * Input
@@ -354,7 +373,7 @@ _Restructuring_:
         * colOrder - [array of strings] list of the columns to be merged into table (ORDER MATTERS)
             * Optional=False
     * Params
-        * axis - the orientation of the table
+        * axis - [int] the orientation of the table, (0=vertical/column, 1=horizontal/row)
             * default=0
     * OutputType - [array of arrays]
 * __table2Map__: convert a matrix to a map by adding a name to each column
@@ -368,7 +387,7 @@ _Restructuring_:
 * __cast__: convert the base datatype of a data structure or datatype from one base type to another (i.e. [int32,int32] to [flat64,float64]), it is useful to note that maps of arrays are allowed and handle by the specification.
     * Input
         * data - [any datatype or data structure] input data to be cast.
-        * toType - [string] string depicting which datatype to cast to.  Allowed: int64,float64,string,int32,float32,boolean
+        * toType - [string] string depicting which datatype to cast to.  Allowed: int64,float64,string,int32,float32,boolean.
     * OutputType - [any]
 
 _String Processing_:
@@ -474,11 +493,11 @@ _String Processing_:
 _NLP_:
 * __tokenize__: separate text into tokens / words / punctuation
     * Input:
-        * str - [string]
+        * str - [string] string to tokenize
     * OutputType: [array of strings]
 * __word2embedding__: convert words from list to array of wordlist x numerical embedding
 * __embedding2word__: convert list of embedding to closest words
-* __getStopWords__: gets array of ([stop words](https://en.wikipedia.org/wiki/Stop_words)).
+* __getStopWords__: gets array of ([stop words](https://en.wikipedia.org/wiki/Stop_words)), by either using a default, or reading from a file.
     * Params:
         * lib - [string] - which library stopword list to load
             * Optional = True
@@ -492,10 +511,10 @@ _NLP_:
         * merge -  [bool] Whether to merge list from file with file from library
             * Optional = True
             * default = False
-    * OutputType - [string]
+    * OutputType - [array]
 * __stem__: produces the stem of a word (i.e. running -> run)
     * Input:
-        * str - [string]
+        * str - [string] word to have endings removed
     * Params:
         * algo - [string]
             * Optional = True
@@ -506,7 +525,7 @@ _NLP_:
     * Input:
         * str - [string]
     * OutputType: [array of strings]
-* __posTag__: Part of speach tag
+* __posTag__: Part of speach tagger
     * Input:
         * str - [string]
     * OutputType: [array of arrays of strings]
@@ -525,12 +544,16 @@ _Image Processing_:
             * default - "Lanczos"
             * allowed: ["Lanczos","NearestNeighbor","Linear", "CatmullRom"]
     * OutputType - [image]
-* __removeAlpha__:  Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases
 * __grayscale__: Convert color image to grayscale
     * Input:
         * img - [image]
     * OutputType - [image]
-* __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face)
+* __subSectionToImage__: takes a portion of an image and makes it an independent image (i.e. for selecting out a face).  If size from corner is larger than the image the subsection is returned up to the image edge.
+    * Input
+        * img - [image] image to be have subsection removed from
+    * Params
+        * size - [array of ints] the size of the subsection
+        * lowerLeftCorner - [array of ints] the x,y coordinates (the corner with the lowest x,y vaules)
 * __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions) with value of integers ranging from 0 to 255
     * Input
@@ -572,7 +595,7 @@ _Custom Operations_:
 
 #### Operations in implementaitons:
 
-To aid in integrating implementations of this specification into GUI interfaces, and IDEs every operation should be defined by a JSON.  All of the above operations are given in the operations directory.  The JSON to define an operation is define as follows, with mulitple objects allowed in the lists for "input" and "params":
+To aid in integrating implementations of this specification into GUI interfaces and IDEs every operation should be defined by a JSON.  All of the above operations are given in the operations directory.  The JSON to define an operation is define as follows, with mulitple objects allowed in the lists for "input" and "params":
 ```
 {
     “title”:”title”,

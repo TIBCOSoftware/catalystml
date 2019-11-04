@@ -1,14 +1,13 @@
 {
-    "title":"tokenize",
-    "desc":"Seperates a string into words.",
+    "title":"posTag",
+    "desc":"Part of speach tagger",
     "input":[
 	        {
-                "str":"s0", 
+                "name":"str", 
                 "type":"string", 
                 "description":"string", 
                 "optional":false
             }
 	    ],
-    "params":[],
-    "output":"array[string]"
+    "output":"array"
 }
