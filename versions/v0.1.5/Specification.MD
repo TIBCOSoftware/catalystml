@@ -66,9 +66,10 @@ General information describes several key:value pairs within the first level of 
 
 The root level key value “input” is used to define the data that is passed into the specification.  Since multiple data objects can be passed to the specification “input” is a JSON list of objects containing the following key words:
 * type - [string]
-* dimensions - array]- if relevant
+* dimensions - [array]- if relevant
 * shape - [array]-  if relevant
-* label - [string] if labeling full input, [array] if providing labels for each component, [map] is proviging labels for compenents of a map
+* label - [string] if labeling full input, [array] if providing labels for each component using "_" to skip assigning labels if desired, [map] is proviging labels for compenents of a map.  Errors are thrown if labels are given for non-existant data references (i.e. arr[9] if the array is only lenth 5, or if key1 in {"key1":"label3"} doesn't exist).
+
 
 ### Operations:
 
@@ -175,14 +176,14 @@ _Math_:
     * OutputType - [int,float]
 * __multi__: multiply two numbers
     * Input
-        * a0 - [int,string,float,etc] 
+        * a0 - [int,float] 
             * Optional=False
         * a1 - [int,float] 
             * Optional=False
     * OutputType - [int,float]
 * __divide__: divide two numbers
     * Input
-        * num - [int,string,float,etc] 
+        * num - [int,float] 
             * Optional=False
         * denom - [int,float] 
             * Optional=False
@@ -224,7 +225,7 @@ _Cleaning_:
     * Input
         * Data - [array of arrays or map]
 			* Optional=False
-        * Col - map key or column number
+        * Col - map key or column number, or "index" to sort
     * Params
         * Ascending - [boolean]
         * Axis - [int] (0=vertical/column, 1=horizontal/row)
@@ -590,8 +591,8 @@ _Utils_
     * OutputType - [any]
     * Output - single string adds output to that variable, list of strings applies output of each input object to the corresponding outputlist item
 
-_Custom Operations_:
-* Language specific method for defining a custom operation (i.e. in go using go get)
+_Additional Operations_:
+* If further operations are needed.  Please suggest them through the Github Issue or PR  system.
 
 #### Operations in implementaitons:
 

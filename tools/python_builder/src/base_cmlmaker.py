@@ -1,5 +1,6 @@
 import datetime
 import json
+import random as r
 
 class structure:
     """
@@ -45,14 +46,14 @@ class structure:
             l.append(o.output)
         s="["+", ".join(l)+"]"
         return s
-    def addInput(self,inpobj):
-        self.input.append(inpobj.make_map())
+    def addInput(self,inobj):
+        self.input.append(inobj.make_map())
         return self
     def addOutput(self,outobj):
         self.output=outobj.make_map()
         return self
 
-class inpobj:
+class inobj:
     """
     the structure of an input object has type,label, dim, and shape
     type (1st) and label(2nd) are required with dim and shape optional
