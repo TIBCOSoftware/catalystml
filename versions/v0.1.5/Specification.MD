@@ -224,10 +224,21 @@ _Cleaning_:
     * Input
         * Data - [array of arrays or map]
 			* Optional=False
-        * Col - map key or column number
     * Params
         * Ascending - [boolean]
-        * Axis - [int] (0=vertical/column, 1=horizontal/row)
+	        * Optional = TRUE
+	        * Default = False
+        * Axis - [int] 
+            * Optional = TRUE
+            * Default = 0,
+            * Allowed = (0:vertical/column, 1:horizontal/row),
+        * nilPosition - [string] 
+            * Optional = False
+            * Allowed = ["first", "last"],
+        * by - [array] sort by elements
+            * Optional = False
+				* string array : sort by the conlumns (with configured column label), 
+				* int array (0 means first column) : sort by the columns (whith configured column number)
     * OutputType - [array of arrays or map]
 * __filter__:  keep/remove rows with certain values
     * Input
@@ -336,7 +347,7 @@ _Restructuring_:
     * OutputType - [DataFrame]
 * __transpose__:  transpose a matrix
     * Input
-        * data [array]- Matrix to be transposed
+        * data [array,map]- Matrix to be transposed
             * Optional=False
 * __join__:  join two data objects like the Left Join command in SQL
     * Input
