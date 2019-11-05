@@ -4,7 +4,7 @@
     "input":[
 	        {
                 "name":"data", 
-                "type":"array", 
+                "type":["array", "map"], 
                 "description":"Matrix to be transposed", 
                 "optional":false
             }
