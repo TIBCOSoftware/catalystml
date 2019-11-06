@@ -17,7 +17,7 @@ class structure:
         self.structure=[]
         self.output=None
     def __repr__(self):
-        return json.dumps(self.make_map())
+        return json.dumps(self.make_map(),indent=4)
     def make_map(self):
         m={}
         m["name"]=self.name
@@ -119,5 +119,5 @@ class operation:
     def __repr__(self):
         m=self.make_map()
         if m==None:return json.dumps()
-        return json.dumps(m)
+        return json.dumps(m,indented=4)
     

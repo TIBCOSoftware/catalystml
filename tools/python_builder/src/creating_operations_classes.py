@@ -24,7 +24,9 @@ def create_class(m,fout):
         #print(l)
         fout.write(f"\t\t{name}'s possible keys:\n")
         for  p in m[mapkey]:
-            s=f"\t\t\t{p['name']} - {p['description']}\n"
+            reqstr='required'
+            if 'optional' in p and p['optional']==True: reqstr='optional'
+            s=f"\t\t\t{p['name']} ({reqstr})- {p['description']}\n"
             fout.write(s)
         fout.write('\t\t"""\n')
         fout.write(f'\t\tdef __init__(self,{",".join(eqls(x["name"]) for x in l)}):\n')
@@ -97,5 +99,14 @@ fout.close()
 
 fout = open(filenameoutput, "a")
 make_ops_class(opdir,fout)
+
+s="\tdef listAllOps():"
+s+="\n\t\tprint('{:18s} {:20s}  {:s}')".format('Category:','Op name:','Description:')
+for op in ops:
+    cat=op.split("/")[-2]
+    with open(op) as f:
+        m=json.load(f)
+    s+="\n\t\tprint('{:18s} {:21s}  {:s}')".format(cat,m['title'],m['desc'][:65])
+fout.write(s)
 fout.close()
 

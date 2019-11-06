@@ -17,7 +17,7 @@ class structure:
         self.structure=[]
         self.output=None
     def __repr__(self):
-        return json.dumps(self.make_map())
+        return json.dumps(self.make_map(),indent=4)
     def make_map(self):
         m={}
         m["name"]=self.name
@@ -119,7 +119,7 @@ class operation:
     def __repr__(self):
         m=self.make_map()
         if m==None:return json.dumps()
-        return json.dumps(m)
+        return json.dumps(m,indented=4)
     
 class map2table(operation):
 	"""
@@ -128,8 +128,8 @@ class map2table(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			map - contains map to be converted to table
-			colOrder - list of the columns to be merged into table (ORDER MATTERS)
+			map (required)- contains map to be converted to table
+			colOrder (required)- list of the columns to be merged into table (ORDER MATTERS)
 		"""
 		def __init__(self,map=None,colOrder=None):
 			"""
@@ -148,7 +148,7 @@ class map2table(operation):
 	class params:
 		"""
 		params's possible keys:
-			axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
+			axis (required)- the orientation of the table (0=vertical/column, 1=horizontal/row)
 		"""
 		def __init__(self,axis=None):
 			"""
@@ -175,8 +175,8 @@ class groupBy(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to group
-			groupKeys - Column by which to group.
+			data (required)- data to group
+			groupKeys (required)- Column by which to group.
 		"""
 		def __init__(self,data=None,groupKeys=None):
 			"""
@@ -195,8 +195,8 @@ class groupBy(operation):
 	class params:
 		"""
 		params's possible keys:
-			asIndex - 
-			axis - (0=vertical/column, 1=horizontal/row)
+			asIndex (required)- 
+			axis (optional)- (0=vertical/column, 1=horizontal/row)
 		"""
 		def __init__(self,asIndex=None,axis=None):
 			"""
@@ -225,8 +225,8 @@ class reshape(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to be reshaped
-			shape - array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is -1 that dimension is sized to fit the data. i.e. [-1,2,3] for a 24 value array means a 4x2x3 matrix
+			data (required)- data to be reshaped
+			shape (required)- array of integers where: 1) length of array  number of  output dimensions and 2) each integer specifies the number of values for a given dimension.  If the integer is -1 that dimension is sized to fit the data. i.e. [-1,2,3] for a 24 value array means a 4x2x3 matrix
 		"""
 		def __init__(self,data=None,shape=None):
 			"""
@@ -255,7 +255,7 @@ class transpose(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - Matrix to be transposed
+			data (required)- Matrix to be transposed
 		"""
 		def __init__(self,data=None):
 			"""
@@ -282,8 +282,8 @@ class dropCol(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - original data set
-			cols - indices or key for column in map or matrix to be removed
+			data (required)- original data set
+			cols (required)- indices or key for column in map or matrix to be removed
 		"""
 		def __init__(self,data=None,cols=None):
 			"""
@@ -312,8 +312,8 @@ class cast(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - input data to be cast.
-			toType - String depicting which datatype to cast to.  Allowed:int64,float64,string,int32,float32,boolean
+			data (required)- input data to be cast.
+			toType (required)- String depicting which datatype to cast to.  Allowed:int64,float64,string,int32,float32,boolean
 		"""
 		def __init__(self,data=None,toType=None):
 			"""
@@ -342,7 +342,7 @@ class pivot(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - Column(s) to use for populating new frame’s values.
+			data (required)- Column(s) to use for populating new frame’s values.
 		"""
 		def __init__(self,data=None):
 			"""
@@ -359,9 +359,9 @@ class pivot(operation):
 	class params:
 		"""
 		params's possible keys:
-			index - Name of columns which value to be used to make new frame’s index
-			columns - Name of columns which value to be used to make new frame’s columns.
-			aggregate - Map key is groupKey, map value is aggregate function. Currently support Sum, Count, Mean, Min, Max
+			index (required)- Name of columns which value to be used to make new frame’s index
+			columns (required)- Name of columns which value to be used to make new frame’s columns.
+			aggregate (required)- Map key is groupKey, map value is aggregate function. Currently support Sum, Count, Mean, Min, Max
 		"""
 		def __init__(self,index=None,columns=None,aggregate=None):
 			"""
@@ -392,8 +392,8 @@ class addCol2Table(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			matrix - matrix to be expanded
-			col - col to be added of same length as matrix's second dimention
+			matrix (required)- matrix to be expanded
+			col (required)- col to be added of same length as matrix's second dimention
 		"""
 		def __init__(self,matrix=None,col=None):
 			"""
@@ -422,7 +422,7 @@ class flatten(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			matrix - matrix to be flattened
+			matrix (required)- matrix to be flattened
 		"""
 		def __init__(self,matrix=None):
 			"""
@@ -449,8 +449,8 @@ class table2map(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - contains map to be converted to table
-			colKeys - list of keys for map that correspond to 0 to n columns in table
+			data (required)- contains map to be converted to table
+			colKeys (required)- list of keys for map that correspond to 0 to n columns in table
 		"""
 		def __init__(self,data=None,colKeys=None):
 			"""
@@ -469,7 +469,7 @@ class table2map(operation):
 	class params:
 		"""
 		params's possible keys:
-			axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
+			axis (optional)- the orientation of the table (0=vertical/column, 1=horizontal/row)
 		"""
 		def __init__(self,axis=None):
 			"""
@@ -496,8 +496,8 @@ class join(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data0 - contains matrices or maps of inputs
-			data1 - contains matrices or maps of inputs
+			data0 (required)- contains matrices or maps of inputs
+			data1 (required)- contains matrices or maps of inputs
 		"""
 		def __init__(self,data0=None,data1=None):
 			"""
@@ -516,8 +516,8 @@ class join(operation):
 	class params:
 		"""
 		params's possible keys:
-			on - either index or the col name/number
-			how - sql join types
+			on (optional)- either index or the col name/number
+			how (required)- sql join types
 		"""
 		def __init__(self,on=None,how=None):
 			"""
@@ -546,8 +546,8 @@ class scale(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to get scale
-			scaler - data to get scale
+			data (required)- data to get scale
+			scaler (required)- data to get scale
 		"""
 		def __init__(self,data=None,scaler=None):
 			"""
@@ -576,9 +576,9 @@ class normalize(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to get mean of
-			value - value to normalize with (if starting at 0)
-			minval - min value to start normalize with (if not starting at 0)
+			data (required)- data to get mean of
+			value (required)- value to normalize with (if starting at 0)
+			minval (optional)- min value to start normalize with (if not starting at 0)
 		"""
 		def __init__(self,data=None,value=None,minval=None):
 			"""
@@ -609,8 +609,8 @@ class multPairWise(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			matrix0 - first matrix
-			matrix1 - second matrix.
+			matrix0 (required)- first matrix
+			matrix1 (required)- second matrix.
 		"""
 		def __init__(self,matrix0=None,matrix1=None):
 			"""
@@ -639,7 +639,7 @@ class norm(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to get geometric length of
+			data (required)- data to get geometric length of
 		"""
 		def __init__(self,data=None):
 			"""
@@ -656,7 +656,7 @@ class norm(operation):
 	class params:
 		"""
 		params's possible keys:
-			axis - which axis to use, 0 (horizontal) is default
+			axis (optional)- which axis to use, 0 (horizontal) is default
 		"""
 		def __init__(self,axis=None):
 			"""
@@ -683,7 +683,7 @@ class mean(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to get mean of
+			data (required)- data to get mean of
 		"""
 		def __init__(self,data=None):
 			"""
@@ -700,7 +700,7 @@ class mean(operation):
 	class params:
 		"""
 		params's possible keys:
-			axis - which axis to use, 0 (horizontal) is default
+			axis (optional)- which axis to use, 0 (horizontal) is default
 		"""
 		def __init__(self,axis=None):
 			"""
@@ -727,9 +727,9 @@ class concat(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - first string
-			s1 - second string
-			slist - list of strings
+			s0 (required)- first string
+			s1 (required)- second string
+			slist (required)- list of strings
 		"""
 		def __init__(self,s0=None,s1=None,slist=None):
 			"""
@@ -760,8 +760,8 @@ class levenshteinSimilarity(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - 1 string to get distance of
-			s1 - 1 string to get distance of
+			s0 (required)- 1 string to get distance of
+			s1 (required)- 1 string to get distance of
 		"""
 		def __init__(self,s0=None,s1=None):
 			"""
@@ -790,8 +790,8 @@ class lastindex(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - string
-			s1 - substring
+			s0 (required)- string
+			s1 (required)- substring
 		"""
 		def __init__(self,s0=None,s1=None):
 			"""
@@ -820,7 +820,7 @@ class tolower(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - string to be made lowercase
+			str (required)- string to be made lowercase
 		"""
 		def __init__(self,str=None):
 			"""
@@ -847,8 +847,8 @@ class matchregex(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - string
-			s1 - substring
+			s0 (required)- string
+			s1 (required)- substring
 		"""
 		def __init__(self,s0=None,s1=None):
 			"""
@@ -877,8 +877,8 @@ class count(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - the string to be searched within
-			s1 - the substring being searched for
+			s0 (required)- the string to be searched within
+			s1 (required)- the substring being searched for
 		"""
 		def __init__(self,s0=None,s1=None):
 			"""
@@ -907,10 +907,10 @@ class replace(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - string
-			s1 - string to be replaced
-			s2 - string to replace with
-			i - number of possible replacements, default all
+			s0 (required)- string
+			s1 (required)- string to be replaced
+			s2 (required)- string to replace with
+			i (optional)- number of possible replacements, default all
 		"""
 		def __init__(self,s0=None,s1=None,s2=None,i=None):
 			"""
@@ -943,8 +943,8 @@ class repeat(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s - string to be repeated
-			i - the number of repeats
+			s (required)- string to be repeated
+			i (required)- the number of repeats
 		"""
 		def __init__(self,s=None,i=None):
 			"""
@@ -983,8 +983,8 @@ class split(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - string to be seperated
-			sep - strings to be seperated at .i.e. ',' , '	', etc.
+			str (required)- string to be seperated
+			sep (required)- strings to be seperated at .i.e. ',' , '	', etc.
 		"""
 		def __init__(self,str=None,sep=None):
 			"""
@@ -1013,8 +1013,8 @@ class index(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - string
-			s1 - substring
+			s0 (required)- string
+			s1 (required)- substring
 		"""
 		def __init__(self,s0=None,s1=None):
 			"""
@@ -1043,7 +1043,7 @@ class toupper(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - string to be made upper case
+			str (required)- string to be made upper case
 		"""
 		def __init__(self,str=None):
 			"""
@@ -1070,8 +1070,8 @@ class levenshteinDistance(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - 1 string to get distance of
-			s1 - 1 string to get distance of
+			s0 (required)- 1 string to get distance of
+			s1 (required)- 1 string to get distance of
 		"""
 		def __init__(self,s0=None,s1=None):
 			"""
@@ -1100,8 +1100,8 @@ class contains(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			s0 - string
-			s1 - substring
+			s0 (required)- string
+			s1 (required)- substring
 		"""
 		def __init__(self,s0=None,s1=None):
 			"""
@@ -1125,15 +1125,15 @@ class contains(operation):
 
 class getStopWords(operation):
 	"""
-	Gets array of ([stop words](https://en.wikipedia.org/wiki/Stop_words)), by either using a default, or reading from a file.
+	Gets array of stop words, by either using a default, or reading from a file.
 	"""
 	class params:
 		"""
 		params's possible keys:
-			lib - which library stopword list to load
-			lang - The language to be used, based on [ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes). For example: English='en'.
-			fileLoc - path to file that contains list of stop words (1 word per line)
-			merge - Whether to merge list from file with file from library
+			lib (optional)- which library stopword list to load
+			lang (optional)- The language to be used, based on [ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes). For example: English='en'.
+			fileLoc (optional)- path to file that contains list of stop words (1 word per line)
+			merge (optional)- Whether to merge list from file with file from library
 		"""
 		def __init__(self,lib=None,lang=None,fileLoc=None,merge=None):
 			"""
@@ -1166,7 +1166,7 @@ class removeStop(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - the string to have stop words removed from
+			str (required)- the string to have stop words removed from
 		"""
 		def __init__(self,str=None):
 			"""
@@ -1183,7 +1183,7 @@ class removeStop(operation):
 	class params:
 		"""
 		params's possible keys:
-			lang - The language to be used, based on ISO 639-1 codes https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+			lang (optional)- The language to be used, based on ISO 639-1 codes https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 		"""
 		def __init__(self,lang=None):
 			"""
@@ -1210,7 +1210,7 @@ class tokenize(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - string to tokenize
+			str (required)- string to tokenize
 		"""
 		def __init__(self,str=None):
 			"""
@@ -1237,7 +1237,7 @@ class stem(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - word to have endings removed
+			str (required)- word to have endings removed
 		"""
 		def __init__(self,str=None):
 			"""
@@ -1254,7 +1254,7 @@ class stem(operation):
 	class params:
 		"""
 		params's possible keys:
-			algo - The algorithm to be used
+			algo (optional)- The algorithm to be used
 		"""
 		def __init__(self,algo=None):
 			"""
@@ -1281,7 +1281,7 @@ class segment(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - string
+			str (required)- string
 		"""
 		def __init__(self,str=None):
 			"""
@@ -1308,7 +1308,7 @@ class posTag(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			str - string
+			str (required)- string
 		"""
 		def __init__(self,str=None):
 			"""
@@ -1335,7 +1335,7 @@ class set(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			arr - the array to be turned into set
+			arr (required)- the array to be turned into set
 		"""
 		def __init__(self,arr=None):
 			"""
@@ -1362,8 +1362,8 @@ class ifnotin(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			arr0 - first array, the one to compare to the 'notin' list
-			arr1 - the array for the 'not in' of if not in.
+			arr0 (required)- first array, the one to compare to the 'notin' list
+			arr1 (required)- the array for the 'not in' of if not in.
 		"""
 		def __init__(self,arr0=None,arr1=None):
 			"""
@@ -1392,8 +1392,8 @@ class ifin(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			arr0 - first array, the one to compare to the 'in' list
-			arr1 - the array for the 'in' of if in.
+			arr0 (required)- first array, the one to compare to the 'in' list
+			arr1 (required)- the array for the 'in' of if in.
 		"""
 		def __init__(self,arr0=None,arr1=None):
 			"""
@@ -1422,7 +1422,7 @@ class concatMap(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - array of maps to be combines into one
+			data (required)- array of maps to be combines into one
 		"""
 		def __init__(self,data=None):
 			"""
@@ -1449,10 +1449,10 @@ class replaceValue(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to be operated on
-			replaceMap - map gives key to replace with value
-			replaceKey - what is to be replaced
-			replaceValue - what is to be replaced with
+			data (required)- data to be operated on
+			replaceMap (optional)- map gives key to replace with value
+			replaceKey (optional)- what is to be replaced
+			replaceValue (optional)- what is to be replaced with
 		"""
 		def __init__(self,data=None,replaceMap=None,replaceKey=None,replaceValue=None):
 			"""
@@ -1475,8 +1475,8 @@ class replaceValue(operation):
 	class params:
 		"""
 		params's possible keys:
-			Axis - (0=vertical/column, 1=horizontal/row)
-			Col - 
+			Axis (optional)- (0=vertical/column, 1=horizontal/row)
+			Col (optional)- Column to replace values in
 		"""
 		def __init__(self,Axis=None,Col=None):
 			"""
@@ -1505,8 +1505,8 @@ class apply(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - data to be operated on
-			function - the operator to be used as the function, $item to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
+			data (required)- data to be operated on
+			function (required)- the operator to be used as the function, $item to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
 		"""
 		def __init__(self,data=None,function=None):
 			"""
@@ -1525,7 +1525,7 @@ class apply(operation):
 	class params:
 		"""
 		params's possible keys:
-			mapOrArray - determines whether the output is an array or a map (input value as key,  response as value)
+			mapOrArray (optional)- determines whether the output is an array or a map (input value as key,  response as value)
 		"""
 		def __init__(self,mapOrArray=None):
 			"""
@@ -1552,7 +1552,7 @@ class oneHotEncoding(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data - 2D table to be converted to map
+			data (required)- 2D table to be converted to map
 		"""
 		def __init__(self,data=None):
 			"""
@@ -1569,9 +1569,9 @@ class oneHotEncoding(operation):
 	class params:
 		"""
 		params's possible keys:
-			inputColumns - the columns to which one Hot Encodding should be applied
-			outputColumns - list of keys for map that correspond to 0 to n columns in table
-			keepOrig - The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true
+			inputColumns (required)- the columns to which one Hot Encodding should be applied
+			outputColumns (optional)- list of keys for map that correspond to 0 to n columns in table
+			keepOrig (optional)- The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true
 		"""
 		def __init__(self,inputColumns=None,outputColumns=None,keepOrig=None):
 			"""
@@ -1595,6 +1595,59 @@ class oneHotEncoding(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
+class sort(operation):
+	"""
+	sort a matrix/map based on axis and given columns.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- array of maps to be combines into one
+		"""
+		def __init__(self,data=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			return m
+	class params:
+		"""
+		params's possible keys:
+			ascending (required)- Sorting data in ascending
+			axis (required)- 0=vertical/column, 1=horizontal/row.
+			nilPosition (required)- Puts Nils at the beginning if first; last puts Nils at the end.
+			by (required)- sort by elements: 1. all are string -> conlumn label, 2. all are int (0 means first column) -> column number
+		"""
+		def __init__(self,ascending=None,axis=None,nilPosition=None,by=None):
+			"""
+			initializing params
+			"""
+			self.ascending=ascending
+			self.axis=axis
+			self.nilPosition=nilPosition
+			self.by=by
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['ascending']=self.ascending
+			m['axis']=self.axis
+			m['nilPosition']=self.nilPosition
+			m['by']=self.by
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize sort operation and define inputs, parameters, and outputs"""
+		self.operation="sort"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
 class grayscale(operation):
 	"""
 	grayscale an image
@@ -1602,7 +1655,7 @@ class grayscale(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			img - the image to be grayscaled
+			img (required)- the image to be grayscaled
 		"""
 		def __init__(self,img=None):
 			"""
@@ -1629,7 +1682,7 @@ class subSectionToImage(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			img - image to be have subsection removed from
+			img (required)- image to be have subsection removed from
 		"""
 		def __init__(self,img=None):
 			"""
@@ -1646,8 +1699,8 @@ class subSectionToImage(operation):
 	class params:
 		"""
 		params's possible keys:
-			size - the size of the subsection
-			lowerLeftCorner - the x,y coordinates (the corner with the lowest x,y vaules)
+			size (required)- the size of the subsection
+			lowerLeftCorner (required)- the x,y coordinates (the corner with the lowest x,y vaules)
 		"""
 		def __init__(self,size=None,lowerLeftCorner=None):
 			"""
@@ -1676,7 +1729,7 @@ class resize(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			img - the image to be resized, jpg,png, or gif
+			img (required)- the image to be resized, jpg,png, or gif
 		"""
 		def __init__(self,img=None):
 			"""
@@ -1693,9 +1746,9 @@ class resize(operation):
 	class params:
 		"""
 		params's possible keys:
-			xsize - the width of the new image, if only xsize included, xsize/ysize ratio is preserved
-			ysize - the height of the new image, if only ysize included, ysize/xsize ratio is preserved
-			algo - algorithm to use for resizing
+			xsize (optional)- the width of the new image, if only xsize included, xsize/ysize ratio is preserved
+			ysize (optional)- the height of the new image, if only ysize included, ysize/xsize ratio is preserved
+			algo (optional)- algorithm to use for resizing
 		"""
 		def __init__(self,xsize=None,ysize=None,algo=None):
 			"""
@@ -1726,7 +1779,7 @@ class img2tensor(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			img - the image to be converted, jpg,png, or gif
+			img (required)- the image to be converted, jpg,png, or gif
 		"""
 		def __init__(self,img=None):
 			"""
@@ -1743,8 +1796,8 @@ class img2tensor(operation):
 	class params:
 		"""
 		params's possible keys:
-			removeAlpha - Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases.  True means remove alpha while converting.
-			includeBatch - Often ML requires a dimension for batch (multiple images), if true dimensions = 4 with first dimension the batch, otherwise this produces a 3-D tensor (width, height, color).
+			removeAlpha (optional)- Most images have 4 values per pixel r,b,g,alpha, where alpha is something like transparency - alpha is not used in most ML cases.  True means remove alpha while converting.
+			includeBatch (optional)- Often ML requires a dimension for batch (multiple images), if true dimensions = 4 with first dimension the batch, otherwise this produces a 3-D tensor (width, height, color).
 		"""
 		def __init__(self,removeAlpha=None,includeBatch=None):
 			"""
@@ -1916,6 +1969,9 @@ class ops:
 		class oneHotEncoding(oneHotEncoding):
 			def __init__(self,inputs=None,params=None,output=None):
 				oneHotEncoding.__init__(self,inputs=inputs,params=params,output=output)
+		class sort(sort):
+			def __init__(self,inputs=None,params=None,output=None):
+				sort.__init__(self,inputs=inputs,params=params,output=output)
 	class image_processing:
 		"""
 		Image processing related operations
@@ -1932,3 +1988,53 @@ class ops:
 		class img2tensor(img2tensor):
 			def __init__(self,inputs=None,params=None,output=None):
 				img2tensor.__init__(self,inputs=inputs,params=params,output=output)
+	def listAllOps():
+		print('Category:          Op name:              Description:')
+		print('restructuring      map2table              convert a map to a matrix')
+		print('restructuring      groupBy                group by a given column in an axis and aggregate the value of ano')
+		print('restructuring      reshape                change the dimensionality of a matrix without changing the underl')
+		print('restructuring      transpose              transpose a matrix')
+		print('restructuring      dropCol                Remove cols from matrix or map')
+		print('restructuring      cast                   Convert the base datatype of a data structure or datatype from on')
+		print('restructuring      pivot                  group by a given column in an axis and aggregate the value of ano')
+		print('restructuring      addCol2Table           Add a column to a matrix')
+		print('restructuring      flatten                reduce multidimensional lists to single dimension')
+		print('restructuring      table2map              convert a matrix to a map by adding a name to each column')
+		print('restructuring      join                   group by a given column in an axis and aggregate the value of ano')
+		print('math               scale                  resizes an image')
+		print('math               normalize              divide all values of array by value (i.e. x/value), if minvalue i')
+		print('math               multPairWise           for matrices of the same shape multiply corresponding values')
+		print('math               norm                   determine the geometric length of a vector - output is a float.  ')
+		print('math               mean                   takes the mean of an array')
+		print('string_processing  concat                 join two strings together')
+		print('string_processing  levenshteinSimilarity  Add a column to a matrix')
+		print('string_processing  lastindex              LastIndex returns the index of the last instance of substr in s, ')
+		print('string_processing  tolower                ToLower returns a copy of the string s with all Unicode letters m')
+		print('string_processing  matchregex             whether substring exists in string')
+		print('string_processing  count                  count number of times substring appears in string')
+		print('string_processing  replace                Replace returns a copy of the string s with the first n non-overl')
+		print('string_processing  repeat                 Repeat returns a new string consisting of count copies of the str')
+		print('string_processing  uuid                   UUID generates a random UUID according to RFC 4122')
+		print('string_processing  split                  Split slices s into all substrings separated by sep and returns a')
+		print('string_processing  index                  Index returns the index of the first instance of substr in s, or ')
+		print('string_processing  toupper                ToUpper returns a copy of the string s with all Unicode letters m')
+		print('string_processing  levenshteinDistance    Add a column to a matrix')
+		print('string_processing  contains               whether substring exists in string')
+		print('nlp                getStopWords           Gets array of stop words, by either using a default, or reading f')
+		print('nlp                removeStop             removes Stop words from a string')
+		print('nlp                tokenize               separate text into tokens / words / punctuation.')
+		print('nlp                stem                   produces the stem of a word (i.e. running -> run)')
+		print('nlp                segment                Seperates a paragraph into sentences.')
+		print('nlp                posTag                 Part of speach tagger')
+		print('cleaning           set                    gets unordered array of unique values from original array')
+		print('cleaning           ifnotin                Given 2 arrays returns the new array with the elements of the fir')
+		print('cleaning           ifin                   Given 2 arrays returns the new array with the elements of the fir')
+		print('cleaning           concatMap              takes an array of maps and combines them into one.')
+		print('cleaning           replaceValue           Given a map replaces data (key) with map value')
+		print('cleaning           apply                  apply a function to every value in a vector or key in a map')
+		print('cleaning           oneHotEncoding         convert categorical vector into a set of vectors for each categor')
+		print('cleaning           sort                   sort a matrix/map based on axis and given columns.')
+		print('image_processing   grayscale              grayscale an image')
+		print('image_processing   subSectionToImage      takes a portion of an image and makes it an independent image (i.')
+		print('image_processing   resize                 resizes an image')
+		print('image_processing   img2tensor             converts an image type to an array of arrays')
