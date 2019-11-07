@@ -51,7 +51,7 @@
         "function": {
           "operation": "stem",
           "input": {
-            "str": "\u0026item"
+            "str": "&item"
           },
           "params": {
             "algo": "Snowball"
