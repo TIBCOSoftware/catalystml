@@ -304,17 +304,14 @@ _Cleaning_:
 * __apply__: apply a function to every value in a vector or key in a map
     * Input
         * data - [map or array] data to be operated on
-        * function - [json object] - the operator to be used as the function, "$item" to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
+        * function - [json object] - the operator to be used as the function, "&item" to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
     * Params
         * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
             * Options: "map", "array"
             * Optional=true
             * default=array
     * OutputType - [array]
-* __concatMap__: takes an array of maps and combines them into one.
-    * Input
-        * data - [array] array of maps to be combines into one
-    * OutputType - [map]
+
 
 _Restructuring_:
 * __dropCol__:  remove cols from matrix or map
@@ -401,6 +398,10 @@ _Restructuring_:
         * data - [any datatype or data structure] input data to be cast.
         * toType - [string] string depicting which datatype to cast to.  Allowed: int64,float64,string,int32,float32,boolean.
     * OutputType - [any]
+* __concatMap__: takes an array of maps and combines them into one.
+    * Input
+        * data - [array] array of maps to be combines into one
+    * OutputType - [map]
 
 _String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
