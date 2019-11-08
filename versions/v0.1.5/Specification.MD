@@ -158,15 +158,6 @@ _Math_:
     * Params
         * None
     * OutputType - [array of arrays] (same size as inputs)
-* __valToArray__: casts single value to array or array of arrays of given shape
-    * Input
-        * value - [int,string,float,etc] 
-            * Optional=False
-        * shape - [array of ints] - array determines shape of output ([2,3] means a 2x3 matrix)
-            * Optional=False
-    * Params
-        * None
-    * OutputType - [array of arrays] (same size as inputs)
 * __add__: add two numbers
     * Input
         * a0 - [int,string,float,etc] 
@@ -314,6 +305,15 @@ _Cleaning_:
 
 
 _Restructuring_:
+* __valToArray__: casts single value to array or array of arrays of given shape
+    * Input
+        * value - [int,string,float,etc] 
+            * Optional=False
+        * shape - [array of ints] - array determines shape of output ([2,3] means a 2x3 matrix)
+            * Optional=False
+    * Params
+        * None
+    * OutputType - [array of arrays] (same size as inputs)
 * __dropCol__:  remove cols from matrix or map
     * Input
         * data - [matrix or map] original data set
