@@ -307,7 +307,7 @@ _Cleaning_:
 _Restructuring_:
 * __valToArray__: casts single value to array or array of arrays of given shape
     * Input
-        * value - [int,string,float,etc] 
+        * value - [int,float,etc] 
             * Optional=False
         * shape - [array of ints] - array determines shape of output ([2,3] means a 2x3 matrix)
             * Optional=False
