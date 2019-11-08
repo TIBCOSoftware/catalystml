@@ -1,1 +1,1 @@
-# Python Tool for building CatalystML
+# Python API for building CatalystML

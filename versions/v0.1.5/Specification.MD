@@ -68,7 +68,7 @@ The root level key value “input” is used to define the data that is passed i
 * type - [string]
 * dimensions - [array]- if relevant
 * shape - [array]-  if relevant
-* label - [string] if labeling full input, [array] if providing labels for each component using "_" to skip assigning labels if desired, [map] is proviging labels for compenents of a map.  Errors are thrown if labels are given for non-existant data references (i.e. arr[9] if the array is only lenth 5, or if key1 in {"key1":"label3"} doesn't exist).
+* label - [string] if labeling full input, [array] if providing labels for each component using "_" to skip assigning labels if desired, [map] is providing labels for components of a map.  Errors are thrown if labels are given for non-existing data references (i.e. arr[9] if the array is only length 5, or if key1 in {"key1":"label3"} doesn't exist).
 
 
 ### Operations:
