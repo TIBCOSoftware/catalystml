@@ -1,13 +1,16 @@
 {
-    "data": "$wordstocount",
-    "function": {
-        "operation": "count",
-        "input": {
-            "s0": "$stringToCount",
-            "s1": "&item"
-        }
+    "input":{
+        "data": "$wordstocount",
+        "function": {
+            "operation": "count",
+            "input": {
+                "s0": "$stringToCount",
+                "s1": "&item"
+            }
+        },
     },
     "params": {
         "mapOrArray": "map"
-    }
+    },
+    "output":"out"
 }

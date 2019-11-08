@@ -291,7 +291,7 @@ _Cleaning_:
     * Input
         * arr0 - [array]  first array, the one to compare to the "in" list
             * Optional=False
-        * arr1 - [array of data variables]  the array for the "in" of if in.
+        * arr1 - [array]  the array for the "in" of if in.
             * Optional=False
     * OutputType - [array]
 * __ifNotIn__:Given 2 arrays returns the new array with the elements of the first array only if they DO NOT appear in the second array as well.

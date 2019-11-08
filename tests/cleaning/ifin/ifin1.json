@@ -1,0 +1,8 @@
+{
+    "operation":"ifin",
+    "input":{
+        "arr0": "$firstarr",
+        "arr1": "$secondarr"
+    },
+    "output":"out"
+}
