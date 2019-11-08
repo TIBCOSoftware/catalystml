@@ -603,9 +603,6 @@ _Utils_
     * OutputType - [any]
     * Output - single string adds output to that variable, list of strings applies output of each input object to the corresponding outputlist item
 
-_Additional Operations_:
-* If further operations are needed.  Please suggest them through the Github Issue or PR  system.
-
 #### Operations in implementaitons:
 
 To aid in integrating implementations of this specification into GUI interfaces and IDEs every operation should be defined by a JSON.  All of the above operations are given in the operations directory.  The JSON to define an operation is define as follows, with mulitple objects allowed in the lists for "input" and "params":
