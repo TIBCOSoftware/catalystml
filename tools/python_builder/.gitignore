@@ -1,0 +1,6 @@
+__pycache__/
+src/opsclasses.py
+.ipynb_checkpoints/
+.ipynb_checkpoints/*
+tmp*
+test*

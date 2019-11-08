@@ -40,7 +40,7 @@
         {
             "name":"Col", 
             "type":"int", 
-            "description":"", 
+            "description":"Column to replace values in", 
             "default":"index",
             "optional":true
         }

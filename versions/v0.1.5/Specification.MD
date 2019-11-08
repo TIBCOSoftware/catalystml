@@ -66,9 +66,10 @@ General information describes several key:value pairs within the first level of 
 
 The root level key value “input” is used to define the data that is passed into the specification.  Since multiple data objects can be passed to the specification “input” is a JSON list of objects containing the following key words:
 * type - [string]
-* dimensions - array]- if relevant
+* dimensions - [array]- if relevant
 * shape - [array]-  if relevant
-* label - [string] if labeling full input, [array] if providing labels for each component, [map] is proviging labels for compenents of a map
+* label - [string] if labeling full input, [array] if providing labels for each component using "_" to skip assigning labels if desired, [map] is providing labels for components of a map.  Errors are thrown if labels are given for non-existing data references (i.e. arr[9] if the array is only length 5, or if key1 in {"key1":"label3"} doesn't exist).
+
 
 ### Operations:
 
@@ -141,27 +142,18 @@ _Math_:
     * OutputType - [array of arrays] (same size as inputs)
 * __addPairWise__:for matrices of the same shape add corresponding values
     * Input
-        * matrix0 - [array of arrays]
+        * matrix0 - [array of arrays] first matrix 
             *Optional=False
-        * matrix1 - [array of arrays]
+        * matrix1 - [array of arrays] second matrix
             * Optional=False
     * Params
         * None
     * OutputType - [array of arrays] (same size as inputs)
 * __divPairWise__: for matrices of the same shape divide corresponding values
     * Input
-        * matrix0 - [array of arrays] 
+        * matrix0 - [array of arrays] first matrix (numerator)
             * Optional=False
-        * matrix1 - [array of arrays]
-            * Optional=False
-    * Params
-        * None
-    * OutputType - [array of arrays] (same size as inputs)
-* __valToArray__: casts single value to array or array of arrays of given shape
-    * Input
-        * value - [int,string,float,etc] 
-            * Optional=False
-        * shape - [array of ints] - array determines shape of output ([2,3] means a 2x3 matrix)
+        * matrix1 - [array of arrays] second matrix (denominator)
             * Optional=False
     * Params
         * None
@@ -175,14 +167,14 @@ _Math_:
     * OutputType - [int,float]
 * __multi__: multiply two numbers
     * Input
-        * a0 - [int,string,float,etc] 
+        * a0 - [int,float] 
             * Optional=False
         * a1 - [int,float] 
             * Optional=False
     * OutputType - [int,float]
 * __divide__: divide two numbers
     * Input
-        * num - [int,string,float,etc] 
+        * num - [int,float] 
             * Optional=False
         * denom - [int,float] 
             * Optional=False
@@ -290,7 +282,7 @@ _Cleaning_:
     * Input
         * arr0 - [array]  first array, the one to compare to the "in" list
             * Optional=False
-        * arr1 - [array of data variables]  the array for the "in" of if in.
+        * arr1 - [array]  the array for the "in" of if in.
             * Optional=False
     * OutputType - [array]
 * __ifNotIn__:Given 2 arrays returns the new array with the elements of the first array only if they DO NOT appear in the second array as well.
@@ -303,19 +295,25 @@ _Cleaning_:
 * __apply__: apply a function to every value in a vector or key in a map
     * Input
         * data - [map or array] data to be operated on
-        * function - [json object] - the operator to be used as the function, "$item" to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
+        * function - [json object] - the operator to be used as the function, "&item" to be used as the variable taken from the data variable when defining inputs and params (instance of the loop), output not included in this object since output is in the apply object
     * Params
         * mapOrArray - [string] determines whether the output is an array or a map (input value as key,  response as value)
             * Options: "map", "array"
             * Optional=true
             * default=array
     * OutputType - [array]
-* __concatMap__: takes an array of maps and combines them into one.
-    * Input
-        * data - [array] array of maps to be combines into one
-    * OutputType - [map]
+
 
 _Restructuring_:
+* __valToArray__: casts single value to array or array of arrays of given shape
+    * Input
+        * value - [int,float,etc] 
+            * Optional=False
+        * shape - [array of ints] - array determines shape of output ([2,3] means a 2x3 matrix)
+            * Optional=False
+    * Params
+        * None
+    * OutputType - [array of arrays] (same size as inputs)
 * __dropCol__:  remove cols from matrix or map
     * Input
         * data - [matrix or map] original data set
@@ -400,6 +398,10 @@ _Restructuring_:
         * data - [any datatype or data structure] input data to be cast.
         * toType - [string] string depicting which datatype to cast to.  Allowed: int64,float64,string,int32,float32,boolean.
     * OutputType - [any]
+* __concatMap__: takes an array of maps and combines them into one.
+    * Input
+        * data - [array] array of maps to be combines into one
+    * OutputType - [map]
 
 _String Processing_:
 * __date__: (year,month,day, etc.) extract date information from string
@@ -600,9 +602,6 @@ _Utils_
         * None
     * OutputType - [any]
     * Output - single string adds output to that variable, list of strings applies output of each input object to the corresponding outputlist item
-
-_Custom Operations_:
-* Language specific method for defining a custom operation (i.e. in go using go get)
 
 #### Operations in implementaitons:
 
