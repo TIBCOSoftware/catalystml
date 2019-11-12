@@ -1,7 +1,9 @@
 import json
 import os
+import sys
 
-with open("../../../versions/current.txt") as f:  v=f.readlines()[-1].strip()
+v=sys.argv[1]
+print("spec version = ",v)
 
 opdir=f"../../../versions/{v}/operations/"
 filenameoutput="opsclasses.py"
