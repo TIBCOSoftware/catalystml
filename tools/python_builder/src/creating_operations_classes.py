@@ -1,7 +1,7 @@
 import json
 import os
 
-with open("../../../current.txt") as f:  v=f.readlines()[-1].strip()
+with open("../../../versions/current.txt") as f:  v=f.readlines()[-1].strip()
 
 opdir=f"../../../versions/{v}/operations/"
 filenameoutput="opsclasses.py"

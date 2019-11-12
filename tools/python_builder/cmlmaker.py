@@ -32,7 +32,7 @@ class structure:
         m["structure"]=struc
         m["output"]=self.output
         return m
-    def addOps(self,ops,order=-1):
+    def addOperation(self,ops,order=-1):
         if order<0:
             self.structure.append(ops)
         else:

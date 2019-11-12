@@ -593,15 +593,6 @@ _Utils_
     * Params
         * cmlFileName - path to where the json file that contains the CML structure.
     * OutputType - [any]
-* __applyToInputs__: Applies the name operation to the list of inputs and params.  This way you do not have to list oneHotEncoding (for example) 10 times for each of your catagorical data columns.
-    * Input
-        * operation/function [string] - operation to apply
-        * inputs - [list of objects(defined in named operation)]
-        * params - [list of objects(defined in named operation)]
-    * Params
-        * None
-    * OutputType - [any]
-    * Output - single string adds output to that variable, list of strings applies output of each input object to the corresponding outputlist item
 
 #### Operations in implementaitons:
 
