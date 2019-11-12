@@ -1,6 +1,7 @@
 import datetime
 import json
 import random as r
+import os
 
 class structure:
     """
@@ -32,7 +33,7 @@ class structure:
         m["structure"]=struc
         m["output"]=self.output
         return m
-    def addOperation(self,ops,order=-1):
+    def addOp(self,ops,order=-1):
         if order<0:
             self.structure.append(ops)
         else:
@@ -52,6 +53,33 @@ class structure:
     def addOutput(self,outobj):
         self.output=outobj.make_map()
         return self
+    def updateVersion(self,version):
+        '''Version must be a string of the for 0.0.0'''
+        self.createdDate=version
+    def updateCreatedDate(self,date):
+        '''Created date should be a string with a sugested format of %Y%m%d'''
+        self.createdDate=date
+    def writeToFile(self,fname,updateLabelVersion=False):
+        if updateLabelVersion:
+            fnameout=self.fileNameCheck(fname)
+        with open(fnameout,'w') as f:
+            f.write(self.__repr__())
+    def fileNameCheck(self,fname):
+        if not os.path.exists(fname):
+            return fname
+
+        while os.path.exists(fname):
+            sp=fname.split('.')
+            pre=".".join(sp[:-1])
+            ext=sp[-1]
+            version =self.version
+            if len(sp)>=4 and ".".join(sp[-4:-1])==version:
+                pre=".".join(sp[:-4])
+            version=".".join([str(int(v)+i) for v,i in zip(version.split('.'),[0,0,1])])
+            self.version=version
+            fname=".".join([pre,version,ext])
+        return fname
+
 
 class inobj:
     """
