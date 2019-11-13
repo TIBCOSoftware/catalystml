@@ -1,0 +1,56 @@
+{
+    "name":"removeStopFromFile",
+    "description":"gets list of stop words and removes them from a list of words",
+    "version":"0.0.1",
+    "createdDate":"20191113",
+    "model":{
+        "framework":"CML",
+        "tags":"common"
+    },
+	"input": [
+    {
+		  "type": "image",
+      "label":"img"
+    },
+    {
+		"type": "int",
+        "label":"xsize"
+    },
+    {
+		"type": "int",
+        "label":"ysize"
+    }
+	],
+	"structure": [
+    {
+      "operation":"resize",
+      "input":{"img":"$img"},
+      "params":{
+        "xsize":"$xsize",
+        "ysize":"$ysize"
+      },
+      "output":"resizedImage"
+    },
+    {
+      "operation":"grayscale",
+      "input":{"img":"$resizedImage"},
+      "output":"resizedGrayImage"
+    },
+    {
+      "operation":"img2tensor",
+      "input": 
+      {
+          "img":"$resizedGrayImage"
+      },
+      "params":{
+        "removeAlpha":true,
+        "includeBatch":true
+      },
+      "output":"tensor"
+    }
+  ],
+	"output": {
+    "type": "array",
+    "data":"$tensor"
+	}
+}
