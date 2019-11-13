@@ -181,6 +181,19 @@ _Math_:
     * OutputType - [int,float]
 
 _Cleaning_:
+* __interpolateMissing__: Fill in missing values
+    * Input
+        * data - [array, map] data to be filled in
+        * col - [int, string, array] the column(s) to be filled in
+    * Params
+        * how - [string] mean: substitutes mean of included values for Missing, linear: interpolates linearly from adjacent values
+            * Optional - True
+            * Default- "mean"
+            * allowed: ["mean","linear"]
+        * edges - [string] for linear how to handle edges
+            * Optional - True
+            * allowed: []
+    * OutputType - [array, map]
 * __replaceValue__: Given a map replaces data (key) with map value 
     * Input
         * data - [array or map]
@@ -270,7 +283,7 @@ _Cleaning_:
     * Input
         * table - [map or array of array]  data to be shifted
         * lagnum - [int] number of places to lag data
-        * col -  column to shift
+        * col - [int,string] column to shift
     * OutputType - [array,map]
 * __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
