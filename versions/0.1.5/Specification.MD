@@ -593,6 +593,15 @@ _Utils_
     * Params
         * cmlFileName - path to where the json file that contains the CML structure.
     * OutputType - [any]
+* __toLog__: Writes input data to stdout
+    * Input
+        * data - [any] data to be written
+            * Optional - False
+    * Params
+        * toFilePath - [string] if provided data will be written to file at the provided path.
+            * Optional - True
+            * default - none
+    * OutputType - [any]
 
 #### Operations in implementaitons:
 
