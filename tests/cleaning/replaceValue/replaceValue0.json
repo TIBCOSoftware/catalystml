@@ -1,0 +1,10 @@
+{
+    "input":{
+        "data": "$inputData",
+        "replaceMap": {"CA": 0, "NC": 1, "TX": 2}
+    },
+    "params": {
+        "Columns": "state"
+    },
+    "output":"out"
+}

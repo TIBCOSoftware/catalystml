@@ -197,7 +197,7 @@ _Cleaning_:
         * Axis - [int] (0=vertical/column, 1=horizontal/row)
             * Optional=True
             * Default=0
-        * Col - [string] 
+        * Columns - [string] 
             * Optional=True
             * Default=’index’
     * OutputType - [array or map] (same type as inputs)
@@ -268,12 +268,10 @@ _Cleaning_:
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
     * Input
-        * table - [map or array of array]  data
-        * lagnum - int of number of places to lag data
-    * Params
-        * axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
-            * default=0
-    * OutputType - [map]
+        * table - [map or array of array]  data to be shifted
+        * lagnum - [int] number of places to lag data
+        * col -  column to shift
+    * OutputType - [array,map]
 * __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
         * array - [array]
@@ -593,15 +591,15 @@ _Utils_
     * Params
         * cmlFileName - path to where the json file that contains the CML structure.
     * OutputType - [any]
-* __applyToInputs__: Applies the name operation to the list of inputs and params.  This way you do not have to list oneHotEncoding (for example) 10 times for each of your catagorical data columns.
+* __toLog__: Writes input data to stdout by default if path provided write to file
     * Input
-        * operation/function [string] - operation to apply
-        * inputs - [list of objects(defined in named operation)]
-        * params - [list of objects(defined in named operation)]
+        * data - [any] data to be written
+            * Optional - False
     * Params
-        * None
-    * OutputType - [any]
-    * Output - single string adds output to that variable, list of strings applies output of each input object to the corresponding outputlist item
+        * toFilePath - [string] if provided data will be written to file at the provided path.
+            * Optional - True
+            * default - none
+    * OutputType - [none]
 
 #### Operations in implementaitons:
 
