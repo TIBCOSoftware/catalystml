@@ -1,0 +1,6 @@
+{
+    "input":{
+        "arr": "$inputData"
+    },
+    "output":"out"
+}

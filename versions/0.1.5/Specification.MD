@@ -197,7 +197,7 @@ _Cleaning_:
         * Axis - [int] (0=vertical/column, 1=horizontal/row)
             * Optional=True
             * Default=0
-        * Col - [string] 
+        * Columns - [string] 
             * Optional=True
             * Default=’index’
     * OutputType - [array or map] (same type as inputs)
@@ -593,7 +593,7 @@ _Utils_
     * Params
         * cmlFileName - path to where the json file that contains the CML structure.
     * OutputType - [any]
-* __toLog__: Writes input data to stdout
+* __toLog__: Writes input data to stdout by default if path provided write to file
     * Input
         * data - [any] data to be written
             * Optional - False
@@ -601,7 +601,7 @@ _Utils_
         * toFilePath - [string] if provided data will be written to file at the provided path.
             * Optional - True
             * default - none
-    * OutputType - [any]
+    * OutputType - [none]
 
 #### Operations in implementaitons:
 
