@@ -268,12 +268,10 @@ _Cleaning_:
 * __targetEncoding__: replace categorical value with its average of another numerical column
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
     * Input
-        * table - [map or array of array]  data
-        * lagnum - int of number of places to lag data
-    * Params
-        * axis - the orientation of the table (0=vertical/column, 1=horizontal/row)
-            * default=0
-    * OutputType - [map]
+        * table - [map or array of array]  data to be shifted
+        * lagnum - [int] number of places to lag data
+        * col -  column to shift
+    * OutputType - [array,map]
 * __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
         * array - [array]
