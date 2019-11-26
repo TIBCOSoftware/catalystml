@@ -484,7 +484,17 @@ _String Processing_:
         * i [integer] - number of possible replacements, default all
     * OutputType - [string]
 * __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
+    * Input
+        * s0 [string] - string
+        * s1 [string] - string to be replaced
+        * s2 [string] - string to replace with
+    * OutputType - [string]	
 * __replaceregex__: Replace data in a string based on a regular expression match	
+    * Input
+        * regex [string] - regular expression match to be replaced
+        * s0 [string] - string
+        * s1 [string] - string to replace with
+    * OutputType - [string]
 * __split__: Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators
     * Input:
         * str - [string] string to be seperated
@@ -497,9 +507,25 @@ _String Processing_:
     * Input:
         * str- [string] string to be made all upper case
 * __trim__: Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed
-* __trimleft__:TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
+* __trimleft__: TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __trimright__: TrimRight returns a slice of the string s with all trailing Unicode code points contained in cutset removed
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __trimprefix__: TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
 * __uuid__: UUID generates a random UUID according to RFC 4122
     * OutputType - [string]
