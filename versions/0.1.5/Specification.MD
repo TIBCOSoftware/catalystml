@@ -551,6 +551,10 @@ _String Processing_:
         * s1 [string] unicode to be trimmed off
     * OutputType [string] 
 * __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __uuid__: UUID generates a random UUID according to RFC 4122
     * OutputType - [string]
 * __levenshteinDistance__: Calculates the Levenshtein Distance between two strings (number of changes needed to conver one string to the other)
