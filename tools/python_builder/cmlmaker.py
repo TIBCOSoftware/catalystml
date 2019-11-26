@@ -60,8 +60,9 @@ class structure:
         '''Created date should be a string with a sugested format of %Y%m%d'''
         self.createdDate=date
     def writeToFile(self,fname,updateLabelVersion=False):
+        fnameout=fname
         if updateLabelVersion:
-            fnameout=self.fileNameCheck(fname)
+            fnameout=self.fileNameCheck(fnameout)
         with open(fnameout,'w') as f:
             f.write(self.__repr__())
     def fileNameCheck(self,fname):
@@ -198,47 +199,47 @@ class map2table(operation):
 
 class groupBy(operation):
 	"""
-	group by a given column in an axis and aggregate the value of another column (like SQL)
+	group by given columns in an axis and aggregate the value of other columns
 	"""
 	class inputs:
 		"""
 		inputs's possible keys:
-			data (required)- data to group
-			groupKeys (required)- Column by which to group.
+			data (required)- map key is column name, map value are column values.
 		"""
-		def __init__(self,data=None,groupKeys=None):
+		def __init__(self,data=None):
 			"""
 			initializing inputs
 			"""
 			self.data=data
-			self.groupKeys=groupKeys
 		def make_map(self):
 			"""
 			method to convert data into a map for later printing
 			"""
 			m={}
 			m['data']=self.data
-			m['groupKeys']=self.groupKeys
 			return m
 	class params:
 		"""
 		params's possible keys:
-			asIndex (required)- 
-			axis (optional)- (0=vertical/column, 1=horizontal/row)
+			index (required)- Group key of data
+			aggregate (optional)- Map key is groupKey, map value is aggregate function. Currently support Sum, Count, Mean, Min, Max
+			level (optional)- Group level < 0 -> group by all index elements, 0 -> group by index element1, 1 -> group by index element2.
 		"""
-		def __init__(self,asIndex=None,axis=None):
+		def __init__(self,index=None,aggregate=None,level=None):
 			"""
 			initializing params
 			"""
-			self.asIndex=asIndex
-			self.axis=axis
+			self.index=index
+			self.aggregate=aggregate
+			self.level=level
 		def make_map(self):
 			"""
 			method to convert data into a map for later printing
 			"""
 			m={}
-			m['asIndex']=self.asIndex
-			if self.axis!=None:m['axis']=self.axis
+			m['index']=self.index
+			if self.aggregate!=None:m['aggregate']=self.aggregate
+			if self.level!=None:m['level']=self.level
 			return m
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize groupBy operation and define inputs, parameters, and outputs"""
@@ -276,6 +277,36 @@ class reshape(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
+class valToArray(operation):
+	"""
+	casts single value to array or array of arrays of given shape
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			val (required)- value to be expanded
+			shape (required)- array determines shape of output ([2,3] means a 2x3 matrix)
+		"""
+		def __init__(self,val=None,shape=None):
+			"""
+			initializing inputs
+			"""
+			self.val=val
+			self.shape=shape
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['val']=self.val
+			m['shape']=self.shape
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize valToArray operation and define inputs, parameters, and outputs"""
+		self.operation="valToArray"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
 class transpose(operation):
 	"""
 	transpose a matrix
@@ -283,7 +314,7 @@ class transpose(operation):
 	class inputs:
 		"""
 		inputs's possible keys:
-			data (required)- Matrix to be transposed
+			data (required)- map key is column name, map value are column values.
 		"""
 		def __init__(self,data=None):
 			"""
@@ -363,14 +394,41 @@ class cast(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
-class pivot(operation):
+class concatMap(operation):
 	"""
-	group by a given column in an axis and aggregate the value of another column (like SQL)
+	takes an array of maps and combines them into one.
 	"""
 	class inputs:
 		"""
 		inputs's possible keys:
-			data (required)- Column(s) to use for populating new frame’s values.
+			data (required)- array of maps to be combines into one
+		"""
+		def __init__(self,data=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize concatMap operation and define inputs, parameters, and outputs"""
+		self.operation="concatMap"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class pivot(operation):
+	"""
+	reshape a matrix or map by re-indexing like the pivot function in pandas
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- map key is column name, map value are column values.
 		"""
 		def __init__(self,data=None):
 			"""
@@ -387,9 +445,9 @@ class pivot(operation):
 	class params:
 		"""
 		params's possible keys:
-			index (required)- Name of columns which value to be used to make new frame’s index
-			columns (required)- Name of columns which value to be used to make new frame’s columns.
-			aggregate (required)- Map key is groupKey, map value is aggregate function. Currently support Sum, Count, Mean, Min, Max
+			index (required)- Group key of data
+			columns (optional)- Name of columns which value to be used to make new frame’s columns
+			aggregate (optional)- Map key is groupKey, map value is aggregate function. Currently support Sum, Count, Mean, Min, Max
 		"""
 		def __init__(self,index=None,columns=None,aggregate=None):
 			"""
@@ -404,8 +462,8 @@ class pivot(operation):
 			"""
 			m={}
 			m['index']=self.index
-			m['columns']=self.columns
-			m['aggregate']=self.aggregate
+			if self.columns!=None:m['columns']=self.columns
+			if self.aggregate!=None:m['aggregate']=self.aggregate
 			return m
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize pivot operation and define inputs, parameters, and outputs"""
@@ -519,33 +577,39 @@ class table2map(operation):
 
 class join(operation):
 	"""
-	group by a given column in an axis and aggregate the value of another column (like SQL)
+	join two data objects like the Join command in SQL
 	"""
 	class inputs:
 		"""
 		inputs's possible keys:
-			data0 (required)- contains matrices or maps of inputs
-			data1 (required)- contains matrices or maps of inputs
+			left (required)- first table : key is column name, map value are column values.
+			right (required)- second table : key is column name, map value are column values.
+			leftindex (required)- column names of index in the first table.
+			rightindex (required)- column names of index in the second table.
 		"""
-		def __init__(self,data0=None,data1=None):
+		def __init__(self,left=None,right=None,leftindex=None,rightindex=None):
 			"""
 			initializing inputs
 			"""
-			self.data0=data0
-			self.data1=data1
+			self.left=left
+			self.right=right
+			self.leftindex=leftindex
+			self.rightindex=rightindex
 		def make_map(self):
 			"""
 			method to convert data into a map for later printing
 			"""
 			m={}
-			m['data0']=self.data0
-			m['data1']=self.data1
+			m['left']=self.left
+			m['right']=self.right
+			m['leftindex']=self.leftindex
+			m['rightindex']=self.rightindex
 			return m
 	class params:
 		"""
 		params's possible keys:
-			on (optional)- either index or the col name/number
-			how (required)- sql join types
+			on (required)- either index or the column name
+			how (required)- How to join
 		"""
 		def __init__(self,on=None,how=None):
 			"""
@@ -558,12 +622,56 @@ class join(operation):
 			method to convert data into a map for later printing
 			"""
 			m={}
-			if self.on!=None:m['on']=self.on
+			m['on']=self.on
 			m['how']=self.how
 			return m
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize join operation and define inputs, parameters, and outputs"""
 		self.operation="join"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class toLog(operation):
+	"""
+	Writes input data to stdout by default if path provided write to file
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- data to be written
+		"""
+		def __init__(self,data=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			return m
+	class params:
+		"""
+		params's possible keys:
+			toFilePath (optional)- if provided data will be written to file at the provided path
+		"""
+		def __init__(self,toFilePath=None):
+			"""
+			initializing params
+			"""
+			self.toFilePath=toFilePath
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			if self.toFilePath!=None:m['toFilePath']=self.toFilePath
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize toLog operation and define inputs, parameters, and outputs"""
+		self.operation="toLog"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -594,6 +702,36 @@ class scale(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize scale operation and define inputs, parameters, and outputs"""
 		self.operation="scale"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class divPairWise(operation):
+	"""
+	for matrices of the same shape divide corresponding values
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			matrix0 (required)- first matrix (numerator)
+			matrix1 (required)- second matrix (denominator)
+		"""
+		def __init__(self,matrix0=None,matrix1=None):
+			"""
+			initializing inputs
+			"""
+			self.matrix0=matrix0
+			self.matrix1=matrix1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['matrix0']=self.matrix0
+			m['matrix1']=self.matrix1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize divPairWise operation and define inputs, parameters, and outputs"""
+		self.operation="divPairWise"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -657,6 +795,126 @@ class multPairWise(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize multPairWise operation and define inputs, parameters, and outputs"""
 		self.operation="multPairWise"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class divide(operation):
+	"""
+	divide two numbers
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			num (required)- numerator
+			denom (required)- denominator
+		"""
+		def __init__(self,num=None,denom=None):
+			"""
+			initializing inputs
+			"""
+			self.num=num
+			self.denom=denom
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['num']=self.num
+			m['denom']=self.denom
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize divide operation and define inputs, parameters, and outputs"""
+		self.operation="divide"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class addPairWise(operation):
+	"""
+	for matrices of the same shape add corresponding values
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			matrix0 (required)- first matrix
+			matrix1 (required)- second matrix.
+		"""
+		def __init__(self,matrix0=None,matrix1=None):
+			"""
+			initializing inputs
+			"""
+			self.matrix0=matrix0
+			self.matrix1=matrix1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['matrix0']=self.matrix0
+			m['matrix1']=self.matrix1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize addPairWise operation and define inputs, parameters, and outputs"""
+		self.operation="addPairWise"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class multi(operation):
+	"""
+	multipli two numbers
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			num0 (required)- first num
+			num1 (required)- second number
+		"""
+		def __init__(self,num0=None,num1=None):
+			"""
+			initializing inputs
+			"""
+			self.num0=num0
+			self.num1=num1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['num0']=self.num0
+			m['num1']=self.num1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize multi operation and define inputs, parameters, and outputs"""
+		self.operation="multi"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class add(operation):
+	"""
+	add two numbers
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			num0 (required)- first num
+			num1 (required)- second number
+		"""
+		def __init__(self,num0=None,num1=None):
+			"""
+			initializing inputs
+			"""
+			self.num0=num0
+			self.num1=num1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['num0']=self.num0
+			m['num1']=self.num1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize add operation and define inputs, parameters, and outputs"""
+		self.operation="add"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -781,6 +1039,36 @@ class concat(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
+class trimprefix(operation):
+	"""
+	TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			s0 (required)- string to be cleaned/trimmed
+			s1 (required)- unicode to be trimmed off
+		"""
+		def __init__(self,s0=None,s1=None):
+			"""
+			initializing inputs
+			"""
+			self.s0=s0
+			self.s1=s1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['s0']=self.s0
+			m['s1']=self.s1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize trimprefix operation and define inputs, parameters, and outputs"""
+		self.operation="trimprefix"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
 class levenshteinSimilarity(operation):
 	"""
 	Add a column to a matrix
@@ -865,6 +1153,132 @@ class tolower(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize tolower operation and define inputs, parameters, and outputs"""
 		self.operation="tolower"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class replaceregex(operation):
+	"""
+	Replace data in a string based on a regular expression match.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			regex (required)- regular expression match to be replaced
+			s0 (required)- string
+			s1 (required)- string to replace with
+		"""
+		def __init__(self,regex=None,s0=None,s1=None):
+			"""
+			initializing inputs
+			"""
+			self.regex=regex
+			self.s0=s0
+			self.s1=s1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['regex']=self.regex
+			m['s0']=self.s0
+			m['s1']=self.s1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize replaceregex operation and define inputs, parameters, and outputs"""
+		self.operation="replaceregex"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class replaceall(operation):
+	"""
+	ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			s0 (required)- string
+			s1 (required)- string to be replaced
+			s2 (required)- string to replace with
+		"""
+		def __init__(self,s0=None,s1=None,s2=None):
+			"""
+			initializing inputs
+			"""
+			self.s0=s0
+			self.s1=s1
+			self.s2=s2
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['s0']=self.s0
+			m['s1']=self.s1
+			m['s2']=self.s2
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize replaceall operation and define inputs, parameters, and outputs"""
+		self.operation="replaceall"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class indexany(operation):
+	"""
+	IndexAny returns the index of the first instance of any Unicode code point from chars in s, or -1 if no Unicode code point from chars is present in s
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			s0 (required)- string
+			s1 (required)- substring
+		"""
+		def __init__(self,s0=None,s1=None):
+			"""
+			initializing inputs
+			"""
+			self.s0=s0
+			self.s1=s1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['s0']=self.s0
+			m['s1']=self.s1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize indexany operation and define inputs, parameters, and outputs"""
+		self.operation="indexany"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class trim(operation):
+	"""
+	Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			s0 (required)- string to be cleaned/trimmed
+			s1 (required)- unicode to be trimmed off
+		"""
+		def __init__(self,s0=None,s1=None):
+			"""
+			initializing inputs
+			"""
+			self.s0=s0
+			self.s1=s1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['s0']=self.s0
+			m['s1']=self.s1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize trim operation and define inputs, parameters, and outputs"""
+		self.operation="trim"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -964,6 +1378,36 @@ class replace(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
+class trimright(operation):
+	"""
+	TrimRight returns a slice of the string s with all trailing Unicode code points contained in cutset removed.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			s0 (required)- string to be cleaned/trimmed
+			s1 (required)- unicode to be trimmed off
+		"""
+		def __init__(self,s0=None,s1=None):
+			"""
+			initializing inputs
+			"""
+			self.s0=s0
+			self.s1=s1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['s0']=self.s0
+			m['s1']=self.s1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize trimright operation and define inputs, parameters, and outputs"""
+		self.operation="trimright"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
 class repeat(operation):
 	"""
 	Repeat returns a new string consisting of count copies of the string s
@@ -1031,6 +1475,36 @@ class split(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize split operation and define inputs, parameters, and outputs"""
 		self.operation="split"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class trimsuffix(operation):
+	"""
+	TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			s0 (required)- string to be cleaned/trimmed
+			s1 (required)- unicode to be trimmed off
+		"""
+		def __init__(self,s0=None,s1=None):
+			"""
+			initializing inputs
+			"""
+			self.s0=s0
+			self.s1=s1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['s0']=self.s0
+			m['s1']=self.s1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize trimsuffix operation and define inputs, parameters, and outputs"""
+		self.operation="trimsuffix"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -1148,6 +1622,36 @@ class contains(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize contains operation and define inputs, parameters, and outputs"""
 		self.operation="contains"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class trimleft(operation):
+	"""
+	TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			s0 (required)- string to be cleaned/trimmed
+			s1 (required)- unicode to be trimmed off
+		"""
+		def __init__(self,s0=None,s1=None):
+			"""
+			initializing inputs
+			"""
+			self.s0=s0
+			self.s1=s1
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['s0']=self.s0
+			m['s1']=self.s1
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize trimleft operation and define inputs, parameters, and outputs"""
+		self.operation="trimleft"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -1623,14 +2127,47 @@ class oneHotEncoding(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
-class sort(operation):
+class lag(operation):
 	"""
-	sort a matrix/map based on axis and given columns.
+	create new vector shifted down by lagnum with NaN filling missing locations added to table/map
 	"""
 	class inputs:
 		"""
 		inputs's possible keys:
-			data (required)- array of maps to be combines into one
+			table (required)- data to be shifted
+			lagnum (required)- number of places to lag data
+			col (required)- column to shift
+		"""
+		def __init__(self,table=None,lagnum=None,col=None):
+			"""
+			initializing inputs
+			"""
+			self.table=table
+			self.lagnum=lagnum
+			self.col=col
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['table']=self.table
+			m['lagnum']=self.lagnum
+			m['col']=self.col
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize lag operation and define inputs, parameters, and outputs"""
+		self.operation="lag"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class sort(operation):
+	"""
+	sort a matrix/map based on axis and given columns 
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- map key is column name, map value are column values.
 		"""
 		def __init__(self,data=None):
 			"""
@@ -1647,10 +2184,10 @@ class sort(operation):
 	class params:
 		"""
 		params's possible keys:
-			ascending (required)- Sorting data in ascending
-			axis (required)- 0=vertical/column, 1=horizontal/row.
-			nilPosition (required)- Puts Nils at the beginning if first; last puts Nils at the end.
-			by (required)- sort by elements: 1. all are string -> conlumn label, 2. all are int (0 means first column) -> column number
+			ascending (optional)- Sorting data in ascending
+			axis (optional)- 0=vertical/column, 1=horizontal/row
+			nilPosition (optional)- Puts Nils at the beginning if first; last puts Nils at the end.
+			by (required)- sort by elements: 1. all are nameing -> conlumn label, 2. all are int (0 means first column) -> column number
 		"""
 		def __init__(self,ascending=None,axis=None,nilPosition=None,by=None):
 			"""
@@ -1665,9 +2202,9 @@ class sort(operation):
 			method to convert data into a map for later printing
 			"""
 			m={}
-			m['ascending']=self.ascending
-			m['axis']=self.axis
-			m['nilPosition']=self.nilPosition
+			if self.ascending!=None:m['ascending']=self.ascending
+			if self.axis!=None:m['axis']=self.axis
+			if self.nilPosition!=None:m['nilPosition']=self.nilPosition
 			m['by']=self.by
 			return m
 	def __init__(self,inputs=None,params=None,output=None):
@@ -1861,6 +2398,9 @@ class ops:
 		class reshape(reshape):
 			def __init__(self,inputs=None,params=None,output=None):
 				reshape.__init__(self,inputs=inputs,params=params,output=output)
+		class valToArray(valToArray):
+			def __init__(self,inputs=None,params=None,output=None):
+				valToArray.__init__(self,inputs=inputs,params=params,output=output)
 		class transpose(transpose):
 			def __init__(self,inputs=None,params=None,output=None):
 				transpose.__init__(self,inputs=inputs,params=params,output=output)
@@ -1870,6 +2410,9 @@ class ops:
 		class cast(cast):
 			def __init__(self,inputs=None,params=None,output=None):
 				cast.__init__(self,inputs=inputs,params=params,output=output)
+		class concatMap(concatMap):
+			def __init__(self,inputs=None,params=None,output=None):
+				concatMap.__init__(self,inputs=inputs,params=params,output=output)
 		class pivot(pivot):
 			def __init__(self,inputs=None,params=None,output=None):
 				pivot.__init__(self,inputs=inputs,params=params,output=output)
@@ -1885,6 +2428,13 @@ class ops:
 		class join(join):
 			def __init__(self,inputs=None,params=None,output=None):
 				join.__init__(self,inputs=inputs,params=params,output=output)
+	class utils:
+		"""
+		Misc. Operations
+		"""
+		class toLog(toLog):
+			def __init__(self,inputs=None,params=None,output=None):
+				toLog.__init__(self,inputs=inputs,params=params,output=output)
 	class math:
 		"""
 		Math based operations
@@ -1892,12 +2442,27 @@ class ops:
 		class scale(scale):
 			def __init__(self,inputs=None,params=None,output=None):
 				scale.__init__(self,inputs=inputs,params=params,output=output)
+		class divPairWise(divPairWise):
+			def __init__(self,inputs=None,params=None,output=None):
+				divPairWise.__init__(self,inputs=inputs,params=params,output=output)
 		class normalize(normalize):
 			def __init__(self,inputs=None,params=None,output=None):
 				normalize.__init__(self,inputs=inputs,params=params,output=output)
 		class multPairWise(multPairWise):
 			def __init__(self,inputs=None,params=None,output=None):
 				multPairWise.__init__(self,inputs=inputs,params=params,output=output)
+		class divide(divide):
+			def __init__(self,inputs=None,params=None,output=None):
+				divide.__init__(self,inputs=inputs,params=params,output=output)
+		class addPairWise(addPairWise):
+			def __init__(self,inputs=None,params=None,output=None):
+				addPairWise.__init__(self,inputs=inputs,params=params,output=output)
+		class multi(multi):
+			def __init__(self,inputs=None,params=None,output=None):
+				multi.__init__(self,inputs=inputs,params=params,output=output)
+		class add(add):
+			def __init__(self,inputs=None,params=None,output=None):
+				add.__init__(self,inputs=inputs,params=params,output=output)
 		class norm(norm):
 			def __init__(self,inputs=None,params=None,output=None):
 				norm.__init__(self,inputs=inputs,params=params,output=output)
@@ -1911,6 +2476,9 @@ class ops:
 		class concat(concat):
 			def __init__(self,inputs=None,params=None,output=None):
 				concat.__init__(self,inputs=inputs,params=params,output=output)
+		class trimprefix(trimprefix):
+			def __init__(self,inputs=None,params=None,output=None):
+				trimprefix.__init__(self,inputs=inputs,params=params,output=output)
 		class levenshteinSimilarity(levenshteinSimilarity):
 			def __init__(self,inputs=None,params=None,output=None):
 				levenshteinSimilarity.__init__(self,inputs=inputs,params=params,output=output)
@@ -1920,6 +2488,18 @@ class ops:
 		class tolower(tolower):
 			def __init__(self,inputs=None,params=None,output=None):
 				tolower.__init__(self,inputs=inputs,params=params,output=output)
+		class replaceregex(replaceregex):
+			def __init__(self,inputs=None,params=None,output=None):
+				replaceregex.__init__(self,inputs=inputs,params=params,output=output)
+		class replaceall(replaceall):
+			def __init__(self,inputs=None,params=None,output=None):
+				replaceall.__init__(self,inputs=inputs,params=params,output=output)
+		class indexany(indexany):
+			def __init__(self,inputs=None,params=None,output=None):
+				indexany.__init__(self,inputs=inputs,params=params,output=output)
+		class trim(trim):
+			def __init__(self,inputs=None,params=None,output=None):
+				trim.__init__(self,inputs=inputs,params=params,output=output)
 		class matchregex(matchregex):
 			def __init__(self,inputs=None,params=None,output=None):
 				matchregex.__init__(self,inputs=inputs,params=params,output=output)
@@ -1929,6 +2509,9 @@ class ops:
 		class replace(replace):
 			def __init__(self,inputs=None,params=None,output=None):
 				replace.__init__(self,inputs=inputs,params=params,output=output)
+		class trimright(trimright):
+			def __init__(self,inputs=None,params=None,output=None):
+				trimright.__init__(self,inputs=inputs,params=params,output=output)
 		class repeat(repeat):
 			def __init__(self,inputs=None,params=None,output=None):
 				repeat.__init__(self,inputs=inputs,params=params,output=output)
@@ -1938,6 +2521,9 @@ class ops:
 		class split(split):
 			def __init__(self,inputs=None,params=None,output=None):
 				split.__init__(self,inputs=inputs,params=params,output=output)
+		class trimsuffix(trimsuffix):
+			def __init__(self,inputs=None,params=None,output=None):
+				trimsuffix.__init__(self,inputs=inputs,params=params,output=output)
 		class index(index):
 			def __init__(self,inputs=None,params=None,output=None):
 				index.__init__(self,inputs=inputs,params=params,output=output)
@@ -1950,6 +2536,9 @@ class ops:
 		class contains(contains):
 			def __init__(self,inputs=None,params=None,output=None):
 				contains.__init__(self,inputs=inputs,params=params,output=output)
+		class trimleft(trimleft):
+			def __init__(self,inputs=None,params=None,output=None):
+				trimleft.__init__(self,inputs=inputs,params=params,output=output)
 	class nlp:
 		"""
 		Natural Language Processing(NLP) related operations
@@ -1997,6 +2586,9 @@ class ops:
 		class oneHotEncoding(oneHotEncoding):
 			def __init__(self,inputs=None,params=None,output=None):
 				oneHotEncoding.__init__(self,inputs=inputs,params=params,output=output)
+		class lag(lag):
+			def __init__(self,inputs=None,params=None,output=None):
+				lag.__init__(self,inputs=inputs,params=params,output=output)
 		class sort(sort):
 			def __init__(self,inputs=None,params=None,output=None):
 				sort.__init__(self,inputs=inputs,params=params,output=output)
@@ -2019,35 +2611,51 @@ class ops:
 	def listAllOps():
 		print('Category:          Op name:              Description:')
 		print('restructuring      map2table              convert a map to a matrix')
-		print('restructuring      groupBy                group by a given column in an axis and aggregate the value of ano')
+		print('restructuring      groupBy                group by given columns in an axis and aggregate the value of othe')
 		print('restructuring      reshape                change the dimensionality of a matrix without changing the underl')
+		print('restructuring      valToArray             casts single value to array or array of arrays of given shape')
 		print('restructuring      transpose              transpose a matrix')
 		print('restructuring      dropCol                Remove cols from matrix or map')
 		print('restructuring      cast                   Convert the base datatype of a data structure or datatype from on')
-		print('restructuring      pivot                  group by a given column in an axis and aggregate the value of ano')
+		print('restructuring      concatMap              takes an array of maps and combines them into one.')
+		print('restructuring      pivot                  reshape a matrix or map by re-indexing like the pivot function in')
 		print('restructuring      addCol2Table           Add a column to a matrix')
 		print('restructuring      flatten                reduce multidimensional lists to single dimension')
 		print('restructuring      table2map              convert a matrix to a map by adding a name to each column')
-		print('restructuring      join                   group by a given column in an axis and aggregate the value of ano')
+		print('restructuring      join                   join two data objects like the Join command in SQL')
+		print('utils              toLog                  Writes input data to stdout by default if path provided write to ')
 		print('math               scale                  resizes an image')
+		print('math               divPairWise            for matrices of the same shape divide corresponding values')
 		print('math               normalize              divide all values of array by value (i.e. x/value), if minvalue i')
 		print('math               multPairWise           for matrices of the same shape multiply corresponding values')
+		print('math               divide                 divide two numbers')
+		print('math               addPairWise            for matrices of the same shape add corresponding values')
+		print('math               multi                  multipli two numbers')
+		print('math               add                    add two numbers')
 		print('math               norm                   determine the geometric length of a vector - output is a float.  ')
 		print('math               mean                   takes the mean of an array')
 		print('string_processing  concat                 join two strings together')
+		print('string_processing  trimprefix             TrimPrefix returns s without the provided leading prefix string. ')
 		print('string_processing  levenshteinSimilarity  Add a column to a matrix')
 		print('string_processing  lastindex              LastIndex returns the index of the last instance of substr in s, ')
 		print('string_processing  tolower                ToLower returns a copy of the string s with all Unicode letters m')
+		print('string_processing  replaceregex           Replace data in a string based on a regular expression match.')
+		print('string_processing  replaceall             ReplaceAll returns a copy of the string s with all non-overlappin')
+		print('string_processing  indexany               IndexAny returns the index of the first instance of any Unicode c')
+		print('string_processing  trim                   Trim returns a slice of the string s with all leading and trailin')
 		print('string_processing  matchregex             whether substring exists in string')
 		print('string_processing  count                  count number of times substring appears in string')
 		print('string_processing  replace                Replace returns a copy of the string s with the first n non-overl')
+		print('string_processing  trimright              TrimRight returns a slice of the string s with all trailing Unico')
 		print('string_processing  repeat                 Repeat returns a new string consisting of count copies of the str')
 		print('string_processing  uuid                   UUID generates a random UUID according to RFC 4122')
 		print('string_processing  split                  Split slices s into all substrings separated by sep and returns a')
+		print('string_processing  trimsuffix             TrimSuffix returns s without the provided trailing suffix string.')
 		print('string_processing  index                  Index returns the index of the first instance of substr in s, or ')
 		print('string_processing  toupper                ToUpper returns a copy of the string s with all Unicode letters m')
 		print('string_processing  levenshteinDistance    Add a column to a matrix')
 		print('string_processing  contains               whether substring exists in string')
+		print('string_processing  trimleft               TrimLeft returns a slice of the string s with all leading Unicode')
 		print('nlp                getStopWords           Gets array of stop words, by either using a default, or reading f')
 		print('nlp                removeStop             removes Stop words from a string')
 		print('nlp                tokenize               separate text into tokens / words / punctuation.')
@@ -2061,7 +2669,8 @@ class ops:
 		print('cleaning           replaceValue           Given a map replaces data (key) with map value')
 		print('cleaning           apply                  apply a function to every value in a vector or key in a map')
 		print('cleaning           oneHotEncoding         convert categorical vector into a set of vectors for each categor')
-		print('cleaning           sort                   sort a matrix/map based on axis and given columns.')
+		print('cleaning           lag                    create new vector shifted down by lagnum with NaN filling missing')
+		print('cleaning           sort                   sort a matrix/map based on axis and given columns ')
 		print('image_processing   grayscale              grayscale an image')
 		print('image_processing   subSectionToImage      takes a portion of an image and makes it an independent image (i.')
 		print('image_processing   resize                 resizes an image')
