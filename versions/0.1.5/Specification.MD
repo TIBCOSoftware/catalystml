@@ -265,6 +265,30 @@ _Cleaning_:
             * Default=’index’
     * OutputType - [array or map] (same type as inputs)
 * __binning__: take a numerical list and convert it into bins
+    * Input
+        * Data - map[string]interface{} or [][]interface{}
+            * Optional = False
+    * Params
+	    * Quantile - int : number of bin by even quantiles
+            * Default = 0
+            * Optional = True
+	    * Bins - []float64 : array of bin boundaries by data value
+        Optional = True
+	    * Labels - []string : used as labels for the resulting bins
+            * Optional = True
+	    * Column - string : target column for binning
+            * Optional = True
+	    * Retbins - bool : Whether to return the (bins, labels) or not
+            * Default = False
+            * Optional = True
+	    * Precision - int : precision of bin boundaries
+            * Optional = True
+	    * Duplicates - string : action on duplicate data raise error (still output data) or drop data
+		    * Allowed = ["raise", "drop"]
+            * Default = "raise"
+            * Optional = True
+    * OutputType - map[string]interface{}
+
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1.  The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true. Collisions of column names are resolved, but append an intger after an "_" starting at 1 for the new column, for example "col_1", "col_2", "col_3", ...
     * Input
         * data - [array of arrays or map] 2D table to be converted to map
