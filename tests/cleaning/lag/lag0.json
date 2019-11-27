@@ -1,0 +1,8 @@
+{
+    "input":{
+        "table": "$inputData",
+        "lagnum":1,
+        "col":"state"
+    },
+    "output":"out"
+}

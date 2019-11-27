@@ -60,8 +60,9 @@ class structure:
         '''Created date should be a string with a sugested format of %Y%m%d'''
         self.createdDate=date
     def writeToFile(self,fname,updateLabelVersion=False):
+        fnameout=fname
         if updateLabelVersion:
-            fnameout=self.fileNameCheck(fname)
+            fnameout=self.fileNameCheck(fnameout)
         with open(fnameout,'w') as f:
             f.write(self.__repr__())
     def fileNameCheck(self,fname):

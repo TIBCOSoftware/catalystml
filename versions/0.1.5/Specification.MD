@@ -181,6 +181,19 @@ _Math_:
     * OutputType - [int,float]
 
 _Cleaning_:
+* __interpolateMissing__: Fill in missing values
+    * Input
+        * data - [array, map] data to be filled in
+        * col - [int, string, array] the column(s) to be filled in
+    * Params
+        * how - [string] mean: substitutes mean of included values for Missing, linear: interpolates linearly from adjacent values
+            * Optional - True
+            * Default- "mean"
+            * allowed: ["mean","linear"]
+        * edges - [string] for linear how to handle edges
+            * Optional - True
+            * allowed: []
+    * OutputType - [array, map]
 * __replaceValue__: Given a map replaces data (key) with map value 
     * Input
         * data - [array or map]
@@ -252,6 +265,30 @@ _Cleaning_:
             * Default=’index’
     * OutputType - [array or map] (same type as inputs)
 * __binning__: take a numerical list and convert it into bins
+    * Input
+        * Data - map[string]interface{} or [][]interface{}
+            * Optional = False
+    * Params
+	    * Quantile - int : number of bin by even quantiles
+            * Default = 0
+            * Optional = True
+	    * Bins - []float64 : array of bin boundaries by data value
+        Optional = True
+	    * Labels - []string : used as labels for the resulting bins
+            * Optional = True
+	    * Column - string : target column for binning
+            * Optional = True
+	    * Retbins - bool : Whether to return the (bins, labels) or not
+            * Default = False
+            * Optional = True
+	    * Precision - int : precision of bin boundaries
+            * Optional = True
+	    * Duplicates - string : action on duplicate data raise error (still output data) or drop data
+		    * Allowed = ["raise", "drop"]
+            * Default = "raise"
+            * Optional = True
+    * OutputType - map[string]interface{}
+
 * __oneHotEncoding__: convert categorical vector into a set of vectors for each category with a 0/1.  The rest of the data in the map/matrix is kept but column used is removed unless keepOrig is true. Collisions of column names are resolved, but append an intger after an "_" starting at 1 for the new column, for example "col_1", "col_2", "col_3", ...
     * Input
         * data - [array of arrays or map] 2D table to be converted to map
@@ -270,7 +307,7 @@ _Cleaning_:
     * Input
         * table - [map or array of array]  data to be shifted
         * lagnum - [int] number of places to lag data
-        * col -  column to shift
+        * col - [int,string] column to shift
     * OutputType - [array,map]
 * __set__: [array] takes an array and removes duplicates, result is unordered (SHOULD WE RENAME THIS TO removeDups INSTEAD?)
     * Input
@@ -471,7 +508,17 @@ _String Processing_:
         * i [integer] - number of possible replacements, default all
     * OutputType - [string]
 * __replaceall__: ReplaceAll returns a copy of the string s with all non-overlapping instances of old replaced by new.
+    * Input
+        * s0 [string] - string
+        * s1 [string] - string to be replaced
+        * s2 [string] - string to replace with
+    * OutputType - [string]	
 * __replaceregex__: Replace data in a string based on a regular expression match	
+    * Input
+        * regex [string] - regular expression match to be replaced
+        * s0 [string] - string
+        * s1 [string] - string to replace with
+    * OutputType - [string]
 * __split__: Split slices s into all substrings separated by sep and returns a slice of the substrings between those separators
     * Input:
         * str - [string] string to be seperated
@@ -484,10 +531,30 @@ _String Processing_:
     * Input:
         * str- [string] string to be made all upper case
 * __trim__: Trim returns a slice of the string s with all leading and trailing Unicode code points contained in cutset removed
-* __trimleft__:TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
+* __trimleft__: TrimLeft returns a slice of the string s with all leading Unicode code points contained in cutset removed
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __trimright__: TrimRight returns a slice of the string s with all trailing Unicode code points contained in cutset removed
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __trimprefix__: TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __trimsuffix__: TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged
+    * Input:
+        * s0 [string] string to be cleaned/trimmed
+        * s1 [string] unicode to be trimmed off
+    * OutputType [string] 
 * __uuid__: UUID generates a random UUID according to RFC 4122
     * OutputType - [string]
 * __levenshteinDistance__: Calculates the Levenshtein Distance between two strings (number of changes needed to conver one string to the other)
