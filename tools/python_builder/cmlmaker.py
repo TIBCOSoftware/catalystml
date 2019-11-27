@@ -2008,21 +2008,21 @@ class replaceValue(operation):
 		"""
 		params's possible keys:
 			Axis (optional)- (0=vertical/column, 1=horizontal/row)
-			Col (optional)- Column to replace values in
+			col (optional)- Column to replace values in
 		"""
-		def __init__(self,Axis=None,Col=None):
+		def __init__(self,Axis=None,col=None):
 			"""
 			initializing params
 			"""
 			self.Axis=Axis
-			self.Col=Col
+			self.col=col
 		def make_map(self):
 			"""
 			method to convert data into a map for later printing
 			"""
 			m={}
 			if self.Axis!=None:m['Axis']=self.Axis
-			if self.Col!=None:m['Col']=self.Col
+			if self.col!=None:m['col']=self.col
 			return m
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize replaceValue operation and define inputs, parameters, and outputs"""
