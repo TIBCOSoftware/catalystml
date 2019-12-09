@@ -191,7 +191,7 @@ _Cleaning_:
         * data - [array, map] data to be filled in
         * col - [int, string, array] the column(s) to be filled in
     * Params
-        * how - [string] mean: substitutes mean of included values for Missing, linear: interpolates linearly from adjacent values
+        * how - [string] mean: substitutes mean of all included values for Missing, linear: interpolates linearly from adjacent values
             * Optional - True
             * Default- "mean"
             * allowed: ["mean","linear"]
