@@ -78,12 +78,17 @@ The structure key in the JSON specification defines the interactions and order o
 
 structure: [array of objects] defines a list containing all operations - the operations objects are of the form:
 * Operation- [string] name of operation (i.e. norm, scale, etc.)
-    * Input -  [map object] describes the inputs:
+    * Input -  [map or array of maps] describes the inputs:
         * Data: value of a labeled variable or a list of values
         * Other keys specific to operation possible
-    * Params - object containing operation specific parameters (optional)
+    * Params - [map or array of maps] object containing operation specific parameters (optional)
     * OutputType - type of output
-    * Output - a label or list of labels,  the label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
+    * Output - [label or array of labels]  the label or pre-existing label's component to reference the output value of the operation by the User (i.e. datatemp['age'], datatemp)
+
+Inputs, Params, and Outputs can all be either objects/labels or arrays of objects/labels.  How the combinations should be interpretted:
+* If all are objects/labels then the operation is applied once
+* If all are lists (must be of the same length, N) then the operation is applied N times with the operation being applied in order of the index of the arrays (if the input or params object is empty for an iteration include an empty "{}".)
+* If lists (all of the same length N) and objects/labels are mixed then the operation is applied N times with the object/label being applied for each of the N times.
 
 Below are a list of operations supported by this specification by category with their expected results and their operation specific keywords.
 
@@ -186,7 +191,7 @@ _Cleaning_:
         * data - [array, map] data to be filled in
         * col - [int, string, array] the column(s) to be filled in
     * Params
-        * how - [string] mean: substitutes mean of included values for Missing, linear: interpolates linearly from adjacent values
+        * how - [string] mean: substitutes mean of all included values for Missing, linear: interpolates linearly from adjacent values
             * Optional - True
             * Default- "mean"
             * allowed: ["mean","linear"]
@@ -302,7 +307,7 @@ _Cleaning_:
             * Optional = true
             * default = false
     * OutputType - [map]
-* __targetEncoding__: replace categorical value with its average of another numerical column
+* __targetEncoding__: replace categorical value with its average of another numerical column (intentionally left unspecified - will be included in the future)
 * __lag__: create new vector shifted down by lagnum with NaN filling missing locations added to table/map
     * Input
         * table - [map or array of array]  data to be shifted
@@ -448,9 +453,9 @@ _String Processing_:
             * Optional=True
             * Default=””  We will get the proper format
     * OutputType - [datetime object]  (datatime object includes properties, month etc.)
-* __phoneNumber__: Extract phone number from string
-* __geoEncoding__:Convert string to Geo coords 
-* __address__: (number, street,city, state, etc.) extract data information from string
+* __phoneNumber__: Extract phone number from string (intentionally left unspecified - will be included in the future)
+* __geoEncoding__: Convert string to Geo coords (intentionally left unspecified - will be included in the future)
+* __address__: (number, street,city, state, etc.) extract data information from string (intentionally left unspecified - will be included in the future)
 * __concat__: join two strings together or a list of strings.  It is possible to concat s0, s1, and slist together.
     * Input
         * s0 [string] - first string
@@ -573,8 +578,8 @@ _NLP_:
     * Input:
         * str - [string] string to tokenize
     * OutputType: [array of strings]
-* __word2embedding__: convert words from list to array of wordlist x numerical embedding
-* __embedding2word__: convert list of embedding to closest words
+* __word2embedding__: convert words from list to array of wordlist x numerical embedding (intentionally left unspecified - will be included in the future)
+* __embedding2word__: convert list of embedding to closest words (intentionally left unspecified - will be included in the future)
 * __getStopWords__: gets array of ([stop words](https://en.wikipedia.org/wiki/Stop_words)), by either using a default, or reading from a file.
     * Params:
         * lib - [string] - which library stopword list to load
@@ -632,7 +637,7 @@ _Image Processing_:
     * Params
         * size - [array of ints] the size of the subsection
         * lowerLeftCorner - [array of ints] the x,y coordinates (the corner with the lowest x,y vaules)
-* __addBoxLabel__: Add box and Label to an image given location (FOR POST PROCESSING)
+* __addBoxLabel__: Add box and Label to an image given location (intentionally left unspecified - will be included in the future)
 * __img2tensor__: Converts an image type to a mathematical tensor (i.e. an array of any number of dimentions) with value of integers ranging from 0 to 255
     * Input
         * img - [image]
