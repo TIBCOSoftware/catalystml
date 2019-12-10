@@ -1,0 +1,23 @@
+{
+    "title":"stem",
+    "desc":"produces the stem of a word (i.e. running -> run)",
+    "input":[
+	        {
+                "name":"str", 
+                "type":"string", 
+                "description":"word to have endings removed", 
+                "optional":false
+            }
+	    ],
+    "params":[
+        {
+            "name":"algo", 
+            "type":"string", 
+            "description":"The algorithm to be used", 
+            "default":"Porter",
+            "allowed":["Snowball","Porter"],
+            "optional":true
+        }
+    ],
+    "output":"string"
+}
