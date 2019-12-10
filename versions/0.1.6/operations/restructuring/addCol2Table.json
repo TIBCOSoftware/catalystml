@@ -1,0 +1,19 @@
+{
+    "title":"addCol2Table",
+    "desc":"Add a column to a matrix",
+    "input":[
+	        {
+                "name":"matrix", 
+                "type":["array","map"], 
+                "description":"matrix to be expanded", 
+                "optional":false
+            },
+	        {
+                "name":"col", 
+                "type":"array", 
+                "description":"col to be added of same length as matrix's second dimention", 
+                "optional":false
+            }
+	    ],
+    "output":"array"
+}
