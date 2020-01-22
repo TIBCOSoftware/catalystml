@@ -1,12 +1,12 @@
 {
-    "name":"removeStopFromFile",
-    "description":"gets list of stop words and removes them from a list of words",
-    "version":"0.0.1",
-    "createdDate":"20191113",
-    "model":{
-        "framework":"CML",
-        "tags":"common"
-    },
+  "name":"imageResizedGrayToTensor",
+  "description":"Takes image and new size and converts image to resized grayscale tensor",
+  "version":"0.0.1",
+  "createdDate":"20191113",
+  "model":{
+      "framework":"CML",
+      "tags":"common"
+  },
 	"input": [
     {
 		  "type": "image",
