@@ -1,5 +1,5 @@
 {
-  "name":"imageResizedToTensor",
+  "name":"imageResizedGrayToTensor",
   "description":"Takes image and new size and converts image to resized grayscale tensor",
   "version":"0.0.1",
   "createdDate":"20191113",
