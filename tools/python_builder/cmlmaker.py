@@ -656,22 +656,69 @@ class toLog(operation):
 		"""
 		params's possible keys:
 			toFilePath (optional)- if provided data will be written to file at the provided path
+			clearWhileStart (optional)- clear log file while starting engine
 		"""
-		def __init__(self,toFilePath=None):
+		def __init__(self,toFilePath=None,clearWhileStart=None):
 			"""
 			initializing params
 			"""
 			self.toFilePath=toFilePath
+			self.clearWhileStart=clearWhileStart
 		def make_map(self):
 			"""
 			method to convert data into a map for later printing
 			"""
 			m={}
 			if self.toFilePath!=None:m['toFilePath']=self.toFilePath
+			if self.clearWhileStart!=None:m['clearWhileStart']=self.clearWhileStart
 			return m
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize toLog operation and define inputs, parameters, and outputs"""
 		self.operation="toLog"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class runcml(operation):
+	"""
+	Runs another CML data preperation structure within the current structure. Allows you to integrate other CML structures into your JSON and pass standardized processing between languages.
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- the input data for the CML structure
+		"""
+		def __init__(self,data=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			return m
+	class params:
+		"""
+		params's possible keys:
+			cmlFileName (required)- path to where the json file that contains the CML structure
+		"""
+		def __init__(self,cmlFileName=None):
+			"""
+			initializing params
+			"""
+			self.cmlFileName=cmlFileName
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['cmlFileName']=self.cmlFileName
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize runcml operation and define inputs, parameters, and outputs"""
+		self.operation="runcml"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -1006,6 +1053,77 @@ class mean(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
+class encodestring(operation):
+	"""
+	Returns a base64 encoded string from an input string
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			str (required)- string to be encoded
+		"""
+		def __init__(self,str=None):
+			"""
+			initializing inputs
+			"""
+			self.str=str
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['str']=self.str
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize encodestring operation and define inputs, parameters, and outputs"""
+		self.operation="encodestring"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class date(operation):
+	"""
+	(year,month,day, etc.) extract date information from string
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- data with date time information
+		"""
+		def __init__(self,data=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			return m
+	class params:
+		"""
+		params's possible keys:
+			format (required)- see https://golang.org/pkg/time/
+		"""
+		def __init__(self,format=None):
+			"""
+			initializing params
+			"""
+			self.format=format
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['format']=self.format
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize date operation and define inputs, parameters, and outputs"""
+		self.operation="date"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
 class concat(operation):
 	"""
 	join two strings together
@@ -1066,6 +1184,33 @@ class trimprefix(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize trimprefix operation and define inputs, parameters, and outputs"""
 		self.operation="trimprefix"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class decodestring(operation):
+	"""
+	Returns a base64 decoded string from an input string
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			str (required)- string to be decoded
+		"""
+		def __init__(self,str=None):
+			"""
+			initializing inputs
+			"""
+			self.str=str
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['str']=self.str
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize decodestring operation and define inputs, parameters, and outputs"""
+		self.operation="decodestring"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -1860,6 +2005,59 @@ class posTag(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
+class filter(operation):
+	"""
+	keep/remove rows with certain values
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- map key is column name, map value are column values.
+			value (required)- target value which filter will be applied to.
+			filterType (required)- keep or remove target column/row.
+		"""
+		def __init__(self,data=None,value=None,filterType=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+			self.value=value
+			self.filterType=filterType
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			m['value']=self.value
+			m['filterType']=self.filterType
+			return m
+	class params:
+		"""
+		params's possible keys:
+			axis (optional)- 0=vertical/column, 1=horizontal/row
+			col (optional)- 
+		"""
+		def __init__(self,axis=None,col=None):
+			"""
+			initializing params
+			"""
+			self.axis=axis
+			self.col=col
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			if self.axis!=None:m['axis']=self.axis
+			if self.col!=None:m['col']=self.col
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize filter operation and define inputs, parameters, and outputs"""
+		self.operation="filter"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
 class set(operation):
 	"""
 	gets unordered array of unique values from original array
@@ -1944,6 +2142,68 @@ class ifin(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize ifin operation and define inputs, parameters, and outputs"""
 		self.operation="ifin"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class binning(operation):
+	"""
+	select a numerical column list and convert it into bins
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- the array or column of map to be binned
+		"""
+		def __init__(self,data=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			return m
+	class params:
+		"""
+		params's possible keys:
+			quantile (optional)- number of bin by even quantiles
+			bins (optional)- array of bin boundaries by data value
+			labels (optional)- used as labels for the resulting bins
+			column (optional)- target column for binning
+			retbins (optional)- whether to return the (bins, labels) or not
+			precision (optional)- precision of bin boundaries
+			duplicates (optional)- action on duplicate data raise error (still output data) or drop data
+		"""
+		def __init__(self,quantile=None,bins=None,labels=None,column=None,retbins=None,precision=None,duplicates=None):
+			"""
+			initializing params
+			"""
+			self.quantile=quantile
+			self.bins=bins
+			self.labels=labels
+			self.column=column
+			self.retbins=retbins
+			self.precision=precision
+			self.duplicates=duplicates
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			if self.quantile!=None:m['quantile']=self.quantile
+			if self.bins!=None:m['bins']=self.bins
+			if self.labels!=None:m['labels']=self.labels
+			if self.column!=None:m['column']=self.column
+			if self.retbins!=None:m['retbins']=self.retbins
+			if self.precision!=None:m['precision']=self.precision
+			if self.duplicates!=None:m['duplicates']=self.duplicates
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize binning operation and define inputs, parameters, and outputs"""
+		self.operation="binning"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -2160,6 +2420,56 @@ class lag(operation):
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
+class interpolateMissing(operation):
+	"""
+	select a numerical column list and convert it into bins
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			data (required)- the array or column of map to be binned
+			col (required)- the column(s) to be filled in
+		"""
+		def __init__(self,data=None,col=None):
+			"""
+			initializing inputs
+			"""
+			self.data=data
+			self.col=col
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['data']=self.data
+			m['col']=self.col
+			return m
+	class params:
+		"""
+		params's possible keys:
+			how (optional)- mean: substitutes mean of included values for Missing, linear: interpolates linearly from adjacent values
+			edges (optional)- mean: substitutes mean of included values for Missing, linear: exterpolates linearly from adjacent values
+		"""
+		def __init__(self,how=None,edges=None):
+			"""
+			initializing params
+			"""
+			self.how=how
+			self.edges=edges
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			if self.how!=None:m['how']=self.how
+			if self.edges!=None:m['edges']=self.edges
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize interpolateMissing operation and define inputs, parameters, and outputs"""
+		self.operation="interpolateMissing"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
 class sort(operation):
 	"""
 	sort a matrix/map based on axis and given columns 
@@ -2210,6 +2520,56 @@ class sort(operation):
 	def __init__(self,inputs=None,params=None,output=None):
 		""" Initialize sort operation and define inputs, parameters, and outputs"""
 		self.operation="sort"
+		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
+
+
+class tensor2img(operation):
+	"""
+	converts an array of arrays to an image type
+	"""
+	class inputs:
+		"""
+		inputs's possible keys:
+			tensor (required)- the image tensor to be converted
+		"""
+		def __init__(self,tensor=None):
+			"""
+			initializing inputs
+			"""
+			self.tensor=tensor
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			m['tensor']=self.tensor
+			return m
+	class params:
+		"""
+		params's possible keys:
+			toFileFolder (optional)- output folder.
+			filename (optional)- image filename.
+			extension (optional)- jpg(jpeg), png, gif.
+		"""
+		def __init__(self,toFileFolder=None,filename=None,extension=None):
+			"""
+			initializing params
+			"""
+			self.toFileFolder=toFileFolder
+			self.filename=filename
+			self.extension=extension
+		def make_map(self):
+			"""
+			method to convert data into a map for later printing
+			"""
+			m={}
+			if self.toFileFolder!=None:m['toFileFolder']=self.toFileFolder
+			if self.filename!=None:m['filename']=self.filename
+			if self.extension!=None:m['extension']=self.extension
+			return m
+	def __init__(self,inputs=None,params=None,output=None):
+		""" Initialize tensor2img operation and define inputs, parameters, and outputs"""
+		self.operation="tensor2img"
 		operation.__init__(self,inputs=inputs,params=params,output=output,operation=self.operation)
 
 
@@ -2435,6 +2795,9 @@ class ops:
 		class toLog(toLog):
 			def __init__(self,inputs=None,params=None,output=None):
 				toLog.__init__(self,inputs=inputs,params=params,output=output)
+		class runcml(runcml):
+			def __init__(self,inputs=None,params=None,output=None):
+				runcml.__init__(self,inputs=inputs,params=params,output=output)
 	class math:
 		"""
 		Math based operations
@@ -2473,12 +2836,21 @@ class ops:
 		"""
 		Operations that act on strings
 		"""
+		class encodestring(encodestring):
+			def __init__(self,inputs=None,params=None,output=None):
+				encodestring.__init__(self,inputs=inputs,params=params,output=output)
+		class date(date):
+			def __init__(self,inputs=None,params=None,output=None):
+				date.__init__(self,inputs=inputs,params=params,output=output)
 		class concat(concat):
 			def __init__(self,inputs=None,params=None,output=None):
 				concat.__init__(self,inputs=inputs,params=params,output=output)
 		class trimprefix(trimprefix):
 			def __init__(self,inputs=None,params=None,output=None):
 				trimprefix.__init__(self,inputs=inputs,params=params,output=output)
+		class decodestring(decodestring):
+			def __init__(self,inputs=None,params=None,output=None):
+				decodestring.__init__(self,inputs=inputs,params=params,output=output)
 		class levenshteinSimilarity(levenshteinSimilarity):
 			def __init__(self,inputs=None,params=None,output=None):
 				levenshteinSimilarity.__init__(self,inputs=inputs,params=params,output=output)
@@ -2565,6 +2937,9 @@ class ops:
 		"""
 		Operations that fall best under data cleaning
 		"""
+		class filter(filter):
+			def __init__(self,inputs=None,params=None,output=None):
+				filter.__init__(self,inputs=inputs,params=params,output=output)
 		class set(set):
 			def __init__(self,inputs=None,params=None,output=None):
 				set.__init__(self,inputs=inputs,params=params,output=output)
@@ -2574,6 +2949,9 @@ class ops:
 		class ifin(ifin):
 			def __init__(self,inputs=None,params=None,output=None):
 				ifin.__init__(self,inputs=inputs,params=params,output=output)
+		class binning(binning):
+			def __init__(self,inputs=None,params=None,output=None):
+				binning.__init__(self,inputs=inputs,params=params,output=output)
 		class concatMap(concatMap):
 			def __init__(self,inputs=None,params=None,output=None):
 				concatMap.__init__(self,inputs=inputs,params=params,output=output)
@@ -2589,6 +2967,9 @@ class ops:
 		class lag(lag):
 			def __init__(self,inputs=None,params=None,output=None):
 				lag.__init__(self,inputs=inputs,params=params,output=output)
+		class interpolateMissing(interpolateMissing):
+			def __init__(self,inputs=None,params=None,output=None):
+				interpolateMissing.__init__(self,inputs=inputs,params=params,output=output)
 		class sort(sort):
 			def __init__(self,inputs=None,params=None,output=None):
 				sort.__init__(self,inputs=inputs,params=params,output=output)
@@ -2596,6 +2977,9 @@ class ops:
 		"""
 		Image processing related operations
 		"""
+		class tensor2image(tensor2image):
+			def __init__(self,inputs=None,params=None,output=None):
+				tensor2image.__init__(self,inputs=inputs,params=params,output=output)
 		class grayscale(grayscale):
 			def __init__(self,inputs=None,params=None,output=None):
 				grayscale.__init__(self,inputs=inputs,params=params,output=output)
@@ -2624,6 +3008,7 @@ class ops:
 		print('restructuring      table2map              convert a matrix to a map by adding a name to each column')
 		print('restructuring      join                   join two data objects like the Join command in SQL')
 		print('utils              toLog                  Writes input data to stdout by default if path provided write to ')
+		print('utils              runcml                 Runs another CML data preperation structure within the current st')
 		print('math               scale                  resizes an image')
 		print('math               divPairWise            for matrices of the same shape divide corresponding values')
 		print('math               normalize              divide all values of array by value (i.e. x/value), if minvalue i')
@@ -2634,8 +3019,11 @@ class ops:
 		print('math               add                    add two numbers')
 		print('math               norm                   determine the geometric length of a vector - output is a float.  ')
 		print('math               mean                   takes the mean of an array')
+		print('string_processing  encodestring           Returns a base64 encoded string from an input string')
+		print('string_processing  date                   (year,month,day, etc.) extract date information from string')
 		print('string_processing  concat                 join two strings together')
 		print('string_processing  trimprefix             TrimPrefix returns s without the provided leading prefix string. ')
+		print('string_processing  decodestring           Returns a base64 decoded string from an input string')
 		print('string_processing  levenshteinSimilarity  Add a column to a matrix')
 		print('string_processing  lastindex              LastIndex returns the index of the last instance of substr in s, ')
 		print('string_processing  tolower                ToLower returns a copy of the string s with all Unicode letters m')
@@ -2662,15 +3050,19 @@ class ops:
 		print('nlp                stem                   produces the stem of a word (i.e. running -> run)')
 		print('nlp                segment                Seperates a paragraph into sentences.')
 		print('nlp                posTag                 Part of speach tagger')
+		print('cleaning           filter                 keep/remove rows with certain values')
 		print('cleaning           set                    gets unordered array of unique values from original array')
 		print('cleaning           ifnotin                Given 2 arrays returns the new array with the elements of the fir')
 		print('cleaning           ifin                   Given 2 arrays returns the new array with the elements of the fir')
+		print('cleaning           binning                select a numerical column list and convert it into bins')
 		print('cleaning           concatMap              takes an array of maps and combines them into one.')
 		print('cleaning           replaceValue           Given a map replaces data (key) with map value')
 		print('cleaning           apply                  apply a function to every value in a vector or key in a map')
 		print('cleaning           oneHotEncoding         convert categorical vector into a set of vectors for each categor')
 		print('cleaning           lag                    create new vector shifted down by lagnum with NaN filling missing')
+		print('cleaning           interpolateMissing     select a numerical column list and convert it into bins')
 		print('cleaning           sort                   sort a matrix/map based on axis and given columns ')
+		print('image_processing   tensor2img             converts an array of arrays to an image type')
 		print('image_processing   grayscale              grayscale an image')
 		print('image_processing   subSectionToImage      takes a portion of an image and makes it an independent image (i.')
 		print('image_processing   resize                 resizes an image')
