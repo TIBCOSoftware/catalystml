@@ -1,0 +1,34 @@
+{
+    "title":"getStopWords",
+    "desc":"Gets array of stop words, by either using a default, or reading from a file.",
+    "params":[
+	        {
+                "name":"lib", 
+                "type":"string", 
+                "description":"which library stopword list to load", 
+                "default":"nltk",
+                "optional":true
+            },
+            {
+                "name":"lang", 
+                "type":"string", 
+                "description":"The language to be used, based on [ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes). For example: English='en'.", 
+                "optional":true,
+                "default":"en"
+            },
+            {
+                "name":"fileLoc", 
+                "type":"string", 
+                "description":"path to file that contains list of stop words (1 word per line)", 
+                "optional":true
+            },
+            {
+                "name":"merge", 
+                "type":"bool", 
+                "description":"Whether to merge list from file with file from library", 
+                "optional":true,
+                "default":false
+            }
+	    ],
+    "output":"array"
+}
